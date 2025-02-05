@@ -1,7 +1,7 @@
 
 async function openHTML(template='',where="main-screen",label="", data="",width='auto'){
 
-    width = width == 'auto' ? (document.querySelector('body').offsetWidth - 160)+'px' : width+'px'
+    width = width == 'auto' ? where =='web-window' ? '100%' : (document.querySelector('body').offsetWidth - 160)+'px' : width+'px'
 
     if(main_data.hasOwnProperty(template.split('.')[0])){
         closeModal(template.split('.')[0])
@@ -79,7 +79,7 @@ function newModal(title, content, width, id,type='pop-up'){
     mod_card.style.margin = '0 auto'
     mod_card.style.width = width
     mod_card.style.top = type=='web-window' ? '50%' : upper_page.top+'px' 
-    mod_card.style.left = type=='web-window' ? '50%' : upper_page.left+'px'
+    mod_card.style.left = type=='web-window' ? 'calc(50% + 41px)' : upper_page.left+'px'
     mod_card.style.overflow = 'auto'
     mod_card.style.transform =  type=='web-window' ? 'translate(-50%, -50%)' : ''
     mod_card.addEventListener('mousedown',(e)=>{
@@ -203,7 +203,7 @@ function queueModal(id){
     
 }
 
-function menuContext(tbl,e){
+function menuContext(tbl,e,float=1){
 
     function removeFrame(){
         const frame = document.querySelectorAll('.back-frame')
@@ -235,7 +235,12 @@ function menuContext(tbl,e){
         mod_card.style.zIndex = 100
         mod_card.style.margin = '0 auto'
         mod_card.style.top = e.clientY+'px'
-        mod_card.style.left = e.clientX+'px'
+        if(float){
+            mod_card.style.left = e.clientX+'px'
+        }else{
+            mod_card.style.right = '2%'
+        }
+
         mod_card.style.overflow = 'auto'
 
     const mod_content = document.createElement('table')

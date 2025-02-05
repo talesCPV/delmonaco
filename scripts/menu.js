@@ -30,21 +30,20 @@ function openMenu(){
         })
     })
 
-    myPromisse.then((resolve)=>{
+    myPromisse.then((resolve)=>{    
         try{
             const menu_data = JSON.parse(resolve)
             const menu = document.querySelector('#side_items')
-            menu.innerHTML = ''//usr_menu
+            menu.innerHTML = ''//usr_menu      
             pushMenu(menu, menu_data)
             checkUserMail()
             addShortcut()
             document.querySelector('#user-name').innerHTML = localStorage.getItem('nome')
             document.querySelector('#user-email').innerHTML = localStorage.getItem('email')
         }catch{            
-/*
-            localStorage.clear()
-            this.location.reload(true)
-*/            
+
+//            localStorage.clear()
+//            this.location.reload(true)
         }
     })
 
@@ -93,6 +92,9 @@ function openMenu(){
                 const ckb = document.createElement('input')
                 ckb.type = 'checkbox';
                 ckb.id = `drop-${drop}`
+                ckb.addEventListener('change',()=>{
+                    document.querySelector('#sidebar').classList.add('open-sidebar')
+                })
                 drop++
                 li.appendChild(ckb)
 
@@ -135,7 +137,6 @@ function openMenu(){
                             shortcut.janela = obj[i].janela
                             shortcut.label = obj[i].label
                             shortcut.width = obj[i].width
-                            shortcut.access = obj[i].access
                             shortcut.x = 100
                             shortcut.y = 100
                             json.push(shortcut)
