@@ -1,0 +1,72 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <fieldset class="fds-busca acervo">
+        <legend>Filtro</legend>
+        <div class="inline">
+            <label for="edtBusca">por:</label>
+            <select id="cmbBusca">
+                <option value="id" signal="IN">Código</option>
+                <option value="nome" signal="LIKE" selected>Nome</option>
+                <option value="pais" signal="LIKE" >País</option>
+                <option value="uf" signal="LIKE">UF</option>
+                <option value="cidade" signal="LIKE">Cidade</option>
+            </select>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+        </div>
+
+    </fieldset>
+    <div class="resp-busca">
+        <table id="tblAcervo"></table>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.busca_acervo.data
+    const pageFunc = main_data.busca_acervo.func
+    const pageScreen = document.querySelector('#card-busca_acervo')
+
+    pageFunc.fillAcervo = ()=>{      
+        const tbl = pageScreen.querySelector('#tblAcervo')
+        tbl.innerHTML = ''
+        const query = getVal('acervo')
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]
+        const myPromisse = queryDB(params,'ACE-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Nome,UF,Cidade')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'nome,uf,cidade','Upp,Upp,Upp')
+            }         
+        });
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillAcervo()
+    })
+
+    pageScreen.querySelector('#tblAcervo').addEventListener('click',(e)=>{
+        try{            
+            if(main_data.hasOwnProperty(pageData.org)){
+                data = e.target.parentNode.data
+                data != undefined ?  main_data[pageData.org].func.buscaAcervo(data) : null               
+            }
+            closeModal('busca_acervo')
+       }catch{null}
+        
+    })
+
+</script>

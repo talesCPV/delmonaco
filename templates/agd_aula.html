@@ -1,0 +1,166 @@
+<template>
+    <style>
+
+        .time{
+            min-width: 60px;
+        }
+
+        .cell{
+            width: 100%;
+            border-left: solid 1px;
+        }
+
+        .has_class{
+            background-color: #dba3a3 !important;
+        }
+
+        .have_class{
+            background-color: #a3dbca !important;
+        }
+
+        th.cell, #edtCal{
+            text-align: center;
+        }
+     
+        td.cell:hover{
+            background-color: yellowgreen;
+            color: black;
+        }
+
+    </style>
+    <div class="inline">
+        <input type="date" id="edtCal">
+    </div>
+    <div class="day"></div>
+
+
+</template>
+<script>
+
+    const pageData = main_data.agd_aula.data
+    const pageFunc = main_data.agd_aula.func
+    const pageScreen = document.querySelector('#card-agd_aula')
+    pageData.agenda = []
+
+    pageFunc.getAulas =()=>{
+        const day = new Date(pageScreen.querySelector('#edtCal').value+' 00:00:00')        
+        const myPromisse = queryDB({'dt_ini': day.getFormatDate() +' 00:00:00','dt_fin': day.getFormatDate()+' 23:59:59'},'AGD-4')
+        return myPromisse.then((resolve)=>{
+            pageData.aulas = JSON.parse(resolve)
+            for(let i=0; i<pageData.aulas.length; i++){
+                const line =  pageScreen.querySelector('#row-'+pageData.aulas[i].hora.padStart(2,0))
+                line.data = pageData.aulas.filter(x => x.hora === pageData.aulas[i].hora)        
+                line.querySelector('td').innerHTML = pageData.aulas[i].aula
+                line.classList.add('have_class')
+            }
+        })
+    }
+
+    function getAgenda(){
+        const myPromisse = queryDB({},'AGD-2')
+        return myPromisse.then((resolve)=>{
+                const agd = JSON.parse(resolve)
+                pageData.agenda = []
+                for(let i=0; i<7; i++){
+                    const obj = new Object
+                    obj.dia = i
+                    obj.aulas = []
+                    try{
+                        const index =  agd.findIndex(x => x.dia ===i.toString());
+                        if(index>=0){
+                            const aulas = agd[index].aulas.split('*#*')
+                            for(let j=0; j<aulas.length; j++){
+                                const aula = aulas[j].split('|')
+                                const aluno = new Object
+                                aluno.hora = aula[0].padStart(2,0)+':00'
+                                aluno.id_aluno = aula[1]
+                                aluno.aluno = aula[2]
+                                aluno.id_aula = aula[3]
+                                aluno.aula = aula[4]
+                                aluno.id_clube = aula[5]
+                                aluno.clube = aula[6]
+                                aluno.valor = aula[7]
+                                aluno.agendado = 1
+                                aluno.modo = 'P'
+                                obj.aulas.push(aluno)
+                            }   
+                        }
+                    }catch{console.error('Dia Inexistente')}
+                    pageData.agenda.push(obj)
+                }
+            })
+    }
+
+    pageFunc.fillAgenda = ()=>{
+        const aula = pageData.agenda[pageData.dia].aulas
+        for(let i=0; i<aula.length; i++){
+            try{
+                const row = document.querySelector('#row-'+aula[i].hora.substr(0,2))
+                const cell = document.querySelector('#cell-'+aula[i].hora.substr(0,2))
+                row.classList.add('has_class')
+                row.data = aula.filter(x => x.hora === aula[i].hora)
+                cell.innerHTML = aula[i].aula
+            }catch{console.error('error')}
+        }
+        pageFunc.getAulas()
+    }
+
+    pageFunc.resetGrid = ()=>{
+        make_grid()
+        getAgenda().then(()=>{
+            pageFunc.fillAgenda()
+        })
+
+    }
+
+    pageFunc.pageStart = ()=>{
+        pageScreen.querySelector('#edtCal').value = today.getFormatDate()
+        pageFunc.resetGrid()
+    }
+
+    function make_grid(){
+        const day = new Date(pageScreen.querySelector('#edtCal').value+' 00:00:00')
+        pageData.dia = day.getDay()
+        pageData.f_dia = day.getFormatDate()
+        const week = pageScreen.querySelector('.day')
+        week.innerHTML = ''
+
+        for(let y=-2; y<24; y++){
+            const line = document.createElement('tr')
+            const head = y==0 ? document.createElement('tr') : null
+            const hora = y.toString().padStart(2,0)+':00'
+            line.id = 'row-'+hora.substr(0,2)
+            line.data = []
+
+            for(let x=0; x<2; x++){            
+                const cell = document.createElement(y>=0 & x>0 ? 'td' : 'th')
+                cell.innerHTML =  y>=0 ? (x==0 ? hora : '') : (x>0 ? (y==-2 ? day.getWeekDay() : day.getFormatBR()) : '')
+                cell.className = x==0 ? 'time' : 'cell'                
+                x>0 ? cell.id = `cell-${hora.substr(0,2)}` : null  
+                cell.addEventListener('click',(e)=>{
+                    if(e.target.nodeName == 'TD'){                    
+                        const data = new Object
+                        data.dia = pageData.dia
+                        data.hora = y
+                        data.date = pageData.f_dia
+                        data.time = hora
+                        data.alunos = e.target.parentNode.data
+                        openHTML('agd_view_aula.html','pop-up','Confirmar Presença',data,800)
+                    }
+                })
+                line.appendChild(cell)
+            }
+
+            week.appendChild(line)
+        }
+    }
+
+    pageScreen.querySelector('#edtCal').addEventListener('change',()=>{
+        make_grid()
+        pageFunc.fillAgenda()
+    })
+
+
+    pageFunc.pageStart()
+
+</script>

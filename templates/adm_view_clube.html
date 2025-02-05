@@ -1,0 +1,155 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Clube</legend>
+
+        <div class="inline">
+            <label for="edtRazSoc">Nome *</label>
+            <input type="text" class="only-view" id="edtNome" maxlength="70" disabled>
+        </div>
+        <div class="inline">
+            <label for="edtEnd">Endereço</label>
+            <input type="text" class="only-view" id="edtEnd" maxlength="60" disabled>
+            <label for="edtNum">Num.</label>
+            <input type="text" class="only-view" id="edtNum" maxlength="6" style="width: 150px;" disabled>    
+        </div>
+        <div class="inline">
+            <label for="edtCidade">Cidade</label>
+            <input type="text" class="only-view" id="edtCidade" maxlength="60" disabled>
+            <label for="cmbUF">Estado</label> 
+            <select id="cmbUF" class="only-view" style="width: 200px;" disabled>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapa</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceara</option>
+                <option value="ES">Espirito Santo</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="MA">Maranhao</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Para</option>
+                <option value="PB">Paraiba</option>
+                <option value="PR">Parana</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piaui</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondonia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option selected="selected" value="SP">Sao Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>                    
+            </select>   
+        </div>
+        <div class="inline">            
+            <label for="edtBairro">Bairro</label>
+            <input type="text" class="only-view" id="edtBairro" maxlength="60" disabled>
+            <label for="edtCEP">CEP</label>
+            <input type="text" class="only-view" id="edtCEP" maxlength="10" inputmode="numeric" onkeyup="valCEP(this)" style="width: 200px;" disabled>
+        </div>
+
+        <div class="line">
+            <button id="btnDel" class="only-view" disabled>Deletar</button>
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+    
+    const pageData = main_data.adm_view_clube.data
+    const pageFunc = main_data.adm_view_clube.func
+    const pageScreen = document.querySelector('#card-adm_view_clube')
+    const newClube = Object.keys(pageData).length == 0
+
+    function startPage(){
+        if(newClube){
+            openFields(1)
+            pageScreen.querySelector('#btnDel').disabled = 1
+            pageScreen.querySelector('#btnEdit').disabled = 1
+        }else{
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtEnd').value = pageData.rua
+            pageScreen.querySelector('#edtNum').value = pageData.num
+            pageScreen.querySelector('#edtCidade').value = pageData.cidade
+            pageScreen.querySelector('#cmbUF').value = pageData.uf
+            pageScreen.querySelector('#edtBairro').value = pageData.bairro
+            pageScreen.querySelector('#edtCEP').value = pageData.cep
+            pageScreen.querySelector('#btnEdit').disabled = 0
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+    pageFunc.setClube = (del=0)=>{
+        if(checkField(['edtNome'])){
+            const params = new Object;
+                params.id = newClube ? 0 : pageData.id
+                params.nome = del ? '' : pageScreen.querySelector('#edtNome').value.trim()
+                params.rua = pageScreen.querySelector('#edtEnd').value.trim()
+                params.num = pageScreen.querySelector('#edtNum').value.trim()
+                params.cidade = pageScreen.querySelector('#edtCidade').value.trim()
+                params.bairro = pageScreen.querySelector('#edtBairro').value.trim()
+                params.uf = pageScreen.querySelector('#cmbUF').value.trim()
+                params.cep = pageScreen.querySelector('#edtCEP').value.trim()
+            const myPromisse = queryDB(params,'ADM-1');
+            myPromisse.then((resolve)=>{
+                setLog(`CLUBE ${newClube?'Cadastrado':(del ? 'Deletado' : 'Editado')} ${ !newClube ? pageData.nome :''} -> ${params.nome}`)
+                try{
+                    main_data.adm_clube.func.fillClube()
+                }catch{
+                    console.error('Tela fechada pelo usuário!')
+                }
+                alert('Cadastrado efetuado!')
+                closeModal('adm_view_clube')
+            })
+        }
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setClube()
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(confirm('Deseja realmente deletar este Clube e todos seus alunos e aulas?')){
+            pageFunc.setClube(1)
+        }
+    })
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>

@@ -1,0 +1,86 @@
+
+<template>
+    <style>
+
+    </style>
+
+        <fieldset class="fds-busca alunos">
+            <legend>Filtro</legend>
+            <div class="inline">
+                <label for="edtBusca">por:</label>
+                <select id="cmbBusca">
+                    <option value="nome" signal="LIKE" selected>Nome</option>
+                    <option value="clube" signal="LIKE" >Clube</option>
+                    <option value="cidade" signal="LIKE">Cidade</option>
+                </select>
+                <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+                <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+                <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+            </div>
+
+            <table id="tblAluno"></table>
+        </fieldset>
+    
+</template>
+<script>
+  
+    const pageData = main_data.adm_aluno.data
+    const pageFunc = main_data.adm_aluno.func
+    const pageScreen = document.querySelector('#card-adm_aluno')
+
+    pageFunc.pageStart = ()=>{
+        if(main_data.hasOwnProperty(pageData.org)){
+            pageFunc.fillAluno()
+        }
+    }
+
+    pageFunc.fillAluno = ()=>{      
+        const tbl = pageScreen.querySelector('#tblAluno')
+        tbl.innerHTML = ''
+        const query = getVal('alunos')
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]
+        const myPromisse = queryDB(params,'ADM-2');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)       
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            if(localStorage.getItem('access')=='0'){
+                tbl.head('Nome,Clube,Prof.')
+            }else{
+                tbl.head('Nome,Clube')
+            }
+            for(let i=0; i<json.length;i++){
+                if(localStorage.getItem('access')=='0'){
+                    tbl.plot(json[i],'nome,clube,prof','Upp,Upp,Upp')
+                }else{
+                    tbl.plot(json[i],'nome,clube','Upp,Upp')
+                }
+            }         
+        });
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillAluno()
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('adm_view_aluno.html','pop-up','Novo Aluno')
+    })
+
+    pageScreen.querySelector('#tblAluno').addEventListener('click',(e)=>{
+        data = e.target.parentNode.data
+        if(main_data.hasOwnProperty(pageData.org)){
+            data != undefined ?  main_data[pageData.org].func.buscaAluno(data) : null   
+            closeModal('adm_aluno')            
+        }else{            
+            data != undefined ? openHTML('adm_view_aluno.html','pop-up',`Edição de dados - ${data.nome.toUpperCase()}`,data) : null
+        }
+
+    })
+
+
+    pageFunc.pageStart()
+
+</script>

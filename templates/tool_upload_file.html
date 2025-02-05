@@ -1,0 +1,46 @@
+
+<template>
+    <style>
+        .col{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+  
+    <fieldset>
+        <legend>Selecione o arquivo</legend>
+        <div class="col">
+                <canvas id="cnvImg"></canvas>
+                <input  name="up_file" id="up_file" type="file" accept=".jpg,.jpeg,.png,.pdf,.avi">  
+                <button id="btnUpload"><span class="mdi mdi-content-save-check"></span>Salvar</button>
+        </div>
+    </fieldset>
+
+
+</template>
+<script>
+
+    const pageData = main_data.tool_upload_file.data
+    const pageFunc = main_data.tool_upload_file.func
+    const pageScreen = document.querySelector('#card-tool_upload_file')
+
+    pageScreen.querySelector('#btnUpload').addEventListener('click',()=>{
+        const up = uploadImage('up_file',`files/${pageData.id_acervo}/${pageData.id_item}/`,pageScreen.querySelector('#up_file').files[0].name)
+        up.then((resp)=>{
+            setLog(`Imagem Adicionada -> : ${pageData.nome}`)
+            if(main_data.hasOwnProperty(pageData.org)){
+                main_data[pageData.org].func.fillAnexo()             
+            }
+            closeModal('tool_upload_file')
+        })
+    })
+
+    pageScreen.querySelector('#up_file').addEventListener('change',()=>{        
+        showFile()
+    })
+
+
+
+</script>

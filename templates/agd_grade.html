@@ -1,0 +1,177 @@
+<template>
+    <style>
+
+        .cell{
+/*            min-width: 140px;*/
+            width: 15%;
+            border-left: solid 1px;
+            text-align: center;
+        }
+
+        th.cell, #edtCal{
+            text-align: center;
+        }
+     
+        td.cell:hover{
+            background-color: yellowgreen;
+            color: black;
+        }
+
+        .legenda{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .line-lgd{
+            display: flex;
+            margin-left: 100px;            
+            align-items: center;
+            gap: 5px;
+            width: 200px;
+        }
+
+        .square{
+            width: 50px;
+            height: 20px;
+        }
+
+        .c0{background-color: rgb(17, 141, 179);}
+        .c1{background-color: rgb(156, 211, 193);}
+        .c2{background-color: rgb(167, 148, 189);}
+        .c3{background-color: rgb(253, 255, 127);}
+        .c4{background-color: rgb(127, 193, 255);}
+        .c5{background-color: rgb(255, 142, 127);}
+        .c6{background-color: rgb(176, 56, 180);}
+        .c7{background-color: rgb(255, 204, 127);}
+        
+
+        @media all and (max-width : 768px) {
+
+            .legenda{
+                flex-direction: column;
+            }
+
+            tr{
+                display: inline-flex;
+            }
+
+            .line-lgd {
+                margin-left: 10px;
+                width: auto;
+            }
+
+            .time{
+                width: 60px;
+            }
+
+            .cell{
+                width: 50px;
+                height: 50px;
+                min-width: 50px;
+                max-width: 50px;
+                overflow: hidden;
+                padding:0 ;
+            }
+
+            .mob-sqr{
+                display: block;
+                max-height: 50px;
+            }
+
+            .mob-sqr::before{
+                content: "";
+                width: 50px;
+                height: 50px;                
+                position: relative;
+                display: block;
+            }
+        }
+
+    </style>
+
+    <div class="legenda"></div>
+    <div class="week"></div>
+
+
+</template>
+<script>
+
+    const pageData = main_data.agd_grade.data
+    const pageFunc = main_data.agd_grade.func
+    const pageScreen = document.querySelector('#card-agd_grade')
+
+    pageFunc.pageStart = ()=>{
+        pageFunc.make_grid()
+    }
+
+    function fillGrid(){
+        const myPromisse = queryDB({},'AGD-0')
+        myPromisse.then((resolve)=>{
+            const legenda = pageScreen.querySelector('.legenda')
+            legenda.innerHTML = ''            
+            pageData.clubes = []
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                if(!pageData.clubes.includes(json[i].id_clube)){
+                    pageData.clubes.push(json[i].id_clube)                    
+                    legenda.innerHTML += `<div class="line-lgd"><div class="square c${pageData.clubes.indexOf(json[i].id_clube)}"></div><p>${json[i].clube}</p></div>`
+                }
+                const cell = pageScreen.querySelector('#'+json[i].id_call)
+                if(cell != null){
+                    cell.innerHTML = json[i].descricao
+                    cell.data.push(json[i])
+                    cell.classList.add('c'+pageData.clubes.indexOf(json[i].id_clube))
+                    cell.classList.add('mob-sqr')
+                }
+            }
+        })
+    }
+
+    pageFunc.make_grid = ()=>{
+/*
+        const day = new Date(today.getFormatDate()+' 00:00:00')
+        while(day.getDay() > 0){
+            day.change(-1)
+        }
+*/
+        const week_day = ['','Seg','Ter','Qua','Qui','Sex','Sab','Dom']
+        const week = pageScreen.querySelector('.week')
+        week.innerHTML = ''
+        for(let y=-1; y<24; y++){
+            const line = document.createElement('tr')
+            const head = y==0 ? document.createElement('tr') : null
+
+            for(let x=0; x<8; x++){            
+                const cell = document.createElement(y>=0 & x>0 ? 'td' : 'th')
+                cell.innerHTML =  y>=0 ? (x==0 ? y.toString().padStart(2,0)+':00' : '') :  week_day[x] 
+                cell.className = x==0 ? 'time' : 'cell'
+                x>0 ? cell.id = `w-${x==7 ? 0 : x}-${y}` : null  
+                cell.data = []
+                cell.addEventListener('click',(e)=>{
+                    if(e.target.nodeName == 'TD'){
+                        const obj = new Object
+                        obj.day = Number(e.target.id.substr(2,1))
+                        obj.time = Number(e.target.id.substr(4,2))
+                        obj.aulas = e.target.data
+                        closeModal('agd_view_grade')
+                        openHTML('agd_view_grade.html','pop-up','Edição de Agenda',obj,600)
+                    }
+                })              
+                line.appendChild(cell)
+
+//                day.change()
+            }
+            week.appendChild(line)
+        }
+
+        fillGrid()
+
+    }
+
+
+
+
+    pageFunc.pageStart()
+
+</script>

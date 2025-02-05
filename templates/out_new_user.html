@@ -1,0 +1,88 @@
+<template>
+    <style></style>
+
+    <fieldset>
+        <legend>Novo Usuário</legend>
+        <div class="inline">
+            <label for="name">Nome*</label>
+            <input type="text" class="asaas" onfocus="this.select();" id="name">            
+        </div>
+        <div class="inline">
+            <label for="email">Email*</label>
+            <input type="email" onfocus="this.select();" id="email" class="asaas"  onkeyup="validaEmail(this)">            
+        </div>
+        <div class="inline">
+            <label for="cpfCnpj">CPF*</label>
+            <input type="text" onfocus="this.select();" inputmode="decimal" id="cpfCnpj" class="asaas" onkeyup="valCPF(this)" maxlength="14">
+        </div>
+        <div class="inline">
+            <label for="mobilePhone">Celular</label>
+            <input type="text" onfocus="this.select();" inputmode="decimal" id="mobilePhone" class="asaas" onkeyup="valFone(this)" maxlength="15">
+        </div>
+        <div class="inline">
+            <label for="edtNewPass">Senha*</label>
+            <input type="password" onfocus="this.select();" id="edtNewPass">            
+        </div>
+        <div class="inline">
+            <label for="edtRePass">Repita a senha</label>
+            <input type="password" onfocus="this.select();" id="edtRePass">            
+        </div>   
+
+        <div class="line">
+            <button id="btnSave">Criar Usuário</button>
+        </div>
+    </fieldset>
+
+    <div class="legenda"></div>
+
+</template>
+<script>
+
+    document.querySelector('#btnSave').addEventListener('click',()=>{
+        if(checkField(['name','email','cpfCnpj'])){
+            if(checkMinLength(['edtNewPass'],8)){
+                if(checkRepass(['edtNewPass','edtRePass'])){
+                    if(checkValidation(['email','cpfCnpj','mobilePhone'])){
+                        const asaas = document.querySelectorAll('.asaas')
+                        const body = {"notificationDisabled": true,"externalReference": "BACKHAND-NewUser"}
+                        for(let i=0; i<asaas.length; i++){
+                            if(asaas[i].value.length > 0){
+                                body[asaas[i].id] = asaas[i].value
+                            }
+                        }
+                        newCli(body).then((response)=>{
+                            response.text().then((txt)=>{
+                                const json = JSON.parse(txt)
+                                console.log(json)
+                                newUser(json.id)
+                            })
+                        })
+                    }
+                }
+            }
+        }      
+    })
+
+    function newUser(asaas_id){
+            const params = new Object;
+                params.nome = document.querySelector('#name').value.trim()
+                params.email = document.querySelector('#email').value.trim()
+                params.pass = document.querySelector('#edtNewPass').value
+                params.asaas_id = asaas_id
+            const myPromisse = queryDB(params,'USR-4');
+            myPromisse.then((resolve)=>{
+                const hash = JSON.parse(resolve)[0].hash
+                if(hash == '0'){
+                    alert('Este email já esta cadastrado, caso não se lembra clique em "Esqueci a senha".')
+                    delAsaasCust(asaas_id).then(()=>{
+                        closeModal('out_new_user')
+                    })
+                }else{
+                    confirmaUser(params.email,asaas_id)
+                    alert('Verifique seu email para confirmar seu cadastro.')
+                    closeModal('out_new_user')
+                }
+            })
+        }
+    
+</script>

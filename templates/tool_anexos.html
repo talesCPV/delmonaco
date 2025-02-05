@@ -1,0 +1,130 @@
+<template>
+    <style>
+
+        .frm-show{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .square_frm{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5%;
+            font-size: 2em;
+            width: 200px;
+            height: 200px;
+        }
+     
+        .square_frm:hover{
+            cursor: pointer;
+            border: solid 1px rgb(189, 25, 25);
+        }
+
+        #btnNovo{
+/*            position: absolute;*/
+        }
+
+    </style>
+  <div class="frm-anexo">
+    <div class="frm-show"></div>
+  </div>
+
+</template>
+<script>
+
+    const pageData = main_data.tool_anexos.data
+    const pageFunc = main_data.tool_anexos.func
+    const pageScreen = document.querySelector('#card-tool_anexos')
+
+    function clearFrm(){
+
+        const frm = pageScreen.querySelector('.frm-show')
+        frm.innerHTML = '' 
+
+        const sqr = document.createElement('div')
+        sqr.className = 'square_frm'
+        sqr.style.backgroundColor = 'rgb(240, 186, 58)'
+        sqr.innerHTML = '<span class="mdi mdi-plus-thick"></span>'
+        sqr.addEventListener('click',()=>{
+            pageData.org = 'tool_anexos'
+            openHTML('tool_upload_file.html','pop-up','Arquivo',pageData,600)
+        })
+
+        frm.appendChild(sqr)
+        return frm
+    }
+
+    pageFunc.fillAnexo = ()=>{
+
+        const data = new URLSearchParams();        
+            data.append("dir",`files/${pageData.id_acervo}/${pageData.id_item}/`);
+        const myRequest = new Request("backend/show_dir.php",{
+            method : "POST",
+            body : data
+        })
+        const myPromisse = new Promise((resolve,reject) =>{
+            fetch(myRequest)
+            .then(function (response){
+                if (response.status === 200) { 
+                    resolve(response.text());             
+                } else { 
+                    reject(new Error("Houve algum erro na comunicação com o servidor"));                    
+                } 
+            })
+        })  
+        myPromisse.then((txt)=>{
+            const json = JSON.parse(txt)
+            const frm = clearFrm()
+            
+            for(let i=json.length-1; i>=2; i--){
+
+                const ext = json[i].split('.')[json[i].split('.').length -1]
+                const filename = json[i].split('.')[0]
+                const arq = ['jpg','jpeg','png'].includes(ext) ? 'img' : 'div'
+
+                const sqr = document.createElement(arq)
+                sqr.className = 'square_frm'
+                sqr.src = `files/${pageData.id_acervo}/${pageData.id_item}/${json[i]}`
+                sqr.style.backgroundColor = '#59f1a4'
+                sqr.style.fontSize = '0.9em'
+                sqr.style.overflow = 'hidden'
+                sqr.innerHTML = `<p>${filename}</p><h1>${ext.toUpperCase()}</h1>`
+                sqr.addEventListener('click',(e)=>{
+                    const tbl = []
+
+                    const open = new Object
+                    open.label = 'Abrir em uma nova aba'
+                    open.link = ()=>{
+                        alert(sqr.src)
+                        window.open(sqr.src, '_blank');
+                    }            
+                    tbl.push(open)
+                    
+                    const del = new Object
+                    del.label = 'Deletar Arquivo'
+                    del.link = ()=>{
+                        if(confirm('Remover esta imagem permanentemente?')){
+                            delFile(`/../files/${pageData.id_acervo}/${pageData.id_item}/${json[i]}`)
+                            .then(()=>{
+                                pageFunc.fillAnexo()
+                            })
+                        }
+                    }            
+                    tbl.push(del)
+                    menuContext(tbl,e)
+                })
+                frm.appendChild(sqr)
+
+            }
+
+        })     
+    }
+
+    
+    pageFunc.fillAnexo()
+
+</script>

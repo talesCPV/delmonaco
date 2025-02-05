@@ -1,0 +1,173 @@
+<template>
+    <style>
+        .frm-post{
+            display: flex;
+            flex-direction: row;            
+        }
+
+        .frm-post select{            
+            overflow-y: scroll;
+        }
+
+        .data-post{
+            width: 100%;
+            height: 100%;
+        }
+
+        .data-post textarea{
+            height: 150px
+        }
+
+        @media all and (max-width : 768px) {
+            .frm-post{
+                flex-direction: column;
+            }
+
+            .frm-post button{
+                width: 92%;
+            }
+        }
+
+    </style>
+    <div class="frm-post">
+        <select id="cmbTipos" size="15"></select>
+        <div class="data-post">
+            <div class="inline">
+                <label for="edtDesc">Descrição</label>
+                <input type="text" id="edtDesc">
+            </div>
+            <div class="inline">
+                <label for="cmbClube">Clube</label>
+                <select id="cmbClube"></select>
+                <label for="edtValor">Valor R$</label>
+                <input type="text" id="edtValor" onfocus="this.select();" onkeyup="valFloat(this)" inputmode="decimal" value="0">
+            </div>
+            <div class="inline">
+                <label for="edtObs">Obs</label>
+                <textarea id="edtObs"></textarea>
+            </div>
+            <div class="line">
+                <button id="btnNovo">Novo</button>
+                <button id="btnSave">Salvar</button>
+                <button id="btnDel">Deletar</button>
+            </div>
+        </div>
+    </div>
+
+</template>
+<script>
+    const pageData = main_data.adm_valor.data
+    const pageFunc = main_data.adm_valor.func
+    const pageScreen = document.querySelector('#card-adm_valor')
+    let newValor = 1
+     
+    function clearForm(){
+        pageScreen.querySelector('#edtDesc').value = ''
+        pageScreen.querySelector('#edtObs').value = ''
+        pageScreen.querySelector('#edtDesc').focus()
+        pageData.pick = new Object
+        newValor = 1
+    }
+
+
+    pageFunc.fillValor = ()=>{
+
+        const cmb = pageScreen.querySelector('#cmbTipos')
+        cmb.innerHTML = ''
+
+        const myPromisse = queryDB({},'ADM-4');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){               
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].descricao+' | '+json[i].clube
+                opt.selected = pageData.access == json[i].id
+                opt.data = json[i]
+                cmb.appendChild(opt)
+            }
+        });
+    }
+
+    pageFunc.fillClube = ()=>{
+
+        const cmb = pageScreen.querySelector('#cmbClube')
+        cmb.innerHTML = ''
+        const params = new Object;
+            params.field = 'nome'
+            params.signal = 'LIKE'
+            params.value = "'%%'"
+        const myPromisse = queryDB(params,'ADM-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            function addOpt(id,nome){
+                const opt = document.createElement('option')
+                opt.value = id
+                opt.innerHTML = nome
+                opt.selected = pageData.access == id 
+                cmb.appendChild(opt)
+            }
+
+            for(let i=0; i<json.length;i++){               
+                addOpt(json[i].id,json[i].nome)
+            }
+        });
+    }
+
+    pageFunc.setValor = (del=0)=>{
+        if(checkField(['edtDesc'])){
+            const params = new Object;
+                params.id = newValor ? 0 : pageData.pick.id
+                params.id_clube = pageScreen.querySelector('#cmbClube').value
+                params.desc = del ? '' : pageScreen.querySelector('#edtDesc').value.trim()
+                params.valor = pageScreen.querySelector('#edtValor').value.trim()
+                params.obs = pageScreen.querySelector('#edtObs').value.trim()
+            const myPromisse = queryDB(params,'ADM-5');
+            myPromisse.then((resolve)=>{
+                setLog(`Valor Aula ${newValor ? 'Cadastrado':(del ? 'Deletado' : 'Editado')} ${ !newValor ? pageData.descricao +' ->' :''} ${params.desc} R$${params.valor}`)
+                pageFunc.fillValor()
+                alert('Cadastrado efetuado!')
+            })
+        }
+    }
+
+    pageScreen.querySelector('#cmbTipos').addEventListener('click',(e)=>{
+
+
+        const sel = pageScreen.querySelector('#cmbTipos')
+        pageData.pick = sel.options[sel.selectedIndex].data
+
+        try{
+            pageScreen.querySelector('#cmbClube').value = pageData.pick.id_clube
+            pageScreen.querySelector('#edtDesc').value = pageData.pick.descricao
+            pageScreen.querySelector('#edtValor').value = parseFloat(pageData.pick.valor).toFixed(2)
+            pageScreen.querySelector('#edtObs').value = pageData.pick.obs
+            newValor = 0
+        }catch{
+            console.error('Não existe nenhum Post.')
+            clearForm()
+        }
+    })
+
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        clearForm()
+    })
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setValor()
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(!newValor){
+            if(confirm('Remover esta Aula?')){
+                pageFunc.setValor(1)
+            }
+        }
+    })
+
+
+    pageFunc.fillValor()
+    pageFunc.fillClube()
+
+</script>
