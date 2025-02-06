@@ -96,7 +96,7 @@
         .botton{
             text-align: center;
             line-height: initial;
-            font-family: Moscow Metro;
+            padding-bottom: 10px;
         }
 
         .hide-btn{
@@ -136,16 +136,9 @@
 
             <div class="risk"></div>
 
-            <div class="inline">
-                <p class="hide-btn"  id="btn-newuser">Novo Usuário</p>
-                <p class="hide-btn"  id="btn-forgot">Esqueci a senha</p>
-            </div>
-
-            <div class="risk"></div>
-
             <div class="botton">
-                <p>Backhand 1.0</p>
-                <p>Gerenciador de aulas</p>
+                <p>Gerencia Del Mônaco 1.0</p>
+                <p>Desenvolvido por Tales C. Dantas</p>
             </div>
 
         </div>
@@ -204,14 +197,6 @@
                 }
             })
         }
-    })
-
-    document.querySelector('#btn-newuser').addEventListener('click',()=>{
-        openHTML('out_new_user.html','pop-up','Bem Vindo ao Backhand')
-    })
-
-    document.querySelector('#btn-forgot').addEventListener('click',()=>{
-        openHTML('out_forgot.html','pop-up','Esqueci a senha')
     })
 
     const parametros = window.location.search.substring(1,99999).split('&')
