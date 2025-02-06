@@ -344,3 +344,54 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+/* PRODUTOS */
+
+ DROP PROCEDURE IF EXISTS sp_view_prod;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_prod(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SET @quer = CONCAT('SELECT * FROM tb_produto WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;
+		ELSE 
+			SELECT 0 AS id, "" AS nome;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE sp_set_prod;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_prod(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Inome varchar(30),
+		IN Ivalor double,
+		IN Isobre varchar(1024)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome = "")THEN
+				DELETE FROM tb_produto WHERE id = Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_produto (nome,valor,sobre) 
+					VALUES (Inome, Ivalor, Isobre);
+				ELSE 
+					UPDATE tb_produto SET nome=Inome, valor=Ivalor, sobre=Isobre ;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+

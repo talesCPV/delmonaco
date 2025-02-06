@@ -8,15 +8,13 @@
 
     </style>
 
-    <fieldset class="fds-busca acervo">
+    <fieldset class="fds-busca prod">
         <legend>Filtro</legend>
         <div class="inline">
             <label for="edtBusca">por:</label>
             <select id="cmbBusca">
                 <option value="id" signal="IN">Código</option>
-                <option value="razao_social" signal="LIKE" selected>Nome</option>
-                <option value="uf" signal="LIKE">UF</option>
-                <option value="cidade" signal="LIKE">Cidade</option>
+                <option value="nome" signal="LIKE" selected>Nome</option>
             </select>
             <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
             <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
@@ -25,45 +23,45 @@
 
     </fieldset>
     <div class="resp-busca">
-        <table id="tblClientes"></table>
+        <table id="tblProdutos"></table>
     </div>
 </template>
 <script>
 
-    const pageData = main_data.cli_busca.data
-    const pageFunc = main_data.cli_busca.func
-    const pageScreen = document.querySelector('#card-cli_busca')
+    const pageData = main_data.prod_busca.data
+    const pageFunc = main_data.prod_busca.func
+    const pageScreen = document.querySelector('#card-prod_busca')
 
-    pageFunc.fillClientes = ()=>{      
-        const tbl = pageScreen.querySelector('#tblClientes')
+    pageFunc.fillProdutos = ()=>{      
+        const tbl = pageScreen.querySelector('#tblProdutos')
         tbl.innerHTML = ''
-        const query = getVal('acervo')
+        const query = getVal('prod')
         const params = new Object;
             params.field = query[0]
             params.signal = query[1]
             params.value = query[2]
-        const myPromisse = queryDB(params,'CLI-0');
+        const myPromisse = queryDB(params,'PROD-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
             tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
-            tbl.head('Razao Social,UF,Cidade')
+            tbl.head('Nome do Produto')
             for(let i=0; i<json.length;i++){
-                tbl.plot(json[i],'razao_social,uf,cidade','Upp,Upp,Upp')
+                tbl.plot(json[i],'nome','Upp')
             }         
         });
     }
 
     pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
-        pageFunc.fillClientes()
+        pageFunc.fillProdutos()
     })
 
     pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
-        openHTML('cli_view.html','pop-up','Novo Cliente')
+        openHTML('prod_view.html','pop-up','Novo Produto')
     })
 
-    pageScreen.querySelector('#tblClientes').addEventListener('click',(e)=>{
+    pageScreen.querySelector('#tblProdutos').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
-        openHTML('cli_view.html','pop-up','Cliente',data)
+        openHTML('prod_view.html','pop-up','Produtos',data)
     })
 
 </script>

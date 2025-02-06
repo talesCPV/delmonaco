@@ -97,3 +97,31 @@ CREATE TABLE tb_colaborador (
     FOREIGN KEY (id_cargo) REFERENCES tb_cargos(id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8; 
 */
+
+/* PRODUTO */
+
+DROP TABLE IF EXISTS tb_produto;
+CREATE TABLE tb_produto(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    nome varchar(30) NOT NULL,
+    valor double NOT NULL DEFAULT 0,
+    sobre varchar(1024) DEFAULT NULL,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_escopo;
+CREATE TABLE tb_prod_item(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    nome varchar(30) NOT NULL,
+    texto varchar(256) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_escopo_item;
+CREATE TABLE tb_escopo_item(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    id_escopo int(11) NOT NULL,
+    texto varchar(1024) NOT NULL,
+	FOREIGN KEY (id_escopo) REFERENCES tb_escopo(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

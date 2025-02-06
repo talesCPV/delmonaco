@@ -9,3 +9,5 @@ CREATE VIEW vw_hora_dia AS
 		UNION ALL SELECT 22 UNION ALL SELECT 23;
 
 SELECT * FROM vw_hora_dia;
+
+SELECT * FROM tb_produto;
