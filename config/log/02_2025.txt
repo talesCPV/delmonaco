@@ -23,3 +23,12 @@
 06/02/2025 14:12 tales@planet3.com.br : Permissao alterada, Modulo: Clientes, Acesso:[[0,1]])
 06/02/2025 14:12 tales@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0,1]])
 06/02/2025 14:15 tales@planet3.com.br :  Imagem Alterada -> Perfil Usuario: tales@planet3.com.br
+06/02/2025 14:35 tales@planet3.com.br : Menu Alterado (Buscar, cli_busca.html, pop-up, Clientes)
+06/02/2025 14:37 tales@planet3.com.br : Menu Alterado (Gerenciar, menu, pop-up, )
+06/02/2025 14:37 tales@planet3.com.br : Menu Alterado (Clientes, cli_busca.html, pop-up, Clientes)
+06/02/2025 14:39 tales@planet3.com.br : Menu Alterado (Sistema, menu, pop-up, )
+06/02/2025 15:23 tales@planet3.com.br : CLIENTE Cadastrado  -> Cliente Teste
+06/02/2025 15:27 tales@planet3.com.br : CLIENTE Editado Cliente Teste -> Cliente Teste 2
+06/02/2025 15:28 tales@planet3.com.br : CLIENTE Editado Cliente Teste 2 -> Cliente Teste 123
+06/02/2025 15:29 tales@planet3.com.br : CLIENTE Editado Cliente Teste 123 -> Cliente Teste 123
+06/02/2025 15:29 tales@planet3.com.br : CLIENTE Deletado Cliente Teste 123 -> 

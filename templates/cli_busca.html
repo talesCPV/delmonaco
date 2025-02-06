@@ -14,8 +14,7 @@
             <label for="edtBusca">por:</label>
             <select id="cmbBusca">
                 <option value="id" signal="IN">Código</option>
-                <option value="nome" signal="LIKE" selected>Nome</option>
-                <option value="pais" signal="LIKE" >País</option>
+                <option value="razao_social" signal="LIKE" selected>Nome</option>
                 <option value="uf" signal="LIKE">UF</option>
                 <option value="cidade" signal="LIKE">Cidade</option>
             </select>
@@ -26,47 +25,45 @@
 
     </fieldset>
     <div class="resp-busca">
-        <table id="tblAcervo"></table>
+        <table id="tblClientes"></table>
     </div>
 </template>
 <script>
 
-    const pageData = main_data.busca_acervo.data
-    const pageFunc = main_data.busca_acervo.func
-    const pageScreen = document.querySelector('#card-busca_acervo')
+    const pageData = main_data.cli_busca.data
+    const pageFunc = main_data.cli_busca.func
+    const pageScreen = document.querySelector('#card-cli_busca')
 
-    pageFunc.fillAcervo = ()=>{      
-        const tbl = pageScreen.querySelector('#tblAcervo')
+    pageFunc.fillClientes = ()=>{      
+        const tbl = pageScreen.querySelector('#tblClientes')
         tbl.innerHTML = ''
         const query = getVal('acervo')
         const params = new Object;
             params.field = query[0]
             params.signal = query[1]
             params.value = query[2]
-        const myPromisse = queryDB(params,'ACE-0');
+        const myPromisse = queryDB(params,'CLI-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
             tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
-            tbl.head('Nome,UF,Cidade')
+            tbl.head('Razao Social,UF,Cidade')
             for(let i=0; i<json.length;i++){
-                tbl.plot(json[i],'nome,uf,cidade','Upp,Upp,Upp')
+                tbl.plot(json[i],'razao_social,uf,cidade','Upp,Upp,Upp')
             }         
         });
     }
 
     pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
-        pageFunc.fillAcervo()
+        pageFunc.fillClientes()
     })
 
-    pageScreen.querySelector('#tblAcervo').addEventListener('click',(e)=>{
-        try{            
-            if(main_data.hasOwnProperty(pageData.org)){
-                data = e.target.parentNode.data
-                data != undefined ?  main_data[pageData.org].func.buscaAcervo(data) : null               
-            }
-            closeModal('busca_acervo')
-       }catch{null}
-        
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('cli_view.html','pop-up','Novo Cliente')
+    })
+
+    pageScreen.querySelector('#tblClientes').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        openHTML('cli_view.html','pop-up','Novo Cliente',data)
     })
 
 </script>

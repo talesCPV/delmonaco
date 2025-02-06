@@ -63,6 +63,7 @@ function openMenu(){
                 const lbl = document.createElement('label')
                 lbl.htmlFor = `drop-${drop}`
                 lbl.classList = 'toggle'
+                lbl.title = obj[i].modulo
                 
                 const icon = document.createElement('span')
                 icon.className = `mdi ${obj[i].icone}`

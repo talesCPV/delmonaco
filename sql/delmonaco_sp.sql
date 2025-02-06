@@ -76,28 +76,6 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
- DROP PROCEDURE IF EXISTS sp_newUser;
-DELIMITER $$
-	CREATE PROCEDURE sp_newUser(
-        IN Inome varchar(30),
-		IN Iemail varchar(80),
-		IN Isenha varchar(30),
-        IN Iasaas_id varchar(16)
-    )
-	BEGIN
-		SET @has_user = (SELECT COUNT(*) FROM tb_usuario WHERE email COLLATE utf8_general_ci = Iemail COLLATE utf8_general_ci);
-		IF (@has_user = 0)THEN
-			SET @hash = SHA2(CONCAT(Iemail, Isenha), 256);
-			INSERT INTO tb_usuario (nome,email,hash,asaas_id)VALUES(Inome,Iemail,@hash,Iasaas_id);
-			CALL sp_add_credit(Iasaas_id,3,0);
-			SELECT hash FROM tb_usuario WHERE id= (SELECT MAX(id) FROM tb_usuario);
-        ELSE
-			SELECT 0 AS hash;
-        END IF;
-	END $$
-DELIMITER ;
-
-
  DROP PROCEDURE IF EXISTS sp_viewUser;
 DELIMITER $$
 	CREATE PROCEDURE sp_viewUser(
@@ -304,22 +282,65 @@ DELIMITER ;
 
 /* FIM PADRÂO */
 
-/* BUSCAS E CADASTROS */
+/* CLIENTES */
 
- DROP PROCEDURE IF EXISTS sp_view_clube;
- DROP PROCEDURE IF EXISTS sp_set_clube;
- DROP PROCEDURE IF EXISTS sp_view_aluno;
- DROP PROCEDURE IF EXISTS sp_set_aluno;
- DROP PROCEDURE IF EXISTS sp_view_aula;
- DROP PROCEDURE IF EXISTS sp_set_aula;
- DROP PROCEDURE IF EXISTS sp_view_agenda;
- DROP PROCEDURE IF EXISTS sp_set_agenda;
- DROP PROCEDURE IF EXISTS sp_view_agenda_dia;
- DROP PROCEDURE IF EXISTS sp_set_aula_dada;
- DROP PROCEDURE IF EXISTS sp_view_aula_dada;
- DROP PROCEDURE IF EXISTS sp_view_fecha_aula;
- DROP PROCEDURE IF EXISTS sp_view_saldo_devedor;
- DROP PROCEDURE IF EXISTS sp_set_baixa_aula;
- DROP PROCEDURE IF EXISTS sp_set_plano;
- DROP PROCEDURE IF EXISTS sp_add_credit;
- DROP PROCEDURE IF EXISTS sp_view_credit;
+ DROP PROCEDURE IF EXISTS sp_view_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_cli(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SET @quer = CONCAT('SELECT * FROM tb_cliente WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;
+		ELSE 
+			SELECT 0 AS id, "" AS nome;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE sp_set_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_cli(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Irazao_social varchar(80),    
+		IN Ifant varchar(40),
+		IN Icnpj varchar(14),
+		IN Iie varchar(14),
+		IN Iim varchar(14),
+		IN Iend varchar(60),
+		IN Inum varchar(6),
+		IN Icomp varchar(50),
+		IN Ibairro varchar(60),
+		IN Icidade varchar(30),
+		IN Iuf varchar(2),
+		IN Icep varchar(10),
+		IN Iramo varchar(80),
+		IN Itel varchar(15),
+		IN Iemail varchar(80)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Irazao_social = "")THEN
+				DELETE FROM tb_cliente WHERE id = Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_cliente (id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email) 
+					VALUES (Iid,Irazao_social,Ifant,Icnpj,Iie,Iim,Iend,Inum,Icomp,Ibairro,Icidade,Iuf,Icep,Iramo,Itel,Iemail);
+				ELSE 
+					UPDATE tb_cliente SET razao_social=Irazao_social, fantasia=Ifant,cnpj=Icnpj, ie=Iie, im=Iim, end=Iend, num=Inum,
+                    comp=Icomp, bairro=Ibairro, cidade=Icidade, uf=Iuf, cep=Icep, ramo=Iramo, tel=Itel, email=Iemail;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
