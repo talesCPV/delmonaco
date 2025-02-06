@@ -32,3 +32,4 @@
 06/02/2025 15:28 tales@planet3.com.br : CLIENTE Editado Cliente Teste 2 -> Cliente Teste 123
 06/02/2025 15:29 tales@planet3.com.br : CLIENTE Editado Cliente Teste 123 -> Cliente Teste 123
 06/02/2025 15:29 tales@planet3.com.br : CLIENTE Deletado Cliente Teste 123 -> 
+06/02/2025 15:38 tales@planet3.com.br : Alteracao de usuario, email:analaura@grupodelmonaco.com.br -> analaura@grupodelmonaco.com, acesso:1 -> 1

@@ -88,7 +88,7 @@ DELIMITER $$
 	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-			SET @quer =CONCAT('SELECT id,email,access, IF(access=0,"ROOT",IFNULL((SELECT nome FROM tb_usr_perm_perfil WHERE USR.access = id),"DESCONHECIDO")) AS perfil FROM tb_usuario AS USR WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			SET @quer =CONCAT('SELECT id,nome,email,access, IF(access=0,"ROOT",IFNULL((SELECT nome FROM tb_usr_perm_perfil WHERE USR.access = id),"DESCONHECIDO")) AS perfil FROM tb_usuario AS USR WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
 			PREPARE stmt1 FROM @quer;
 			EXECUTE stmt1;
 		ELSE 
@@ -338,7 +338,7 @@ DELIMITER $$
 					VALUES (Iid,Irazao_social,Ifant,Icnpj,Iie,Iim,Iend,Inum,Icomp,Ibairro,Icidade,Iuf,Icep,Iramo,Itel,Iemail);
 				ELSE 
 					UPDATE tb_cliente SET razao_social=Irazao_social, fantasia=Ifant,cnpj=Icnpj, ie=Iie, im=Iim, end=Iend, num=Inum,
-                    comp=Icomp, bairro=Ibairro, cidade=Icidade, uf=Iuf, cep=Icep, ramo=Iramo, tel=Itel, email=Iemail;
+                    comp=Icomp, bairro=Ibairro, cidade=Icidade, uf=Iuf, cep=Icep, ramo=Iramo, tel=Itel, email=Iemail ;
                 END IF;
             END IF;
         END IF;
