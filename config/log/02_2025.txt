@@ -18,3 +18,8 @@
 05/02/2025 22:53 tales@planet3.com.br : Menu Incluido (Buscar)
 05/02/2025 22:54 tales@planet3.com.br : Menu Alterado (Clientes, menu, pop-up, )
 05/02/2025 22:54 tales@planet3.com.br : Menu Alterado (Buscar, menu, pop-up, )
+06/02/2025 14:09 tales@planet3.com.br : Insercao de novo usuarios, email:undefined -> analaura@grupodelmonaco.com.br, acesso:undefined -> 1
+06/02/2025 14:12 tales@planet3.com.br : Menu Deletado (RAIZera)
+06/02/2025 14:12 tales@planet3.com.br : Permissao alterada, Modulo: Clientes, Acesso:[[0,1]])
+06/02/2025 14:12 tales@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0,1]])
+06/02/2025 14:15 tales@planet3.com.br :  Imagem Alterada -> Perfil Usuario: tales@planet3.com.br

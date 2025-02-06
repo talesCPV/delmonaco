@@ -41,6 +41,41 @@ DELIMITER ;
 
 /* USER */
 
+ DROP PROCEDURE sp_setUser;
+DELIMITER $$
+	CREATE PROCEDURE sp_setUser(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+        IN Inome varchar(30),
+		IN Iemail varchar(80),
+		IN Isenha varchar(30),
+        IN Iaccess int(11)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iemail="")THEN
+				DELETE FROM tb_mail WHERE id_from=Iid OR id_to=Iid;
+				DELETE FROM tb_usuario WHERE id=Iid;
+            ELSE			
+				IF(Iid=0)THEN
+					INSERT INTO tb_usuario (email,hash,access,nome)VALUES(Iemail,SHA2(CONCAT(Iemail, Isenha), 256),Iaccess,Inome);
+                ELSE
+					IF(Isenha="")THEN
+						UPDATE tb_usuario SET nome=Inome, email=Iemail, access=Iaccess WHERE id=Iid;
+                    ELSE
+						UPDATE tb_usuario SET nome=Inome, email=Iemail, hash=SHA2(CONCAT(Iemail, Isenha), 256), access=Iaccess WHERE id=Iid;
+                    END IF;
+                END IF;
+            END IF;
+            SELECT 1 AS ok;
+		ELSE 
+			SELECT 0 AS ok;
+        END IF;
+	END $$
+DELIMITER ;
+
  DROP PROCEDURE IF EXISTS sp_newUser;
 DELIMITER $$
 	CREATE PROCEDURE sp_newUser(
