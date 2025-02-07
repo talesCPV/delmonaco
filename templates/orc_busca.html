@@ -1,0 +1,67 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <fieldset class="fds-busca orc">
+        <legend>Filtro</legend>
+        <div class="inline">
+            <label for="edtBusca">por:</label>
+            <select id="cmbBusca">
+                <option value="id" signal="IN">Código</option>
+                <option value="nome" signal="LIKE" selected>Nome</option>
+            </select>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+        </div>
+
+    </fieldset>
+    <div class="resp-busca">
+        <table id="tblOrcamentos"></table>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.orc_busca.data
+    const pageFunc = main_data.orc_busca.func
+    const pageScreen = document.querySelector('#card-orc_busca')
+
+    pageFunc.fillOrcamento = ()=>{      
+        const tbl = pageScreen.querySelector('#tblOrcamentos')
+        tbl.innerHTML = ''
+        const query = getVal('orc')
+        const params = new Object;
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]
+        const myPromisse = queryDB(params,'ORC-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Num.,Cliente,Data,Valor')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'nome','Upp')
+            }         
+        });
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillOrcamento()
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('orc_view.html','pop-up','Novo Orcamento')
+    })
+
+    pageScreen.querySelector('#tblOrcamentos').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        openHTML('orc_view.html','pop-up','Produtos',data)
+    })
+
+</script>

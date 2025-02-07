@@ -36,6 +36,9 @@
         "PROD-3"  => 'CALL sp_set_escopo(@access,@hash,x00,x01,"x02","x03");', // id,id_prod,nome,texto
         "PROD-4"  => 'CALL sp_up_escopo(@access,@hash,x00,x01);', // id, id_prod
 
+        /* ORÇAMENTOS */
+        "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
+
         
     );
 

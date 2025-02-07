@@ -118,3 +118,20 @@ CREATE TABLE tb_escopo(
 	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+/* ORÇAMENTOS */
+
+DROP TABLE IF EXISTS tb_orcamento;
+CREATE TABLE tb_orcamento(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    id_cli int(11) NOT NULL,
+    titulo varchar(90) NOT NULL,
+    txt_intro varchar(2048) NOT NULL DEFAULT "",
+    txt_invest varchar(2048) NOT NULL DEFAULT "",
+	txt_viagem varchar(2048) NOT NULL DEFAULT "",
+    txt_cond_pgto varchar(2048) NOT NULL DEFAULT "",
+    txt_prazo varchar(2048) NOT NULL DEFAULT "",
+    valor double NOT NULL DEFAULT 0,
+	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
