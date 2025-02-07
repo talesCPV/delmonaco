@@ -383,12 +383,13 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Inome = "")THEN
 				DELETE FROM tb_produto WHERE id = Iid;
+                DELETE FROM tb_escopo WHERE id_prod = Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_produto (nome,valor,sobre) 
 					VALUES (Inome, Ivalor, Isobre);
 				ELSE 
-					UPDATE tb_produto SET nome=Inome, valor=Ivalor, sobre=Isobre ;
+					UPDATE tb_produto SET nome=Inome, valor=Ivalor, sobre=Isobre WHERE id=Iid ;
                 END IF;
             END IF;
         END IF;
@@ -427,7 +428,6 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Inome = "")THEN
 				DELETE FROM tb_escopo WHERE id = Iid;
-				DELETE FROM tb_escopo_item WHERE id_escopo = Iid;
                 SELECT "DELETADO" AS RESP;
             ELSE
 				IF(Iid=0)THEN

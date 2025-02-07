@@ -77,7 +77,7 @@
         myPromisse.then((resolve)=>{
             setLog(`PRODUTO ${newProd?'Cadastrado': del ? 'Deletado' : 'Editado'} ${pageData.nome} -> ${params.nome}`)
             try{
-                main_data.cli_busca.func.fillClientes()
+                main_data.prod_busca.func.fillProdutos()
             }catch{
                 console.error('Tela fechada pelo usuário!')
             }

@@ -73,3 +73,13 @@
 07/02/2025 16:09 analaura@grupodelmonaco.com : ESCOPO undefined Implantacao da ISO 9001 -> Treinamento
 07/02/2025 21:41 tales@planet3.com.br : ESCOPO undefined Implantacao da ISO 9001 -> Suporte Pos-Implantacao
 07/02/2025 21:42 tales@planet3.com.br : ESCOPO undefined Implantacao da ISO 9001 -> Suporte Pos-Implantacao
+07/02/2025 21:47 tales@planet3.com.br : PRODUTO Cadastrado undefined -> Implantacao ISO 14000
+07/02/2025 21:49 tales@planet3.com.br : PRODUTO Editado Implantacao ISO 14000 -> Implantacao ISO 14000
+07/02/2025 21:50 tales@planet3.com.br : PRODUTO Editado Implantacao ISO 14000 -> Implantacao ISO 9000
+07/02/2025 21:50 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> Item 1
+07/02/2025 21:50 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> Item 2
+07/02/2025 21:50 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> Item 0
+07/02/2025 21:54 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> 
+07/02/2025 21:54 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> null
+07/02/2025 21:54 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> Item 1
+07/02/2025 21:55 tales@planet3.com.br : PRODUTO Deletado Implantacao ISO 14000 -> 
