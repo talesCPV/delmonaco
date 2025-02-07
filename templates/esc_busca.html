@@ -48,12 +48,13 @@
         const up = new Object
         up.label = 'Subir Ítem'
         up.link = ()=>{
-            if(i>0){
-                data.splice(i-1,0,data[i])
-                data.splice(i+1,1)
-                pageFunc.setMenu(JSON.stringify(pageData.json))
-                pageFunc.refreshMenu()
-            }
+            const params = new Object;
+            params.id = data.id
+            params.id_prod = data.id_prod       
+            const myPromisse = queryDB(params,'PROD-4');
+            myPromisse.then((resolve)=>{
+                pageFunc.fillEscopo()
+            })
         }            
         tbl.push(up)
         menuContext(tbl,e)

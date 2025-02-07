@@ -442,3 +442,23 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_up_escopo;
+DELIMITER $$
+	CREATE PROCEDURE sp_up_escopo(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+        IN Iid_prod int(11)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid>0)THEN
+				UPDATE tb_escopo SET id=-1 WHERE id=Iid AND id_prod=Iid_prod;
+                UPDATE tb_escopo SET id=Iid WHERE id=(Iid-1) AND id_prod=Iid_prod;
+                UPDATE tb_escopo SET id=(Iid-1) WHERE id=-1 AND id_prod=Iid_prod;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
