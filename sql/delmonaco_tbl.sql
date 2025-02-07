@@ -110,18 +110,11 @@ CREATE TABLE tb_produto(
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_escopo;
-CREATE TABLE tb_prod_item(
+CREATE TABLE tb_escopo(
     id int(11) NOT NULL AUTO_INCREMENT,
+    id_prod int(11) NOT NULL,
     nome varchar(30) NOT NULL,
-    texto varchar(256) NOT NULL,
-    PRIMARY KEY (id)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS tb_escopo_item;
-CREATE TABLE tb_escopo_item(
-    id int(11) NOT NULL AUTO_INCREMENT,
-    id_escopo int(11) NOT NULL,
-    texto varchar(1024) NOT NULL,
-	FOREIGN KEY (id_escopo) REFERENCES tb_escopo(id),
+    texto varchar(2048) NOT NULL DEFAULT "",
+	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

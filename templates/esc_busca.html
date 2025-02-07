@@ -1,0 +1,108 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <div class="resp-busca">
+        <table id="tblEscopos"></table>
+    </div>
+    <div class="line">
+        <button id="btnNovo">Novo Escopo</button>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.esc_busca.data
+    const pageFunc = main_data.esc_busca.func
+    const pageScreen = document.querySelector('#card-esc_busca')
+
+    function pageStart(){
+        pageFunc.fillEscopo()
+    }
+
+    pageFunc.subMenu = (e,data)=>{
+        const tbl = []
+        data.setEscopo = pageFunc.setEscopo
+
+        const edt = new Object
+        edt.label = 'Editar'
+        edt.link = ()=>{
+            openHTML('esc_view.html','pop-up',`Escopo - ${data.nome}`,data,600)
+        }            
+        tbl.push(edt)
+
+        const del = new Object
+        del.label = 'Deletar'
+        del.link = ()=>{
+            if(confirm('Deletar este escopo de Produto?')){
+                pageFunc.setEscopo('','',data.id)
+            }
+        }            
+        tbl.push(del)
+
+        const up = new Object
+        up.label = 'Subir Ítem'
+        up.link = ()=>{
+            if(i>0){
+                data.splice(i-1,0,data[i])
+                data.splice(i+1,1)
+                pageFunc.setMenu(JSON.stringify(pageData.json))
+                pageFunc.refreshMenu()
+            }
+        }            
+        tbl.push(up)
+        menuContext(tbl,e)
+    }
+
+    pageFunc.fillEscopo = ()=>{      
+        const tbl = pageScreen.querySelector('#tblEscopos')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.id = pageData.id
+        const myPromisse = queryDB(params,'PROD-2');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Escopo de Produto')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'nome','Upp')
+            }         
+        })
+    }
+
+    pageFunc.setEscopo = (nome="",texto="",id=0)=>{
+        const params = new Object;
+            params.id = id
+            params.id_prod = pageData.id
+            params.nome = nome
+            params.texto = texto
+        const myPromisse = queryDB(params,'PROD-3');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            setLog(`ESCOPO ${json.RESP} ${pageData.nome} -> ${params.nome}`)
+            pageFunc.fillEscopo()
+        })
+    }
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        const nome = prompt('Nome do Escopo:')
+        pageFunc.setEscopo(nome)
+    })
+
+    pageScreen.querySelector('#tblEscopos').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        e.preventDefault()
+        pageFunc.subMenu(e,data)
+
+
+//        openHTML('esc_view.html','pop-up','Produtos',data)
+    })
+
+    pageStart()
+
+</script>

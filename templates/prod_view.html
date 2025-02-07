@@ -29,6 +29,7 @@
         </div>
 
         <div class="line">
+            <button id="btnEscopo" class="only-view" disabled>Escopo</button>
             <button id="btnDel" class="only-view" disabled>Deletar</button>
             <button id="btnEdit">Editar</button>
             <button id="btnSave" class="only-view" disabled>Salvar</button>
@@ -48,6 +49,7 @@
             openFields(1)
             pageScreen.querySelector('#btnDel').disabled = 1
             pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('#btnEscopo').disabled = 1
         }else{     
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtValor').value = pageData.valor
@@ -82,6 +84,10 @@
             closeModal('prod_view')
         })
     }
+
+    pageScreen.querySelector('#btnEscopo').addEventListener('click',()=>{
+        openHTML('esc_busca.html','pop-up',`Escopo de ${pageData.nome}`,pageData)
+    })
 
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setProd()

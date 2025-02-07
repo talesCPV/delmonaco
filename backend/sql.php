@@ -32,8 +32,10 @@
         /* PRODUTOS */
         "PROD-0"  => 'CALL sp_view_prod(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
         "PROD-1"  => 'CALL sp_set_prod(@access,@hash,x00,"x01","x02","x03");', // id,nome,valor,sobre
+        "PROD-2"  => 'CALL sp_view_escopo(@access,@hash,x00);', // ID_PROD
+        "PROD-3"  => 'CALL sp_set_escopo(@access,@hash,x00,x01,"x02","x03");', // id,id_prod,nome,texto
 
-
+        
     );
 
 ?>

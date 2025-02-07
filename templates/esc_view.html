@@ -1,0 +1,80 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Produto</legend>
+
+        <div class="inline">
+            <label for="edtNome">Nome *</label>
+            <input type="text" class="only-view" id="edtNome" onfocus="this.select();" maxlength="30" disabled>
+        </div>
+
+        <div class="inline">
+            <label for="edtSobre">Sobre</label>
+            <textarea class="only-view" id="edtSobre" rows="5" maxlength="2048" disabled></textarea>
+        </div>
+
+        <div class="line">
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+    
+    const pageData = main_data.esc_view.data
+    const pageFunc = main_data.esc_view.func
+    const pageScreen = document.querySelector('#card-esc_view')
+    const newProd = Object.keys(pageData).length == 0
+
+    function startPage(){
+        if(newProd){
+            openFields(1)
+            pageScreen.querySelector('#btnEdit').disabled = 1
+        }else{     
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtSobre').value = pageData.texto
+            pageScreen.querySelector('#btnEdit').disabled = 0
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        const nome = pageScreen.querySelector('#edtNome').value.trim()
+        const texto = pageScreen.querySelector('#edtSobre').value.trim()
+        pageData.setEscopo(nome,texto,pageData.id)
+        closeModal('esc_view')
+    })
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>

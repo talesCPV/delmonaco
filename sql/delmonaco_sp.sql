@@ -368,7 +368,7 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
- DROP PROCEDURE sp_set_prod;
+ DROP PROCEDURE IF EXISTS sp_set_prod;
 DELIMITER $$
 	CREATE PROCEDURE sp_set_prod(	
 		IN Iallow varchar(80),
@@ -395,3 +395,50 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
+ DROP PROCEDURE IF EXISTS sp_view_escopo;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_escopo(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_prod int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SELECT * FROM tb_escopo WHERE id_prod = Iid_prod ORDER BY id;
+		ELSE 
+			SELECT 0 AS id, "" AS nome;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_escopo;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_escopo(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+        IN Iid_prod int(11),
+		IN Inome varchar(30),
+		IN Itexto varchar(256)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome = "")THEN
+				DELETE FROM tb_escopo WHERE id = Iid;
+				DELETE FROM tb_escopo_item WHERE id_escopo = Iid;
+                SELECT "DELETADO" AS RESP;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_escopo (id_prod,nome,texto) 
+					VALUES (Iid_prod,Inome, Itexto);
+					SELECT "ADICIONADO" AS RESP;
+				ELSE 
+					UPDATE tb_escopo SET nome=Inome, texto=Itexto WHERE id=Iid;
+					SELECT "EDITADO" AS RESP;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
