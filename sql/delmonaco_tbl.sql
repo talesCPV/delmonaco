@@ -125,13 +125,29 @@ DROP TABLE IF EXISTS tb_orcamento;
 CREATE TABLE tb_orcamento(
     id int(11) NOT NULL AUTO_INCREMENT,
     id_cli int(11) NOT NULL,
-    titulo varchar(90) NOT NULL,
-    txt_intro varchar(2048) NOT NULL DEFAULT "",
-    txt_invest varchar(2048) NOT NULL DEFAULT "",
-	txt_viagem varchar(2048) NOT NULL DEFAULT "",
-    txt_cond_pgto varchar(2048) NOT NULL DEFAULT "",
-    txt_prazo varchar(2048) NOT NULL DEFAULT "",
+    capa boolean DEFAULT 0,
+    data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     valor double NOT NULL DEFAULT 0,
-	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
+	FOREIGN KEY (id_cli) REFERENCES tb_cliente(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_texto;
+CREATE TABLE tb_texto(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    nome varchar(60) NOT NULL,
+    titulo varchar(90) NOT NULL,
+    text varchar(4096) NOT NULL DEFAULT "",
+    valor double NOT NULL DEFAULT 0,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_orc_txt;
+CREATE TABLE tb_orc_txt(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    id_orc int(11) NOT NULL,
+    id_txt int(11) NOT NULL,
+    FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id),
+    FOREIGN KEY (id_txt) REFERENCES tb_texto(id),
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

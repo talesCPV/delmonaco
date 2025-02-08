@@ -38,7 +38,9 @@
 
         /* ORÇAMENTOS */
         "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
+        "ORC-1"  => 'CALL sp_set_orc(@access,@hash,x00,x01,"x02","x03","x04");', // id,id_cli,capa,data,valor
 
+        
         
     );
 

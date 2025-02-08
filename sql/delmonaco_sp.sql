@@ -462,3 +462,33 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+/* ORÇAMENTO */
+
+ DROP PROCEDURE IF EXISTS sp_set_orc;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_orc(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_cli int(11),
+		IN Icapa boolean,
+		IN Idata datetime,
+		IN Ivalor double
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid_cli = 0)THEN
+				DELETE FROM tb_orcamento WHERE id = Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_orcamento (id_cli,capa,data,valor) 
+					VALUES (Iid_cli,Icapa,Idata,Ivalor);
+				ELSE
+					UPDATE tb_orcamento SET capa=Icapa, data=Idata, valor=Ivalor WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

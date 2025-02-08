@@ -1,0 +1,124 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Produto</legend>
+
+        <div class="inline">
+            <label for="cmbCli">Cliente</label>
+            <select class="only-view" id="cmbCli" disabled></select>
+        </div>
+
+        <div class="inline">
+            <label for="edtValor">Valor</label>
+            <input type="text" class="only-view" id="edtValor" disabled>
+            <label for="edtData">Data</label>
+            <input type="date" class="only-view" id="edtData" disabled>
+            <label for="ckbCapa">Capa</label>
+            <input type="checkbox" class="only-view" id="ckbCapa" checked disabled>
+
+        </div>
+
+        <div class="line">
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+    
+    const pageData = main_data.orc_view.data
+    const pageFunc = main_data.orc_view.func
+    const pageScreen = document.querySelector('#card-orc_view')
+    const newOrc = Object.keys(pageData).length == 0
+
+    function startPage(){
+        pageFunc.fillCli()
+        if(newOrc){
+            openFields(1)
+            pageScreen.querySelector('#btnEdit').disabled = 1
+        }else{     
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtSobre').value = pageData.texto
+            pageScreen.querySelector('#btnEdit').disabled = 0
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+    pageFunc.fillCli = ()=>{
+        const params = new Object;
+            params.field = 'razao_social'
+            params.signal = 'LIKE'
+            params.value ="'%%'"
+        const myPromisse = queryDB(params,'CLI-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const cmb = pageScreen.querySelector('#cmbCli')
+            cmb.innerHTML = ''
+            console.log(pageData)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].razao_social
+                opt.value = json[i].id
+                if(newOrc){
+                    opt.selected = pageData.id_cli == json[i].id
+                }
+                cmb.appendChild(opt)
+            }         
+        })
+    }
+
+    pageFunc.setOrc = (del=0)=>{
+        const params = new Object;
+            params.id = newOrc ? 0 : pageData.id
+            params.id_cli = del ? 0 : pageScreen.querySelector('#cmbCli').value
+            params.capa = pageScreen.querySelector('#ckbCapa').checked
+            params.data = pageScreen.querySelector('#edtData').value+'00:00:00'
+            params.valor = pageScreen.querySelector('#edtValor').value
+        const myPromisse = queryDB(params,'ORC-1');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            console.log(json)
+            closeModal('orc_view')
+        })
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        const nome = pageScreen.querySelector('#edtNome').value.trim()
+        const texto = pageScreen.querySelector('#edtSobre').value.trim()
+        pageData.setEscopo(nome,texto,pageData.id)
+        closeModal('orcc_view')
+    })
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>
