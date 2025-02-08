@@ -352,18 +352,13 @@ DELIMITER $$
 	CREATE PROCEDURE sp_view_prod(	
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
-		IN Ifield varchar(30),
-        IN Isignal varchar(4),
-		IN Ivalue varchar(50)
+		IN Inome varchar(30)
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
-		IF(@allow)THEN   
-			SET @quer = CONCAT('SELECT * FROM tb_produto WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
-			PREPARE stmt1 FROM @quer;
-			EXECUTE stmt1;
-		ELSE 
-			SELECT 0 AS id, "" AS nome;
+		IF(@allow)THEN
+
+			SELECT * FROM tb_produto WHERE nome COLLATE utf8_general_ci LIKE CONCAT('%',Inome,'%') COLLATE utf8_general_ci ORDER BY nome;
         END IF;
 	END $$
 DELIMITER ;
@@ -465,6 +460,22 @@ DELIMITER ;
 
 /* ORÇAMENTO */
 
+ DROP PROCEDURE IF EXISTS sp_view_orc;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_orc(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN IdtIni date,
+        IN IdtFin date
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SELECT * FROM vw_orcamento WHERE data>= CONCAT(IdtIni," 00:00:00") AND data<= CONCAT(IdtFin," 23:59:59") ORDER BY data DESC;
+        END IF;
+	END $$
+DELIMITER ;
+
  DROP PROCEDURE IF EXISTS sp_set_orc;
 DELIMITER $$
 	CREATE PROCEDURE sp_set_orc(	
@@ -486,7 +497,7 @@ DELIMITER $$
 					INSERT INTO tb_orcamento (id_cli,capa,data,valor) 
 					VALUES (Iid_cli,Icapa,Idata,Ivalor);
 				ELSE
-					UPDATE tb_orcamento SET capa=Icapa, data=Idata, valor=Ivalor WHERE id=Iid;
+					UPDATE tb_orcamento SET id_cli=Iid_cli, capa=Icapa, data=Idata, valor=Ivalor WHERE id=Iid;
                 END IF;
             END IF;
         END IF;

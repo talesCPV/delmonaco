@@ -11,12 +11,8 @@
     <fieldset class="fds-busca prod">
         <legend>Filtro</legend>
         <div class="inline">
-            <label for="edtBusca">por:</label>
-            <select id="cmbBusca">
-                <option value="id" signal="IN">Código</option>
-                <option value="nome" signal="LIKE" selected>Nome</option>
-            </select>
-            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <label for="edtNome">Nome:</label>
+            <input type="text" id="edtNome" onkeypress="return getEnter(event, 'btnBusca')">
             <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
             <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
         </div>
@@ -31,15 +27,14 @@
     const pageData = main_data.prod_busca.data
     const pageFunc = main_data.prod_busca.func
     const pageScreen = document.querySelector('#card-prod_busca')
+    const callback = pageData.hasOwnProperty('callback')
+    console.log(callback)
 
     pageFunc.fillProdutos = ()=>{      
         const tbl = pageScreen.querySelector('#tblProdutos')
         tbl.innerHTML = ''
-        const query = getVal('prod')
         const params = new Object;
-            params.field = query[0]
-            params.signal = query[1]
-            params.value = query[2]
+            params.nome = pageScreen.querySelector('#edtNome').value.trim()
         const myPromisse = queryDB(params,'PROD-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
@@ -48,7 +43,7 @@
             for(let i=0; i<json.length;i++){
                 tbl.plot(json[i],'nome','Upp')
             }         
-        });
+        })
     }
 
     pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
@@ -61,7 +56,12 @@
 
     pageScreen.querySelector('#tblProdutos').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
-        openHTML('prod_view.html','pop-up','Produtos',data)
+        if(callback){
+            pageData.callback(data)
+            closeModal('prod_busca')
+        }else{
+            openHTML('prod_view.html','pop-up','Produtos',data)
+        }
     })
 
 </script>

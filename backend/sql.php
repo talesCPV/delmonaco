@@ -30,14 +30,14 @@
         "CLI-1"  => 'CALL sp_set_cli(@access,@hash,x00,"x01","x02","x03","x04","x05","x06","x07","x08","x09","x10","x11","x12","x13","x14","x15");', // id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email
 
         /* PRODUTOS */
-        "PROD-0"  => 'CALL sp_view_prod(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
+        "PROD-0"  => 'CALL sp_view_prod(@access,@hash,"x00");', // Nome
         "PROD-1"  => 'CALL sp_set_prod(@access,@hash,x00,"x01","x02","x03");', // id,nome,valor,sobre
         "PROD-2"  => 'CALL sp_view_escopo(@access,@hash,x00);', // ID_PROD
         "PROD-3"  => 'CALL sp_set_escopo(@access,@hash,x00,x01,"x02","x03");', // id,id_prod,nome,texto
         "PROD-4"  => 'CALL sp_up_escopo(@access,@hash,x00,x01);', // id, id_prod
 
         /* ORÇAMENTOS */
-        "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
+        "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01");', // DT_INI, DT_FIN
         "ORC-1"  => 'CALL sp_set_orc(@access,@hash,x00,x01,"x02","x03","x04");', // id,id_cli,capa,data,valor
 
         

@@ -10,13 +10,13 @@
 
     <fieldset class="fds-busca orc">
         <legend>Filtro</legend>
+
         <div class="inline">
-            <label for="edtBusca">por:</label>
-            <select id="cmbBusca">
-                <option value="id" signal="IN">Código</option>
-                <option value="nome" signal="LIKE" selected>Nome</option>
-            </select>
-            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+
+            <label for="ckbData">Início/Final</label>
+            <input type="date" id="edtIni">
+            <input type="date" id="edtFin">
+
             <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
             <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
         </div>
@@ -32,21 +32,25 @@
     const pageFunc = main_data.orc_busca.func
     const pageScreen = document.querySelector('#card-orc_busca')
 
+    function pageStart(){
+        pageScreen.querySelector('#edtIni').value = today.iniMonth()
+        pageScreen.querySelector('#edtFin').value = today.finMonth()
+    }
+
     pageFunc.fillOrcamento = ()=>{      
         const tbl = pageScreen.querySelector('#tblOrcamentos')
         tbl.innerHTML = ''
-        const query = getVal('orc')
         const params = new Object;
-            params.field = query[0]
-            params.signal = query[1]
-            params.value = query[2]
+            params.dtIni = pageScreen.querySelector('#edtIni').value
+            params.dtFin = pageScreen.querySelector('#edtFin').value
         const myPromisse = queryDB(params,'ORC-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
+            console.log(json)
             tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
-            tbl.head('Num.,Cliente,Data,Valor')
+            tbl.head('Data,Cliente,Valor')
             for(let i=0; i<json.length;i++){
-                tbl.plot(json[i],'nome','Upp')
+                tbl.plot(json[i],'data,cliente,valor','dat,Upp,R$.')
             }         
         });
     }
@@ -61,7 +65,9 @@
 
     pageScreen.querySelector('#tblOrcamentos').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
-        openHTML('orc_view.html','pop-up','Produtos',data)
+        openHTML('orc_view.html','pop-up',data.cliente,data)
     })
+
+    pageStart()
 
 </script>

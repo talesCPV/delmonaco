@@ -142,12 +142,11 @@ CREATE TABLE tb_texto(
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS tb_orc_txt;
-CREATE TABLE tb_orc_txt(
-    id int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS tb_orc_prod;
+CREATE TABLE tb_orc_prod(
     id_orc int(11) NOT NULL,
-    id_txt int(11) NOT NULL,
+    id_prod int(11) NOT NULL,
     FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id),
-    FOREIGN KEY (id_txt) REFERENCES tb_texto(id),
-    PRIMARY KEY (id)
+    FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
+    PRIMARY KEY (id_orc,id_prod)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
