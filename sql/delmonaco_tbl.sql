@@ -125,10 +125,12 @@ DROP TABLE IF EXISTS tb_orcamento;
 CREATE TABLE tb_orcamento(
     id int(11) NOT NULL AUTO_INCREMENT,
     id_cli int(11) NOT NULL,
+    id_owner int(11) NOT NULL,
     capa boolean DEFAULT 0,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     valor double NOT NULL DEFAULT 0,
 	FOREIGN KEY (id_cli) REFERENCES tb_cliente(id),
+    FOREIGN KEY (id_owner) REFERENCES tb_usuario(id),
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 

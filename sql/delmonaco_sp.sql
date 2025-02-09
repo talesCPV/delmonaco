@@ -494,12 +494,56 @@ DELIMITER $$
 				DELETE FROM tb_orcamento WHERE id = Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_orcamento (id_cli,capa,data,valor) 
-					VALUES (Iid_cli,Icapa,Idata,Ivalor);
+					SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+					INSERT INTO tb_orcamento (id_cli,id_owner,capa,data,valor) 
+					VALUES (Iid_cli,@id_call,Icapa,Idata,Ivalor);
 				ELSE
 					UPDATE tb_orcamento SET id_cli=Iid_cli, capa=Icapa, data=Idata, valor=Ivalor WHERE id=Iid;
                 END IF;
             END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_orc_view_item;
+DELIMITER $$
+	CREATE PROCEDURE sp_orc_view_item(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_orc int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SELECT * FROM vw_orc_item WHERE id_orc = Iid_orc;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_orc_add_item;
+DELIMITER $$
+	CREATE PROCEDURE sp_orc_add_item(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_orc int(11),
+		IN Iid_prod int(11)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_orc_prod WHERE id_orc=Iid_orc AND id_prod=Iid_prod);
+            SET @valor = (SELECT valor FROM tb_produto WHERE id=Iid_prod);
+            SET @sign = 1; 
+			IF(@has)THEN
+				DELETE FROM tb_orc_prod WHERE id_orc=Iid_orc AND id_prod=Iid_prod;
+                UPDATE tb_orcamento SET valor = valor - @valor;
+                SET @sign = -1;
+            ELSE
+				INSERT INTO tb_orc_prod (id_orc,id_prod) 
+				VALUES (Iid_orc,Iid_prod);
+                UPDATE tb_orcamento SET valor = valor + @valor;
+            END IF;
+            SELECT @valor AS valor, @sign AS sign;
         END IF;
 	END $$
 DELIMITER ;

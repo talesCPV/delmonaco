@@ -39,7 +39,7 @@
 
     <fieldset class="orc-itens">
         <legend>Produtos</legend>
-        <table id="tblEscopo"></table>
+        <table id="tblItens"></table>
         <div class="line">
             <button id="btnAddEscopo"> <span class="mdi mdi-plus-thick"></span> Adicionar</button>
         </div>
@@ -66,6 +66,7 @@
             pageScreen.querySelector('#edtData').value = pageData.data.substr(0,10)
             pageScreen.querySelector('#ckbCapa').checked = pageData.capa
             pageScreen.querySelector('#btnEdit').disabled = 0
+            pageFunc.viewItem(pageData.id)
         }
     }
 
@@ -86,7 +87,6 @@
             const json = JSON.parse(resolve)
             const cmb = pageScreen.querySelector('#cmbCli')
             cmb.innerHTML = ''
-            console.log(pageData)
             for(let i=0; i<json.length;i++){
                 const opt = document.createElement('option')
                 opt.innerHTML = json[i].razao_social
@@ -114,6 +114,36 @@
         })
     }
 
+    pageFunc.viewItem = (id_orc)=>{
+        const params = new Object;
+            params.id_orc = id_orc
+        const myPromisse = queryDB(params,'ORC-3');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tblItens')
+            tbl.innerHTML = ''
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Ítem,Valor')
+            for(let i=0; i<json.length; i++){
+                tbl.plot(json[i],'nome,valor','Upp,R$.')
+            }
+
+        })
+    }
+
+    pageFunc.addItem = (id_prod)=>{
+        const params = new Object;
+            params.id_orc = pageData.id
+            params.id_prod = id_prod
+        const myPromisse = queryDB(params,'ORC-2');
+        myPromisse.then((resolve)=>{
+            main_data.orc_busca.func.fillOrcamento()
+            pageFunc.viewItem(pageData.id)
+            const json = JSON.parse(resolve)[0]
+            pageScreen.querySelector('#edtValor').value = (Number(pageScreen.querySelector('#edtValor').value) + (Number(json.valor) * Number(json.sign))).toFixed(2)
+        })
+    }
+
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setOrc()
         closeModal('orc_view')
@@ -131,7 +161,7 @@
 
     pageScreen.querySelector('#btnAddEscopo').addEventListener('click',()=>{
         pageData.callback = (prod)=>{
-            console.log(prod)
+            pageFunc.addItem(prod.id)
         }
         openHTML('prod_busca.html','pop-up','Selecione o Cliente',pageData,600)
 
