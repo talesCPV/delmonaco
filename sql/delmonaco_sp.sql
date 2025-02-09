@@ -491,7 +491,8 @@ DELIMITER $$
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			IF(Iid_cli = 0)THEN
-				DELETE FROM tb_orcamento WHERE id = Iid;
+				DELETE FROM tb_orcamento WHERE id=Iid;
+                DELETE FROM tb_orc_prod WHERE id_orc=Iid;
             ELSE
 				IF(Iid=0)THEN
 					SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);

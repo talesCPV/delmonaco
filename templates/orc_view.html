@@ -127,7 +127,6 @@
             for(let i=0; i<json.length; i++){
                 tbl.plot(json[i],'nome,valor','Upp,R$.')
             }
-
         })
     }
 
@@ -163,8 +162,15 @@
         pageData.callback = (prod)=>{
             pageFunc.addItem(prod.id)
         }
-        openHTML('prod_busca.html','pop-up','Selecione o Cliente',pageData,600)
+        openHTML('prod_busca.html','pop-up','Selecione o Produto',pageData,600)
 
+    })
+
+    pageScreen.querySelector('#tblItens').addEventListener('dblclick',(e)=>{
+        const data = e.target.parentNode.data
+        if(confirm('Deseja remover este ítem do orçamento?')){
+            pageFunc.addItem(data.id_prod)
+        }
     })
 
     startPage()
