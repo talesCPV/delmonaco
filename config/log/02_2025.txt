@@ -83,15 +83,14 @@
 07/02/2025 21:54 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> null
 07/02/2025 21:54 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 14000 -> Item 1
 07/02/2025 21:55 tales@planet3.com.br : PRODUTO Deletado Implantacao ISO 14000 -> 
-07/02/2025 22:06 tales@planet3.com.br : Menu Alterado (Comercial, menu, pop-up, )
-07/02/2025 22:07 tales@planet3.com.br : Menu Alterado (Orcamentos, orc_busca.html, pop-up, Itens do Orcamento)
-07/02/2025 22:13 tales@planet3.com.br : Menu Alterado (Orcamentos, orc_busca.html, pop-up, Orcamentos)
-09/02/2025 18:36 tales@planet3.com.br : Menu Incluido (Itens de Orcamento)
-09/02/2025 18:38 tales@planet3.com.br : Menu Alterado (Itens de Orcamento, orc_texto.html, pop-up, Itens de Orcamento)
-09/02/2025 19:08 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Deslocamento e Estadia
-09/02/2025 19:09 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Condicoes de Pagamento
-09/02/2025 19:11 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Validade da Proposta
-09/02/2025 19:12 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Prazo de Execucao
-09/02/2025 19:12 tales@planet3.com.br : Item de Orcamento Editado Deslocamento e Estadia -> Deslocamento e Estadia w
-09/02/2025 19:13 tales@planet3.com.br : Item de Orcamento Editado Deslocamento e Estadia w -> Deslocamento e Estadia
-09/02/2025 19:17 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Investimento
+07/02/2025 18:03 tales@planet3.com.br : Menu Alterado (Comercial, menu, pop-up, )
+07/02/2025 18:04 tales@planet3.com.br : Menu Alterado (Orcamentos, menu, pop-up, Itens do Orcamento)
+07/02/2025 18:04 tales@planet3.com.br : Menu Alterado (Comercial, menu, pop-up, )
+07/02/2025 18:05 tales@planet3.com.br : Menu Alterado (Comercial, menu, pop-up, )
+07/02/2025 18:05 tales@planet3.com.br : Menu Alterado (Orcamentos, orc_busca.html, pop-up, Orcamentos)
+08/02/2025 07:43 analaura@grupodelmonaco.com : ESCOPO undefined Implantacao ISO 9000 -> 
+08/02/2025 07:44 analaura@grupodelmonaco.com :  Imagem Alterada -> Perfil Usuario: analaura@grupodelmonaco.com
+09/02/2025 10:49 analaura@grupodelmonaco.com : CLIENTE Cadastrado  -> STN COMERCIO DE UNIFORMES E BRINDES LTDA
+09/02/2025 10:51 analaura@grupodelmonaco.com : CLIENTE Cadastrado  -> Neopack Embalagens e Servicos LTDA
+09/02/2025 10:55 analaura@grupodelmonaco.com : CLIENTE Cadastrado  -> Engeport Engenharia LTDA
+09/02/2025 11:01 analaura@grupodelmonaco.com : PRODUTO Cadastrado undefined -> Emissao de CTF do Ibama
