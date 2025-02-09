@@ -40,7 +40,9 @@
         "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01");', // DT_INI, DT_FIN
         "ORC-1"  => 'CALL sp_set_orc(@access,@hash,x00,x01,"x02","x03","x04");', // id,id_cli,capa,data,valor
         "ORC-2"  => 'CALL sp_orc_add_item(@access,@hash,x00,x01);', // id_orc,id_prod
-        "ORC-3"  => 'CALL sp_orc_view_item(@access,@hash,x00);' // id_orc
+        "ORC-3"  => 'CALL sp_orc_view_item(@access,@hash,x00);', // id_orc
+        "ORC-4"  => 'CALL sp_view_orc_texto(@access,@hash,"x00");', // titulo
+        "ORC-5"  => 'CALL sp_set_orc_texto(@access,@hash,x00,"x01","x02","x03");', // id,titulo,texto,valor
 
 
         

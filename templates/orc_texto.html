@@ -1,0 +1,66 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <fieldset class="fds-busca orc">
+        <legend>Filtro</legend>
+        <div class="inline">
+            <label for="edtTitulo">Título:</label>
+            <input type="text" id="edtTitulo" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+        </div>
+
+    </fieldset>
+    <div class="resp-busca">
+        <table id="tblTextos"></table>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.orc_texto.data
+    const pageFunc = main_data.orc_texto.func
+    const pageScreen = document.querySelector('#card-orc_texto')
+
+    function pageStart(){
+
+    }
+
+    pageFunc.fillTexto = ()=>{      
+        const tbl = pageScreen.querySelector('#tblTextos')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.titulo = pageScreen.querySelector('#edtTitulo').value
+        const myPromisse = queryDB(params,'ORC-4');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Titulo, Valor')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'titulo,valor','Upp,R$.')
+            }         
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillTexto()
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('orc_text_view.html','pop-up','Novo Ítem de Orçamento')
+    })
+
+    pageScreen.querySelector('#tblTextos').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        openHTML('orc_text_view.html','pop-up',data.cliente,data)
+    })
+
+    pageStart()
+
+</script>

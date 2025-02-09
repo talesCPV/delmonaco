@@ -137,9 +137,8 @@ CREATE TABLE tb_orcamento(
 DROP TABLE IF EXISTS tb_texto;
 CREATE TABLE tb_texto(
     id int(11) NOT NULL AUTO_INCREMENT,
-    nome varchar(60) NOT NULL,
     titulo varchar(90) NOT NULL,
-    text varchar(4096) NOT NULL DEFAULT "",
+    texto varchar(4096) NOT NULL DEFAULT "",
     valor double NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

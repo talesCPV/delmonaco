@@ -548,3 +548,45 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_orc_texto;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_orc_texto(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ititulo varchar(30)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM tb_texto WHERE titulo COLLATE utf8_general_ci LIKE CONCAT('%',Ititulo,'%') COLLATE utf8_general_ci ORDER BY titulo;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_orc_texto;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_orc_texto(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Ititulo varchar(90),
+		IN Itexto varchar(4096),
+		IN Ivalor double
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Ititulo = "")THEN
+				DELETE FROM tb_texto WHERE id = Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_texto (titulo,texto,valor) 
+					VALUES (Ititulo,Itexto,Ivalor);
+				ELSE 
+					UPDATE tb_texto SET titulo=Ititulo, valor=Ivalor, texto=Itexto WHERE id=Iid ;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

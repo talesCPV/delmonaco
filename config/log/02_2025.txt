@@ -86,3 +86,12 @@
 07/02/2025 22:06 tales@planet3.com.br : Menu Alterado (Comercial, menu, pop-up, )
 07/02/2025 22:07 tales@planet3.com.br : Menu Alterado (Orcamentos, orc_busca.html, pop-up, Itens do Orcamento)
 07/02/2025 22:13 tales@planet3.com.br : Menu Alterado (Orcamentos, orc_busca.html, pop-up, Orcamentos)
+09/02/2025 18:36 tales@planet3.com.br : Menu Incluido (Itens de Orcamento)
+09/02/2025 18:38 tales@planet3.com.br : Menu Alterado (Itens de Orcamento, orc_texto.html, pop-up, Itens de Orcamento)
+09/02/2025 19:08 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Deslocamento e Estadia
+09/02/2025 19:09 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Condicoes de Pagamento
+09/02/2025 19:11 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Validade da Proposta
+09/02/2025 19:12 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Prazo de Execucao
+09/02/2025 19:12 tales@planet3.com.br : Item de Orcamento Editado Deslocamento e Estadia -> Deslocamento e Estadia w
+09/02/2025 19:13 tales@planet3.com.br : Item de Orcamento Editado Deslocamento e Estadia w -> Deslocamento e Estadia
+09/02/2025 19:17 tales@planet3.com.br : Item de Orcamento Cadastrado undefined -> Investimento
