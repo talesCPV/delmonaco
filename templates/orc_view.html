@@ -23,7 +23,7 @@
 
         <div class="inline">
             <label for="edtValor">Valor</label>
-            <input type="text" class="only-view" id="edtValor" onfocus="this.select();" inputmode="decimal" onkeyup="valFloat(this)" value="0" disabled>
+            <input type="text" id="edtValor" onfocus="this.select();" inputmode="decimal" onkeyup="valFloat(this)" value="0" disabled>
             <label for="edtData">Data</label>
             <input type="date" class="only-view" id="edtData" onfocus="this.select();" disabled>
             <label for="ckbCapa">Capa</label>
@@ -42,6 +42,14 @@
         <table id="tblItens"></table>
         <div class="line">
             <button id="btnAddEscopo"> <span class="mdi mdi-plus-thick"></span> Adicionar</button>
+        </div>
+    </fieldset>
+
+    <fieldset class="orc-texto">
+        <legend>Textos</legend>
+        <table id="tblTextos"></table>
+        <div class="line">
+            <button id="btnAddTexto"> <span class="mdi mdi-plus-thick"></span> Adicionar</button>
         </div>
     </fieldset>
 
@@ -67,6 +75,7 @@
             pageScreen.querySelector('#ckbCapa').checked = pageData.capa
             pageScreen.querySelector('#btnEdit').disabled = 0
             pageFunc.viewItem(pageData.id)
+            pageFunc.viewTexto(pageData.id)
         }
     }
 
@@ -75,6 +84,35 @@
         for(let i=0; i<view.length; i++){
             view[i].disabled = !open
         }
+    }
+
+    pageFunc.subMenuItens = (e,data)=>{
+        const tbl = []
+        data.setEscopo = pageFunc.setEscopo
+
+        const edt = new Object
+        edt.label = 'Editar Valor'
+        edt.link = ()=>{
+            const prod = new Object
+            prod.id = data.id_prod
+            prod.valor = getFloat(prompt(data.nome+' R$',data.valor),2)           
+            pageFunc.addItem(prod)
+        }            
+        tbl.push(edt)
+
+        const del = new Object
+        del.label = 'Deletar'
+        del.link = ()=>{
+            if(confirm('Remover este ítem do orçamento?')){
+                const prod = new Object
+                prod.id = data.id_prod
+                prod.valor = 0
+                pageFunc.addItem(prod)
+            }
+        }            
+        tbl.push(del)
+
+        menuContext(tbl,e)
     }
 
     pageFunc.fillCli = ()=>{
@@ -130,18 +168,50 @@
         })
     }
 
-    pageFunc.addItem = (id_prod)=>{
+    pageFunc.addItem = (prod)=>{
         const params = new Object;
             params.id_orc = pageData.id
-            params.id_prod = id_prod
+            params.id_prod = prod.id
+            params.valor = prod.valor
         const myPromisse = queryDB(params,'ORC-2');
         myPromisse.then((resolve)=>{
             main_data.orc_busca.func.fillOrcamento()
             pageFunc.viewItem(pageData.id)
             const json = JSON.parse(resolve)[0]
-            pageScreen.querySelector('#edtValor').value = (Number(pageScreen.querySelector('#edtValor').value) + (Number(json.valor) * Number(json.sign))).toFixed(2)
+            pageScreen.querySelector('#edtValor').value = Number(json.valor).toFixed(2)
         })
     }
+
+    pageFunc.viewTexto = (id_orc)=>{
+        const params = new Object;
+            params.id_orc = id_orc
+        const myPromisse = queryDB(params,'ORC-7');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tblTextos')
+            tbl.innerHTML = ''
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Ítem,Valor')
+            for(let i=0; i<json.length; i++){
+                tbl.plot(json[i],'titulo,valor','Upp,R$.')
+            }
+        })
+    }
+
+    pageFunc.addTexto = (txt)=>{
+        const params = new Object;
+            params.id_orc = pageData.id
+            params.id_texto = txt.id
+            params.valor = txt.valor
+        const myPromisse = queryDB(params,'ORC-6');
+        myPromisse.then((resolve)=>{
+            main_data.orc_busca.func.fillOrcamento()
+            pageFunc.viewTexto(pageData.id)
+            const json = JSON.parse(resolve)[0]
+            pageScreen.querySelector('#edtValor').value = Number(json.valor).toFixed(2)
+        })
+    }
+
 
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setOrc()
@@ -160,17 +230,27 @@
 
     pageScreen.querySelector('#btnAddEscopo').addEventListener('click',()=>{
         pageData.callback = (prod)=>{
-            pageFunc.addItem(prod.id)
+            prod.valor = 0
+            pageFunc.addItem(prod)
         }
         openHTML('prod_busca.html','pop-up','Selecione o Produto',pageData,600)
 
     })
 
-    pageScreen.querySelector('#tblItens').addEventListener('dblclick',(e)=>{
-        const data = e.target.parentNode.data
-        if(confirm('Deseja remover este ítem do orçamento?')){
-            pageFunc.addItem(data.id_prod)
+    pageScreen.querySelector('#btnAddTexto').addEventListener('click',()=>{
+        pageData.callback = (text)=>{
+            text.valor = 0
+console.log(text)            
+            pageFunc.addTexto(text)
         }
+        openHTML('orc_texto.html','pop-up','Selecione o Texto',pageData,600)
+
+    })
+
+    pageScreen.querySelector('#tblItens').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        pageFunc.subMenuItens(e,data)
+          
     })
 
     startPage()

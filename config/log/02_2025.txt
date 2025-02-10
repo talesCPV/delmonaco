@@ -94,3 +94,5 @@
 09/02/2025 10:51 analaura@grupodelmonaco.com : CLIENTE Cadastrado  -> Neopack Embalagens e Servicos LTDA
 09/02/2025 10:55 analaura@grupodelmonaco.com : CLIENTE Cadastrado  -> Engeport Engenharia LTDA
 09/02/2025 11:01 analaura@grupodelmonaco.com : PRODUTO Cadastrado undefined -> Emissao de CTF do Ibama
+10/02/2025 15:41 tales@planet3.com.br : Item de Orcamento Editado Condicoes de Pagamento -> Condicoes de Pagamento 1
+10/02/2025 15:41 tales@planet3.com.br : Item de Orcamento Editado Condicoes de Pagamento 1 -> Condicoes de Pagamento

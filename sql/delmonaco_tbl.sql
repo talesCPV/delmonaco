@@ -147,7 +147,18 @@ DROP TABLE IF EXISTS tb_orc_prod;
 CREATE TABLE tb_orc_prod(
     id_orc int(11) NOT NULL,
     id_prod int(11) NOT NULL,
+    valor double NOT NULL DEFAULT 0,
     FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id),
     FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
     PRIMARY KEY (id_orc,id_prod)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_orc_texto;
+CREATE TABLE tb_orc_texto(
+    id_orc int(11) NOT NULL,
+    id_texto int(11) NOT NULL,
+    valor double NOT NULL DEFAULT 0,
+    FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id),
+    FOREIGN KEY (id_texto) REFERENCES tb_texto(id),
+    PRIMARY KEY (id_orc,id_texto)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

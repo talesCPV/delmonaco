@@ -27,6 +27,7 @@
     const pageData = main_data.orc_texto.data
     const pageFunc = main_data.orc_texto.func
     const pageScreen = document.querySelector('#card-orc_texto')
+    const callback = pageData.hasOwnProperty('callback')
 
     function pageStart(){
         pageFunc.fillTexto()
@@ -58,7 +59,14 @@
 
     pageScreen.querySelector('#tblTextos').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
-        openHTML('orc_text_view.html','pop-up',data.cliente,data)
+        if(callback){
+            pageData.callback(data)
+            closeModal('orc_texto')
+        }else{
+            openHTML('orc_text_view.html','pop-up',data.cliente,data)
+        }
+
+
     })
 
     pageStart()

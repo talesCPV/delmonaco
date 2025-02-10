@@ -521,37 +521,38 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
- DROP PROCEDURE IF EXISTS sp_orc_add_item;
+ DROP PROCEDURE IF EXISTS sp_orc_set_item;
 DELIMITER $$
-	CREATE PROCEDURE sp_orc_add_item(	
+	CREATE PROCEDURE sp_orc_set_item(	
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
         IN Iid_orc int(11),
-		IN Iid_prod int(11)
+		IN Iid_prod int(11),
+        IN Ivalor double
     )
 	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			SET @has = (SELECT COUNT(*) FROM tb_orc_prod WHERE id_orc=Iid_orc AND id_prod=Iid_prod);
-            SET @valor = (SELECT valor FROM tb_produto WHERE id=Iid_prod);
-            SET @sign = 1; 
-			IF(@has)THEN
+			IF(@has AND Ivalor=0)THEN
 				DELETE FROM tb_orc_prod WHERE id_orc=Iid_orc AND id_prod=Iid_prod;
-                UPDATE tb_orcamento SET valor = valor - @valor;
-                SET @sign = -1;
             ELSE
-				INSERT INTO tb_orc_prod (id_orc,id_prod) 
-				VALUES (Iid_orc,Iid_prod);
-                UPDATE tb_orcamento SET valor = valor + @valor;
+				SET @valor = (SELECT valor FROM tb_produto WHERE id=Iid_prod);
+				IF(Ivalor=0)THEN
+					INSERT INTO tb_orc_prod (id_orc,id_prod,valor) 
+					VALUES (Iid_orc,Iid_prod,@valor);
+				ELSE
+					UPDATE tb_orc_prod SET valor = Ivalor WHERE id_orc=Iid_orc AND id_prod=Iid_prod;
+				END IF;
             END IF;
-            SELECT @valor AS valor, @sign AS sign;
+            SELECT IFNULL(SUM(valor),0) AS valor FROM vw_orc_item WHERE id_orc=Iid_orc;
         END IF;
 	END $$
 DELIMITER ;
 
- DROP PROCEDURE IF EXISTS sp_view_orc_texto;
+ DROP PROCEDURE IF EXISTS sp_view_texto;
 DELIMITER $$
-	CREATE PROCEDURE sp_view_orc_texto(	
+	CREATE PROCEDURE sp_view_texto(	
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
 		IN Ititulo varchar(30)
@@ -564,9 +565,9 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
- DROP PROCEDURE IF EXISTS sp_set_orc_texto;
+ DROP PROCEDURE IF EXISTS sp_set_texto;
 DELIMITER $$
-	CREATE PROCEDURE sp_set_orc_texto(	
+	CREATE PROCEDURE sp_set_texto(	
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
         IN Iid int(11),
@@ -587,6 +588,50 @@ DELIMITER $$
 					UPDATE tb_texto SET titulo=Ititulo, valor=Ivalor, texto=Itexto WHERE id=Iid ;
                 END IF;
             END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_orc_view_texto;
+DELIMITER $$
+	CREATE PROCEDURE sp_orc_view_texto(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_orc int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SELECT * FROM vw_orc_texto WHERE id_orc = Iid_orc;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_orc_set_texto;
+DELIMITER $$
+	CREATE PROCEDURE sp_orc_set_texto(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_orc int(11),
+		IN Iid_texto int(11),
+        IN Ivalor double
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_orc_texto WHERE id_orc=Iid_orc AND id_texto=Iid_texto);
+			IF(@has AND Ivalor=0)THEN
+				DELETE FROM tb_orc_texto WHERE id_orc=Iid_orc AND id_texto=Iid_texto;
+            ELSE
+				SET @valor = (SELECT valor FROM tb_texto WHERE id=Iid_texto);
+				IF(Ivalor=0)THEN
+					INSERT INTO tb_orc_texto (id_orc,id_texto,valor) 
+					VALUES (Iid_orc,Iid_texto,@valor);
+				ELSE
+					UPDATE tb_orc_texto SET valor = Ivalor WHERE id_orc=Iid_orc AND id_texto=Iid_texto;
+				END IF;
+            END IF;
+            SELECT IFNULL(SUM(valor),0) AS valor FROM vw_orc_texto WHERE id_orc=Iid_orc;
         END IF;
 	END $$
 DELIMITER ;
