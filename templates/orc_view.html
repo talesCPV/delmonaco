@@ -34,6 +34,7 @@
             <button id="btnEdit">Editar</button>
             <button id="btnDel" class="only-view" disabled>Deletar</button>
             <button id="btnSave" class="only-view" disabled>Salvar</button>
+            <button id="btnPrint" class="only-view" disabled>Imprimir</button>
         </div>
     </fieldset>
 
@@ -66,6 +67,7 @@
         if(newOrc){
             openFields(1)
             pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('#btnPrint').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
             pageScreen.querySelector('#edtData').value = today.getFormatDate()
             pageScreen.querySelector('.orc-itens').style.display = 'none'
@@ -74,6 +76,7 @@
             pageScreen.querySelector('#edtData').value = pageData.data.substr(0,10)
             pageScreen.querySelector('#ckbCapa').checked = pageData.capa
             pageScreen.querySelector('#btnEdit').disabled = 0
+            pageScreen.querySelector('#btnPrint').disabled = 0
             pageFunc.viewItem(pageData.id)
             pageFunc.viewTexto(pageData.id)
         }
@@ -88,7 +91,6 @@
 
     pageFunc.subMenuItens = (e,data)=>{
         const tbl = []
-        data.setEscopo = pageFunc.setEscopo
 
         const edt = new Object
         edt.label = 'Editar Valor'
@@ -108,6 +110,34 @@
                 prod.id = data.id_prod
                 prod.valor = 0
                 pageFunc.addItem(prod)
+            }
+        }            
+        tbl.push(del)
+
+        menuContext(tbl,e)
+    }
+
+    pageFunc.subMenuTexto = (e,data)=>{
+        const tbl = []
+
+        const edt = new Object
+        edt.label = 'Editar Valor'
+        edt.link = ()=>{
+            const texto = new Object
+            texto.id = data.id_texto
+            texto.valor = getFloat(prompt(data.titulo+' R$',data.valor),2)           
+            pageFunc.addTexto(texto)
+        }            
+        tbl.push(edt)
+
+        const del = new Object
+        del.label = 'Deletar'
+        del.link = ()=>{
+            if(confirm('Remover este texto do orçamento?')){
+                const texto = new Object
+                texto.id = data.id_texto
+                texto.valor = 0
+                pageFunc.addTexto(texto)
             }
         }            
         tbl.push(del)
@@ -158,6 +188,7 @@
         const myPromisse = queryDB(params,'ORC-3');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
+            pageData.itens = json
             const tbl = pageScreen.querySelector('#tblItens')
             tbl.innerHTML = ''
             tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
@@ -178,6 +209,7 @@
             main_data.orc_busca.func.fillOrcamento()
             pageFunc.viewItem(pageData.id)
             const json = JSON.parse(resolve)[0]
+            pageData.valor = JSON.parse(resolve)[0].valor
             pageScreen.querySelector('#edtValor').value = Number(json.valor).toFixed(2)
         })
     }
@@ -188,6 +220,7 @@
         const myPromisse = queryDB(params,'ORC-7');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
+            pageData.textos = json
             const tbl = pageScreen.querySelector('#tblTextos')
             tbl.innerHTML = ''
             tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
@@ -208,6 +241,7 @@
             main_data.orc_busca.func.fillOrcamento()
             pageFunc.viewTexto(pageData.id)
             const json = JSON.parse(resolve)[0]
+            pageData.valor = JSON.parse(resolve)[0].valor
             pageScreen.querySelector('#edtValor').value = Number(json.valor).toFixed(2)
         })
     }
@@ -228,6 +262,10 @@
         }
     })
 
+    pageScreen.querySelector('#btnPrint').addEventListener('click',()=>{
+        print_orc(pageData)
+    })
+
     pageScreen.querySelector('#btnAddEscopo').addEventListener('click',()=>{
         pageData.callback = (prod)=>{
             prod.valor = 0
@@ -240,7 +278,6 @@
     pageScreen.querySelector('#btnAddTexto').addEventListener('click',()=>{
         pageData.callback = (text)=>{
             text.valor = 0
-console.log(text)            
             pageFunc.addTexto(text)
         }
         openHTML('orc_texto.html','pop-up','Selecione o Texto',pageData,600)
@@ -250,6 +287,12 @@ console.log(text)
     pageScreen.querySelector('#tblItens').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
         pageFunc.subMenuItens(e,data)
+          
+    })
+
+    pageScreen.querySelector('#tblTextos').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        pageFunc.subMenuTexto(e,data)
           
     })
 

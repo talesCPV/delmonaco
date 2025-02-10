@@ -2,13 +2,16 @@
 
 	DROP VIEW IF EXISTS vw_orcamento;
  	CREATE VIEW vw_orcamento AS
-	SELECT ORC.id, ORC.id_cli,ORC.id_owner,ORC.capa,ORC.data,CLI.fantasia AS cliente, USR.nome AS owner,
-    (SELECT SUM(valor) FROM tb_orc_prod WHERE id_orc=ORC.id) AS valor
-	FROM tb_orcamento AS ORC
-	INNER JOIN tb_cliente AS CLI
-    INNER JOIN tb_usuario AS USR
-	ON ORC.id_cli = CLI.id
-    AND ORC.id_owner = USR.id;
+		SELECT ORC.id, ORC.id_cli,ORC.id_owner,ORC.capa,ORC.data,
+		CLI.fantasia AS cliente, USR.nome AS owner,
+		IFNULL(TOT.valor,0) AS valor
+		FROM tb_orcamento AS ORC
+		INNER JOIN tb_cliente AS CLI
+		INNER JOIN tb_usuario AS USR
+		INNER JOIN vw_tot_orc AS TOT
+		ON ORC.id_cli = CLI.id
+		AND ORC.id_owner = USR.id
+		AND ORC.id = TOT.id_orc;
     
 SELECT * FROM vw_orcamento;
 
@@ -34,9 +37,32 @@ DROP VIEW IF EXISTS vw_orc_texto;
     
 SELECT * FROM vw_orc_texto;
 
-SELECT (IFNULL(SUM(ITEM.valor),0) + IFNULL(SUM(TXT.valor),0)) AS valor 
-FROM vw_orc_item AS ITEM 
-LEFT JOIN vw_orc_texto AS TXT
-ON ITEM.id_orc = TXT.id_orc;
+DROP VIEW IF EXISTS vw_tot_orc_prod;
+ CREATE VIEW vw_tot_orc_prod AS
+	SELECT ORC.id, IFNULL(SUM(ITEM.valor),0) AS valor
+	FROM tb_orcamento AS ORC
+	LEFT JOIN tb_orc_prod AS ITEM
+	ON ORC.id = ITEM.id_orc
+	GROUP BY ORC.id;
 
-SELECT IFNULL(SUM(valor),0) AS valor FROM vw_orc_texto WHERE id_orc=1;
+SELECT * FROM vw_tot_orc_prod;
+
+DROP VIEW IF EXISTS vw_tot_orc_text;
+ CREATE VIEW vw_tot_orc_text AS
+	SELECT ORC.id, IFNULL(SUM(TXT.valor),0) AS valor 
+	FROM tb_orcamento AS ORC
+	LEFT JOIN tb_orc_texto AS TXT
+	ON ORC.id = TXT.id_orc
+    GROUP BY ORC.id;
+
+SELECT * FROM vw_tot_orc_text;
+
+DROP VIEW IF EXISTS vw_tot_orc;
+ CREATE VIEW vw_tot_orc AS
+	SELECT PROD.id AS id_orc, (PROD.valor + TXT.valor) AS valor
+	FROM vw_tot_orc_prod AS PROD
+	INNER JOIN vw_tot_orc_text AS TXT
+	ON PROD.id=TXT.id;
+
+SELECT * FROM vw_tot_orc;
+

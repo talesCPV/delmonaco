@@ -545,7 +545,7 @@ DELIMITER $$
 					UPDATE tb_orc_prod SET valor = Ivalor WHERE id_orc=Iid_orc AND id_prod=Iid_prod;
 				END IF;
             END IF;
-            SELECT IFNULL(SUM(valor),0) AS valor FROM vw_orc_item WHERE id_orc=Iid_orc;
+            SELECT * FROM vw_tot_orc WHERE id_orc=Iid_orc;
         END IF;
 	END $$
 DELIMITER ;
@@ -631,7 +631,7 @@ DELIMITER $$
 					UPDATE tb_orc_texto SET valor = Ivalor WHERE id_orc=Iid_orc AND id_texto=Iid_texto;
 				END IF;
             END IF;
-            SELECT IFNULL(SUM(valor),0) AS valor FROM vw_orc_texto WHERE id_orc=Iid_orc;
+			SELECT * FROM vw_tot_orc WHERE id_orc=Iid_orc;
         END IF;
 	END $$
 DELIMITER ;
