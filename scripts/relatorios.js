@@ -27,14 +27,27 @@ function print_orc(orc){
         }
 
         await Promise.all(fila)
+        
+        addPage(0)
+        plotImg('assets/reports/head.png',0,0,210)
+        doc.setFontSize(10);
+        txt.y = 75
+        
+        for(let i=0; i<orc.textos.length; i++){
+            doc.setFont(undefined, 'bold')
+            doc.text((i+1)+'- '+orc.textos[i].titulo,5,txt.y)
+            addLine()
+            doc.setFont(undefined, 'normal')
+            box(orc.textos[i].texto,5,txt.y,205,1)
+            addLine()
+        }
 
         const blob = doc.output('blob')
         openPDF(doc,'orcamento')
 
     }
 
-    function addItem(i){    
-
+    function addItem(i){
         addPage(0)
         plotImg('assets/reports/head.png',0,0,210)
         doc.setFontSize(10);
@@ -67,9 +80,6 @@ function print_orc(orc){
             box(orc.itens[i].escopo[j].texto,5,txt.y,205,1)
             addLine()
         }
-
-
     }
-
    
 }
