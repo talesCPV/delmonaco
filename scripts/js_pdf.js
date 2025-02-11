@@ -27,8 +27,6 @@ var imgData = new Image()
 
 function addPage(Y=46){
     doc.addPage();
-    frame()
-    header_pdf()    
     txt.y = Y 
 }
 

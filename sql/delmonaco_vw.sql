@@ -3,7 +3,7 @@
 	DROP VIEW IF EXISTS vw_orcamento;
  	CREATE VIEW vw_orcamento AS
 		SELECT ORC.id, ORC.id_cli,ORC.id_owner,ORC.capa,ORC.data,
-		CLI.fantasia AS cliente, USR.nome AS owner,
+		CLI.fantasia AS cliente, USR.nome AS owner,CLI.razao_social,CLI.cnpj,
 		IFNULL(TOT.valor,0) AS valor
 		FROM tb_orcamento AS ORC
 		INNER JOIN tb_cliente AS CLI
