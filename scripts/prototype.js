@@ -35,6 +35,12 @@ String.prototype.time = function(){
     return (str.substring(11,16))
 }
 
+String.prototype.viewFullDate = function(){
+    const str = this.valueOf()
+    const month = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
+    return `${str.substring(8,10)} de ${month[Number(str.substring(5,7))-1]} de ${str.substring(0,4)}`
+}
+
 /* DATE */
 Date.prototype.change = function(N=1){
     this.setDate(this.getDate()+N)

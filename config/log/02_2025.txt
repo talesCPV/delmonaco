@@ -96,3 +96,8 @@
 09/02/2025 11:01 analaura@grupodelmonaco.com : PRODUTO Cadastrado undefined -> Emissao de CTF do Ibama
 10/02/2025 15:41 tales@planet3.com.br : Item de Orcamento Editado Condicoes de Pagamento -> Condicoes de Pagamento 1
 10/02/2025 15:41 tales@planet3.com.br : Item de Orcamento Editado Condicoes de Pagamento 1 -> Condicoes de Pagamento
+11/02/2025 19:07 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Diagnostico Inicial
+11/02/2025 19:08 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Diagnostico Inicial
+11/02/2025 19:19 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Implantacao da ISO 9001
+11/02/2025 19:20 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Treinamento
+11/02/2025 19:20 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Auditoria Interna

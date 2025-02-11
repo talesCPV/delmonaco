@@ -90,6 +90,7 @@ function backLine(N=1, botton=0, top=46){
 function box(text,x,y,w,lh=0.8){
     const h = txt.lineHeigth * lh   
     text = text.trim().split('\n')
+
     for(let i=0; i<text.length; i++){
         const txt = text[i].trim().split(' ')
         let lin = ''
@@ -102,9 +103,8 @@ function box(text,x,y,w,lh=0.8){
                 lin =  txt[j] + ' '
                 addLine()
             }
-
         }
-        lin.trim() != '' ? doc.text(lin,x,y): '';
+        lin.trim().length >0 ? doc.text(lin,x,y): null;
         y += h
         addLine()
     }    

@@ -45,6 +45,9 @@
         "ORC-5"  => 'CALL sp_set_texto(@access,@hash,x00,"x01","x02","x03");', // id,titulo,texto,valor
         "ORC-6"  => 'CALL sp_orc_set_texto(@access,@hash,x00,x01,"x02");', // id_orc,id_texto,valor
         "ORC-7"  => 'CALL sp_orc_view_texto(@access,@hash,x00);', // id_orc
+        "ORC-8"  => 'CALL sp_up_texto(@access,@hash,x00);', // id
+
+        
 
 
         

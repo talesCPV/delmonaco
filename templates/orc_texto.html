@@ -33,6 +33,38 @@
         pageFunc.fillTexto()
     }
 
+    pageFunc.subMenu = (e,data)=>{
+        const tbl = []
+
+        const edt = new Object
+        edt.label = 'Editar'
+        edt.link = ()=>{
+            openHTML('orc_text_view.html','pop-up',data.cliente,data)
+        }            
+        tbl.push(edt)
+
+        const up = new Object
+        up.label = 'Subir Ítem'
+        up.link = ()=>{
+            const params = new Object;
+            params.id = data.id
+            params.id_prod = data.id_prod       
+            const myPromisse = queryDB(params,'ORC-8');
+            myPromisse.then((resolve)=>{
+                const tbl = pageScreen.querySelector('#tblTextos')
+                tbl.innerHTML = ''
+                const json = JSON.parse(resolve)
+                tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+                tbl.head('Titulo, Valor')
+                for(let i=0; i<json.length;i++){
+                    tbl.plot(json[i],'titulo,valor','Upp,R$.')
+                }
+            })
+        }            
+        tbl.push(up)
+        menuContext(tbl,e)
+    }
+
     pageFunc.fillTexto = ()=>{      
         const tbl = pageScreen.querySelector('#tblTextos')
         tbl.innerHTML = ''
@@ -63,7 +95,8 @@
             pageData.callback(data)
             closeModal('orc_texto')
         }else{
-            openHTML('orc_text_view.html','pop-up',data.cliente,data)
+            e.preventDefault()
+            pageFunc.subMenu(e,data)
         }
 
 
