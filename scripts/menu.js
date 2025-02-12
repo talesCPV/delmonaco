@@ -127,7 +127,7 @@ function openMenu(){
                 })    
                 lbl.addEventListener('contextmenu',(e)=>{
                     e.preventDefault()
-                    if(confirm('Criar atalho na área de trabalho?')){
+                    if(confirm('Criar atalho na área de trabalho?')){      
                         const myConfig = getConfig('shortcut')
                         myConfig.then((response)=>{
                             const json = response != '' ? JSON.parse(JSON.parse(response)) : []
@@ -138,6 +138,7 @@ function openMenu(){
                             shortcut.janela = obj[i].janela
                             shortcut.label = obj[i].label
                             shortcut.width = obj[i].width
+                            shortcut.access = obj[i].access
                             shortcut.x = 100
                             shortcut.y = 100
                             json.push(shortcut)

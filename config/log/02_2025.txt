@@ -101,3 +101,10 @@
 11/02/2025 19:19 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Implantacao da ISO 9001
 11/02/2025 19:20 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Treinamento
 11/02/2025 19:20 tales@planet3.com.br : ESCOPO undefined Implantacao ISO 9001:2015 -> Auditoria Interna
+12/02/2025 13:04 tales@planet3.com.br : ESCOPO undefined Auditoria Fiscal -> null
+12/02/2025 13:19 tales@planet3.com.br : Item de Orcamento Deletado Investimento -> 
+12/02/2025 14:13 tales@planet3.com.br : Item de Orcamento Editado Prazo de Execucao -> Prazo de Execucao
+12/02/2025 14:14 tales@planet3.com.br : Item de Orcamento Editado Validade da Proposta -> Validade da Proposta
+12/02/2025 14:16 tales@planet3.com.br : Item de Orcamento Editado Validade da Proposta -> Validade da Proposta
+12/02/2025 14:18 tales@planet3.com.br : Item de Orcamento Editado Validade da Proposta -> Validade da Proposta
+12/02/2025 14:20 tales@planet3.com.br : Item de Orcamento Editado Prazo de Execucao -> Prazo de Execucao

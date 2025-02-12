@@ -379,6 +379,7 @@ DELIMITER $$
 			IF(Inome = "")THEN
 				DELETE FROM tb_produto WHERE id = Iid;
                 DELETE FROM tb_escopo WHERE id_prod = Iid;
+                DELETE FROM tb_orc_prod WHERE id_prod = Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_produto (nome,valor,sobre) 
@@ -493,11 +494,14 @@ DELIMITER $$
 			IF(Iid_cli = 0)THEN
 				DELETE FROM tb_orcamento WHERE id=Iid;
                 DELETE FROM tb_orc_prod WHERE id_orc=Iid;
+                DELETE FROM tb_orc_texto WHERE id_orc=Iid;
             ELSE
 				IF(Iid=0)THEN
 					SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
 					INSERT INTO tb_orcamento (id_cli,id_owner,capa,data,valor) 
 					VALUES (Iid_cli,@id_call,Icapa,Idata,Ivalor);
+                    SET @id_orc = (SELECT MAX(id) FROM tb_orcamento);
+                    INSERT INTO tb_orc_texto (id_orc,id_texto,valor) SELECT @id_orc , id, valor FROM tb_texto;
 				ELSE
 					UPDATE tb_orcamento SET id_cli=Iid_cli, capa=Icapa, data=Idata, valor=Ivalor WHERE id=Iid;
                 END IF;
@@ -580,6 +584,7 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Ititulo = "")THEN
 				DELETE FROM tb_texto WHERE id = Iid;
+                DELETE FROM tb_orc_texto WHERE id_texto = Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_texto (titulo,texto,valor) 
