@@ -74,7 +74,7 @@
         }else{     
             pageScreen.querySelector('#edtValor').value = Number(pageData.valor).toFixed(2)
             pageScreen.querySelector('#edtData').value = pageData.data.substr(0,10)
-            pageScreen.querySelector('#ckbCapa').checked = pageData.capa
+            pageScreen.querySelector('#ckbCapa').checked = Number(pageData.capa)
             pageScreen.querySelector('#btnEdit').disabled = 0
             pageScreen.querySelector('#btnPrint').disabled = 0
             pageFunc.viewItem(pageData.id)

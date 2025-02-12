@@ -7,9 +7,12 @@ function print_orc(orc){
         format: 'a4'
     }) 
 
-    plotImg('assets/reports/capa01.png',0,0,210)
-    addPage(0)
-    plotImg('assets/reports/capa02.png',0,0,210)
+    if(Number(orc.capa)){
+        plotImg('assets/reports/capa01.png',0,0,210)
+        addPage(0)
+        plotImg('assets/reports/capa02.png',0,0,210)
+    }
+
 
     fillEscopo()
     
@@ -34,7 +37,6 @@ function print_orc(orc){
         plotImg('assets/reports/head.png',0,0,210)
         doc.setFontSize(10);
         txt.y = 75
-        
 
         doc.setFont(undefined, 'bold')
         doc.text('Investimento',5,txt.y)

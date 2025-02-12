@@ -87,18 +87,19 @@ function backLine(N=1, botton=0, top=46){
     return true
 }
 
-function negrito(text,x,y){
+function negrito(sign,text,x,y){
 
-    const negrito = text.split('@#')
+    const negrito = text.split(sign)
     doc.text(negrito[0].trim(),x,y)
+    x += doc.getTextWidth(negrito[0].trim()+'  ')
     for(let k=1; k<negrito.length; k++){
         doc.setFont(undefined, 'bold')
-        const after = negrito[k].split(' ')
+        const after = negrito[k].split(' ') 
         doc.text(after[0].trim(),x,y)
-console.log(after)
+        x += doc.getTextWidth(after[0].trim())
         doc.setFont(undefined, 'normal')
         if(after.length>1){
-            doc.text(after[1].trim(),x+doc.getTextWidth(after[0])*1.1,y)
+            doc.text(negrito[k].replaceAll(after[0].trim(),'') ,x,y)
         }
     }
 
@@ -115,13 +116,15 @@ function box(text,x,y,w,lh=0.8){
             if(doc.getTextDimensions(lin+txt[j]+' ').w < w ){
                 lin +=  txt[j] + ' '
             }else{
-                doc.text(lin.trim(),x,y)
+                negrito('@#',lin.trim(),x,y)
+//                doc.text(lin.trim(),x,y)
                 y += h
                 lin =  txt[j] + ' '
                 addLine()
             }
         }
-        lin.trim().length >0 ? doc.text(lin,x,y): null;
+        lin.trim().length >0 ? negrito('@#',lin,x,y): null;
+//        lin.trim().length >0 ? doc.text(lin,x,y): null;
         y += h
         addLine()
     }    
