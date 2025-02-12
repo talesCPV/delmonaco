@@ -87,6 +87,23 @@ function backLine(N=1, botton=0, top=46){
     return true
 }
 
+function negrito(text,x,y){
+
+    const negrito = text.split('@#')
+    doc.text(negrito[0].trim(),x,y)
+    for(let k=1; k<negrito.length; k++){
+        doc.setFont(undefined, 'bold')
+        const after = negrito[k].split(' ')
+        doc.text(after[0].trim(),x,y)
+console.log(after)
+        doc.setFont(undefined, 'normal')
+        if(after.length>1){
+            doc.text(after[1].trim(),x+doc.getTextWidth(after[0])*1.1,y)
+        }
+    }
+
+}
+
 function box(text,x,y,w,lh=0.8){
     const h = txt.lineHeigth * lh   
     text = text.trim().split('\n')
@@ -98,7 +115,7 @@ function box(text,x,y,w,lh=0.8){
             if(doc.getTextDimensions(lin+txt[j]+' ').w < w ){
                 lin +=  txt[j] + ' '
             }else{
-                doc.text(lin.trim(),x,y);
+                doc.text(lin.trim(),x,y)
                 y += h
                 lin =  txt[j] + ' '
                 addLine()

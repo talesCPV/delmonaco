@@ -97,6 +97,17 @@ function print_orc(orc){
             let texto = orc.textos[i].texto
             texto = texto.replaceAll('@produto', orc.produtos)
             texto = texto.replaceAll('@cliente', orc.cliente+'-'+orc.razao_social)
+            
+            let prazo = texto.split('@prazo-')
+            if(prazo.length>1){
+                for(let j=1; j<prazo.length; j++){
+                    let k=0;
+                    const dias = Number(getNum(prazo[j].split(' ')[0]))
+                    const pz =  new Date(orc.data)
+                    texto = texto.replaceAll('@prazo-'+dias, pz.overday(dias).viewFullDate())
+                }
+            }
+
             doc.setFont(undefined, 'bold')
             doc.text(orc.textos[i].titulo,5,txt.y)
             addLine()
