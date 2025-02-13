@@ -520,6 +520,7 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN   
+			SET SESSION group_concat_max_len = 999999;
 			SELECT * FROM vw_orc_item WHERE id_orc = Iid_orc;
         END IF;
 	END $$

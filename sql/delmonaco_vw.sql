@@ -17,7 +17,8 @@ SELECT * FROM vw_orcamento;
 
 DROP VIEW IF EXISTS vw_orc_item;
  CREATE VIEW vw_orc_item AS
-	SELECT ORC.id AS id_orc, PROD.id AS id_prod, PROD.nome, ITEM.valor, PROD.sobre
+	SELECT ORC.id AS id_orc, PROD.id AS id_prod, PROD.nome, ITEM.valor, PROD.sobre,
+    (SELECT GROUP_CONCAT(DISTINCT CONCAT(id,"|",nome,"|",texto) SEPARATOR "||") FROM tb_escopo WHERE id_prod=PROD.id) AS escopo
 	FROM tb_produto AS PROD
 	INNER JOIN tb_orcamento AS ORC
 	INNER JOIN tb_orc_prod AS ITEM
@@ -66,3 +67,4 @@ DROP VIEW IF EXISTS vw_tot_orc;
 
 SELECT * FROM vw_tot_orc;
 
+'1', '1', 'Implantação ISO 9001:2015', '15000', 'Norma internacional que define os requisitos para um Sistema de Gestão da Qualidade (SGQ), com foco na melhoria contínua, satisfação do cliente e eficiência operacional.', '2|Diagnóstico Inicial|* Levantamento das necessidades da empresa em relação aos processos e estrutura organizacional.\n* Avaliação preliminar para identificação de gap entre os processos existentes e os requisitos da ISO 9001.||3|Implantação da ISO 9001|* Adequação e/ou elaboração de documentos necessários: Manual da Qualidade, Procedimento'

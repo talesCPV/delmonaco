@@ -194,6 +194,16 @@
             tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
             tbl.head('Ítem,Valor')
             for(let i=0; i<json.length; i++){
+                const escopo = json[i].escopo.split('||')
+                json[i].escopo = []
+                for(let j=0; j<escopo.length; j++){
+                    try{
+                        const itens = escopo[j].split('|')
+                        json[i].escopo.push({'id':itens[0],'titulo':itens[1],'texto':itens[2]})
+                    }catch{
+                        console.error('algum erro no split itens!');
+                    }
+                }
                 tbl.plot(json[i],'nome,valor','Upp,R$.')
             }
         })

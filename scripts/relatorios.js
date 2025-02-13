@@ -1,6 +1,6 @@
 
 function print_orc(orc){
-    console.log(orc)
+//    console.log(orc)
 
     doc = new jsPDF({
         orientation: 'portrait',
@@ -11,33 +11,25 @@ function print_orc(orc){
         plotImg('assets/reports/capa01.png',0,0,210)
         addPage(0)
         plotImg('assets/reports/capa02.png',0,0,210)
+        addPage(0)
+
     }
 
 
     fillEscopo()
     
     async function fillEscopo(){
-
-        const fila = []
+/*        
+        plotImg('assets/reports/head.png',0,0,210)
+        doc.setFontSize(10);
+*/
         orc.produtos = ''
         for(let i=0; i< orc.itens.length; i++){
             orc.produtos += orc.itens[i].nome+', '
-            const params = new Object;
-                params.id = orc.itens[i].id_prod
-            fila.push( queryDB(params,'PROD-2').then((resolve)=>{
-                const json = JSON.parse(resolve)
-                orc.itens[i].escopo = json
-                addItem(i)
-            }))
+            addItem(i)
         }
 
-        await Promise.all(fila)
-        
-        addPage(0)
-        plotImg('assets/reports/head.png',0,0,210)
-        doc.setFontSize(10);
-        txt.y = 75
-
+        addPage()
         doc.setFont(undefined, 'bold')
         doc.text('Investimento',5,txt.y)
         addLine()
@@ -60,7 +52,9 @@ function print_orc(orc){
     }
 
     function addItem(i){
-        addPage(0)
+//        addPage(0)
+        txt.y = 75
+
         plotImg('assets/reports/head.png',0,0,210)
         doc.setFontSize(10);
         txt.y = 75
@@ -86,7 +80,7 @@ function print_orc(orc){
         addLine(2)
         for(let j=0; j<orc.itens[i].escopo.length; j++){
             doc.setFont(undefined, 'bold')
-            doc.text((j+1)+'- '+orc.itens[i].escopo[j].nome,5,txt.y)
+            doc.text((j+1)+'- '+orc.itens[i].escopo[j].titulo,5,txt.y)
             addLine()
             doc.setFont(undefined, 'normal')
             box(orc.itens[i].escopo[j].texto,5,txt.y,205,1)

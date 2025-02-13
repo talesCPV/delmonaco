@@ -25,16 +25,19 @@ var imgData = new Image()
 
 /* FUNCTIONS */
 
-function addPage(Y=46){
+function addPage(Y=76){
     doc.addPage();
+    plotImg('assets/reports/head.png',0,0,210)    
     txt.y = Y 
 }
 
-function getBarcode(N, pos=[txt.dim[0]-41,txt.dim[1]-30, 36, 25] ){
-    const bar = newBarcode(N,70)    
-    const image = new Image();
-    image.src = bar.toDataURL();
-    doc.addImage(image, 'png', pos[0],pos[1],pos[2],pos[3]);
+function addLine(N=1, botton=10, top=76){
+    txt.y += txt.lineHeigth * N
+    if(txt.y >= doc.internal.pageSize.getHeight() - botton){
+        addPage()
+        return false
+    }
+    return true
 }
 
 function clearTxt(y=10,x=10,dim=[90,80]){
@@ -73,16 +76,7 @@ function plotImg(url,x,y,w){
     doc.addImage(foto, 'png', x,y,w,0);
 }
 
-function addLine(N=1, botton=0, top=46){
-    txt.y += txt.lineHeigth * N
-    if(txt.y >= doc.internal.pageSize.getHeight() - botton){
-        addPage(top)
-        return false
-    }
-    return true
-}
-
-function backLine(N=1, botton=0, top=46){
+function backLine(N=1){
     txt.y -= txt.lineHeigth * N
     return true
 }
@@ -118,7 +112,8 @@ function box(text,x,y,w,lh=0.8){
             }else{
                 negrito('@#',lin.trim(),x,y)
 //                doc.text(lin.trim(),x,y)
-                y += h
+
+                y = y+h
                 lin =  txt[j] + ' '
                 addLine()
             }
