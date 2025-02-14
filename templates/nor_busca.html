@@ -1,0 +1,60 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <fieldset class="fds-busca">
+        <legend>Filtro</legend>
+        <div class="inline">
+            <label for="edtBusca">Nome:</label>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+        </div>
+
+    </fieldset>
+    <div class="resp-busca">
+        <table id="tblNormas"></table>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.nor_busca.data
+    const pageFunc = main_data.nor_busca.func
+    const pageScreen = document.querySelector('#card-nor_busca')
+
+    pageFunc.fillnormas = ()=>{      
+        const tbl = pageScreen.querySelector('#tblNormas')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.nome = pageScreen.querySelector('#edtBusca').value
+        const myPromisse = queryDB(params,'NOR-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Nome')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'nome','Upp')
+            }         
+        });
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillnormas()
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('nor_view.html','pop-up','Nova Norma')
+    })
+
+    pageScreen.querySelector('#tblNormas').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        openHTML('nor_view.html','pop-up','Norma',data)
+    })
+
+</script>

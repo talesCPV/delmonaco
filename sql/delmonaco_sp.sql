@@ -357,7 +357,6 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-
 			SELECT * FROM tb_produto WHERE nome COLLATE utf8_general_ci LIKE CONCAT('%',Inome,'%') COLLATE utf8_general_ci ORDER BY nome;
         END IF;
 	END $$
@@ -658,6 +657,101 @@ DELIMITER $$
 				END IF;
             END IF;
 			SELECT * FROM vw_tot_orc WHERE id_orc=Iid_orc;
+        END IF;
+	END $$
+DELIMITER ;
+
+/* NORMAS */
+
+ DROP PROCEDURE IF EXISTS sp_view_normas;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_normas(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Inome varchar(120)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SELECT * FROM tb_normas WHERE nome COLLATE utf8_general_ci LIKE CONCAT("%",Inome,"%") COLLATE utf8_general_ci;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_norma;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_norma(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Inome varchar(120),
+        IN Isobre varchar(2048)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome = '')THEN
+				DELETE FROM tb_normas WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_normas (nome,sobre) 
+					VALUES (Inome,Isobre);
+				ELSE
+					UPDATE tb_normas SET nome=Inome, sobre=Isobre WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+/* LEIS */
+
+ DROP PROCEDURE IF EXISTS sp_view_leis;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_leis(	
+		IN Iallow varchar(80),
+        IN Ihash varchar(64),
+		IN Ifield varchar(30),
+		IN Isignal varchar(30),
+        IN Ivalue varchar(60)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @quer = CONCAT('SELECT * FROM tb_leis WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			PREPARE stmt1 FROM @quer;
+			EXECUTE stmt1;        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_lei;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_lei(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Inome varchar(120),
+        IN Iesfera varchar(9),
+		IN Iramo varchar(90),
+		IN Iassunto varchar(120),
+		IN Iementa varchar(2048),
+		IN Iaplicabilidade varchar(13)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome = '')THEN
+				DELETE FROM tb_leis WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_leis (nome,esfera,ramo,assunto,ementa,aplicabilidade) 
+					VALUES (Inome,Iesfera,Iramo,Iassunto,Iementa,Iaplicabilidade);
+				ELSE
+					UPDATE tb_leis 
+                    SET nome=Inome, esfera=Iesfera,ramo=Iramo,assunto=Iassunto,ementa=Iementa,aplicabilidade=Iaplicabilidade 
+                    WHERE id=Iid;
+                END IF;
+            END IF;
         END IF;
 	END $$
 DELIMITER ;

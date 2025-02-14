@@ -47,6 +47,12 @@
         "ORC-7"  => 'CALL sp_orc_view_texto(@access,@hash,x00);', // id_orc
         "ORC-8"  => 'CALL sp_up_texto(@access,@hash,x00);', // id
 
+        /* NORMAS */
+        "NOR-0"  => 'CALL sp_view_normas(@access,@hash,"x00");', // nome
+        "NOR-1"  => 'CALL sp_set_norma(@access,@hash,x00,"x01","x02");', // id,nome,sobre
+        "NOR-2"  => 'CALL sp_view_leis(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
+        "NOR-3"  => 'CALL sp_set_lei(@access,@hash,x00,"x01","x02","x03","x04","x05","x06");', // id,nome,esfera,ramo,assunto,ementa,aplicabilidade
+
         
 
 
