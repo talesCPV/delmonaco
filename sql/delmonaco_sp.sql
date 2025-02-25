@@ -730,6 +730,7 @@ DELIMITER $$
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
         IN Iid int(11),
+        IN Iid_norma int(11),
 		IN Inome varchar(120),
         IN Iesfera varchar(9),
 		IN Iramo varchar(90),
@@ -737,15 +738,15 @@ DELIMITER $$
 		IN Iementa varchar(2048),
 		IN Iaplicabilidade varchar(13)
     )
-	BEGIN    
+	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			IF(Inome = '')THEN
 				DELETE FROM tb_leis WHERE id=Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_leis (nome,esfera,ramo,assunto,ementa,aplicabilidade) 
-					VALUES (Inome,Iesfera,Iramo,Iassunto,Iementa,Iaplicabilidade);
+					INSERT INTO tb_leis (id_norma,nome,esfera,ramo,assunto,ementa,aplicabilidade) 
+					VALUES (Iid_norma,Inome,Iesfera,Iramo,Iassunto,Iementa,Iaplicabilidade);
 				ELSE
 					UPDATE tb_leis 
                     SET nome=Inome, esfera=Iesfera,ramo=Iramo,assunto=Iassunto,ementa=Iementa,aplicabilidade=Iaplicabilidade 

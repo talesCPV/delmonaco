@@ -54,7 +54,7 @@
 
     pageScreen.querySelector('#tblNormas').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
-        openHTML('nor_view.html','pop-up','Norma',data)
+        openHTML('nor_view.html','pop-up',data.nome,data)
     })
 
 </script>

@@ -32,6 +32,14 @@
             <button id="btnSave" class="only-view" disabled>Salvar</button>
         </div>
     </fieldset>
+    <fieldset class="leis">
+        <legend>Leis</legend>
+        <table id="tblLeis"></table>
+        <div class="line">
+            <button id="btnNovaLei"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
+        </div>
+    </fieldset>
+
 
 </template>
 <script>
@@ -45,6 +53,7 @@
         if(newNorma){
             openFields(1)
             pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('.leis').style.display = 'none'
         }else{     
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtSobre').value = pageData.sobre
@@ -91,6 +100,10 @@
         }else{
             openFields(0)
         }
+    })
+
+    pageScreen.querySelector('#btnNovaLei').addEventListener('click',()=>{
+        openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
     })
 
     startPage()
