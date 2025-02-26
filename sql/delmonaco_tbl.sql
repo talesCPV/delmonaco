@@ -67,6 +67,14 @@ CREATE TABLE tb_cliente(
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS tb_user_cli;
+CREATE TABLE tb_user_cli(
+    id_user int(11) NOT NULL,
+    id_cliente int(11) NOT NULL,
+    access int DEFAULT 1,
+    PRIMARY KEY (id_user,id_cliente)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 /*
  DROP TABLE tb_colaborador;
 CREATE TABLE tb_colaborador (
@@ -183,6 +191,5 @@ CREATE TABLE tb_leis(
     assunto varchar(120) DEFAULT NULL,
     ementa varchar(2048) DEFAULT NULL,
     aplicabilidade varchar(13) DEFAULT "NÃO APLICÁVEL",
-    FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

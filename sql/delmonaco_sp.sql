@@ -41,7 +41,7 @@ DELIMITER ;
 
 /* USER */
 
- DROP PROCEDURE sp_setUser;
+ DROP PROCEDURE IF EXISTS sp_setUser;
 DELIMITER $$
 	CREATE PROCEDURE sp_setUser(
 		IN Iallow varchar(80),
@@ -58,6 +58,7 @@ DELIMITER $$
 			IF(Iemail="")THEN
 				DELETE FROM tb_mail WHERE id_from=Iid OR id_to=Iid;
 				DELETE FROM tb_usuario WHERE id=Iid;
+                DELETE FROM tb_user_cli WHERE id_user=Iid;
             ELSE			
 				IF(Iid=0)THEN
 					INSERT INTO tb_usuario (email,hash,access,nome)VALUES(Iemail,SHA2(CONCAT(Iemail, Isenha), 256),Iaccess,Inome);
@@ -305,7 +306,7 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
- DROP PROCEDURE sp_set_cli;
+ DROP PROCEDURE IF EXISTS sp_set_cli;
 DELIMITER $$
 	CREATE PROCEDURE sp_set_cli(	
 		IN Iallow varchar(80),
@@ -332,6 +333,7 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Irazao_social = "")THEN
 				DELETE FROM tb_cliente WHERE id = Iid;
+                DELETE FROM tb_user_cli WHERE id_cliente=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_cliente (id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email) 
@@ -340,6 +342,48 @@ DELIMITER $$
 					UPDATE tb_cliente SET razao_social=Irazao_social, fantasia=Ifant,cnpj=Icnpj, ie=Iie, im=Iim, end=Iend, num=Inum,
                     comp=Icomp, bairro=Ibairro, cidade=Icidade, uf=Iuf, cep=Icep, ramo=Iramo, tel=Itel, email=Iemail ;
                 END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_user_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_user_cli(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_user int(11),
+		IN Iid_cliente int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_user_cli WHERE id_user=Iid_user AND id_cliente=Iid_cliente);
+			IF(@has)THEN
+				DELETE FROM tb_user_cli WHERE id_user=Iid_user AND id_cliente=Iid_cliente;
+            ELSE
+				INSERT INTO tb_user_cli (id_user,id_cliente)
+				VALUES (Iid_user,Iid_cliente);
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_cli_user;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_cli_user(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_cli int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid_cli)THEN
+				SELECT * FROM vw_usr_cli WHERE id_cliente=Iid;
+            ELSE
+				SELECT * FROM vw_usr_cli WHERE id_cuser=Iid;
             END IF;
         END IF;
 	END $$
@@ -738,7 +782,7 @@ DELIMITER $$
 		IN Iementa varchar(2048),
 		IN Iaplicabilidade varchar(13)
     )
-	BEGIN
+	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			IF(Inome = '')THEN

@@ -67,4 +67,13 @@ DROP VIEW IF EXISTS vw_tot_orc;
 
 SELECT * FROM vw_tot_orc;
 
-'1', '1', 'Implantação ISO 9001:2015', '15000', 'Norma internacional que define os requisitos para um Sistema de Gestão da Qualidade (SGQ), com foco na melhoria contínua, satisfação do cliente e eficiência operacional.', '2|Diagnóstico Inicial|* Levantamento das necessidades da empresa em relação aos processos e estrutura organizacional.\n* Avaliação preliminar para identificação de gap entre os processos existentes e os requisitos da ISO 9001.||3|Implantação da ISO 9001|* Adequação e/ou elaboração de documentos necessários: Manual da Qualidade, Procedimento'
+DROP VIEW IF EXISTS vw_usr_cli;
+CREATE VIEW vw_usr_cli AS
+	SELECT UCL.*,CLI.fantasia AS cliente,USR.nome 
+	FROM tb_user_cli AS UCL
+	INNER JOIN tb_usuario AS USR
+	INNER JOIN tb_cliente AS CLI
+	ON UCL.id_user=USR.id
+	AND UCL.id_cliente = CLI.id;
+
+SELECT * FROM vw_usr_cli;

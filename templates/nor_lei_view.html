@@ -64,17 +64,48 @@
     const pageData = main_data.nor_lei_view.data
     const pageFunc = main_data.nor_lei_view.func
     const pageScreen = document.querySelector('#card-nor_lei_view')
-    const newLei = !pageData.hasOwnProperty('id_lei')
+    const newLei = !pageData.hasOwnProperty('id_norma')
 
     function startPage(){
         if(newLei){
             openFields(1)
             pageScreen.querySelector('#btnEdit').disabled = 1
-        }else{     
+            pageData.id_norma = pageData.id
+        }else{
+            pageData.id_lei = pageData.id
             pageScreen.querySelector('#edtNome').value = pageData.nome
-//            pageScreen.querySelector('#edtSobre').value = pageData.texto
+            pageScreen.querySelector('#cmbEsfera').value = pageData.esfera
+            pageScreen.querySelector('#edtRamo').value = pageData.ramo
+            pageScreen.querySelector('#edtAssunto').value = pageData.assunto
+            pageScreen.querySelector('#edtEmenta').value = pageData.ementa
+            pageScreen.querySelector('#cmbAplica').value = pageData.aplicabilidade
             pageScreen.querySelector('#btnEdit').disabled = 0
         }
+    }
+
+    pageFunc.setLei = (del=0)=>{
+        const params = new Object;
+            params.id = newLei ? 0 : pageData.id_lei
+            params.id_norma = pageData.id_norma
+            params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
+            params.esfera = pageScreen.querySelector('#cmbEsfera').value
+            params.ramo = pageScreen.querySelector('#edtRamo').value.trim()
+            params.assunto = pageScreen.querySelector('#edtAssunto').value.trim()
+            params.ementa = pageScreen.querySelector('#edtEmenta').value.trim()
+            params.aplicabidade = pageScreen.querySelector('#cmbAplica').value
+            
+          
+        const myPromisse = queryDB(params,'NOR-3');
+        myPromisse.then((resolve)=>{
+            setLog(`LEI ${newLei?'Cadastrada': del ? 'Deletada' : 'Editada'} ${ !newLei ? pageData.nome :''} -> ${params.nome}`)
+            try{
+                main_data.nor_view.func.fillLeis(pageData.id_norma)
+            }catch{
+                console.error('Tela fechada pelo usuário!')
+            }
+            alert('Cadastrado efetuado!')
+            closeModal('nor_lei_view')
+        })
     }
 
     function openFields(open=1){
@@ -85,10 +116,8 @@
     }
 
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
-        const nome = pageScreen.querySelector('#edtNome').value.trim()
-//        const texto = pageScreen.querySelector('#edtSobre').value.trim()
-        pageData.setEscopo(nome,texto,pageData.id)
-        closeModal('esc_view')
+        pageFunc.setLei()
+//        closeModal('nor_lei_view')
     })
 
     pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{

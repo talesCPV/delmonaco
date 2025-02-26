@@ -58,6 +58,7 @@
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtSobre').value = pageData.sobre
             pageScreen.querySelector('#btnEdit').disabled = 0
+            pageFunc.fillLeis(pageData.id)
         }
     }
 
@@ -87,6 +88,23 @@
         })
     }
 
+    pageFunc.fillLeis = (id_norma)=>{
+        const params = new Object;
+            params.field = 'id_norma'
+            params.signal = '='
+            params.value = id_norma
+          
+        const myPromisse = queryDB(params,'NOR-2');
+        myPromisse.then((resolve)=>{            
+            const json = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tblLeis')
+            tbl.head('Lei,Esfera|min-field,Aplicabilidade|min-field')
+            for(let i=0; i<json.length; i++){
+                tbl.plot(json[i],'nome,esfera|min-field,aplicabilidade|min-field','Upp,Upp,Upp')
+            }
+        })
+    }
+
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setNorma()
         closeModal('esc_view')
@@ -104,6 +122,12 @@
 
     pageScreen.querySelector('#btnNovaLei').addEventListener('click',()=>{
         openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
+    })
+
+    pageScreen.querySelector('#tblLeis').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        e.preventDefault()
+        openHTML('nor_lei_view.html','pop-up',pageData.nome,data)
     })
 
     startPage()

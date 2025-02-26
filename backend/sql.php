@@ -28,6 +28,8 @@
         /* CLIENTES */
         "CLI-0"  => 'CALL sp_view_cli(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
         "CLI-1"  => 'CALL sp_set_cli(@access,@hash,x00,"x01","x02","x03","x04","x05","x06","x07","x08","x09","x10","x11","x12","x13","x14","x15");', // id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email
+        "CLI-2"  => 'CALL sp_set_user_cli(@access,@hash,x00,x01);', // ID_USER, ID_CLIENTE
+        "CLI-3"  => 'CALL sp_view_cli_user(@access,@hash,x00,x01);', // ID, ID=(0-id_usuario 1-ID_cliente)
 
         /* PRODUTOS */
         "PROD-0"  => 'CALL sp_view_prod(@access,@hash,"x00");', // Nome

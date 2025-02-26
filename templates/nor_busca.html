@@ -28,6 +28,10 @@
     const pageFunc = main_data.nor_busca.func
     const pageScreen = document.querySelector('#card-nor_busca')
 
+    function pageStart(){
+        pageFunc.fillnormas()
+    }
+
     pageFunc.fillnormas = ()=>{      
         const tbl = pageScreen.querySelector('#tblNormas')
         tbl.innerHTML = ''
@@ -56,5 +60,7 @@
         const data = e.target.parentNode.data
         openHTML('nor_view.html','pop-up',data.nome,data)
     })
+
+    pageStart()
 
 </script>
