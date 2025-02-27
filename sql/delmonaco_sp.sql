@@ -375,16 +375,16 @@ DELIMITER $$
 	CREATE PROCEDURE sp_view_cli_user(
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
-        IN Iid int(11),
-		IN Iid_cli int(11)
+        IN Iid int(11)
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-			IF(Iid_cli)THEN
+			IF(Iid > 0)THEN
 				SELECT * FROM vw_usr_cli WHERE id_cliente=Iid;
             ELSE
-				SELECT * FROM vw_usr_cli WHERE id_user=Iid;
+				SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+				SELECT * FROM vw_usr_cli WHERE id_user=@id_call;
             END IF;
         END IF;
 	END $$

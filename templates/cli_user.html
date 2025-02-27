@@ -101,7 +101,6 @@
     pageFunc.fillCliUser = ()=>{      
         const params = new Object;
             params.id = cli.value
-            params.busca = 1
         const myPromisse = queryDB(params,'CLI-3');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)

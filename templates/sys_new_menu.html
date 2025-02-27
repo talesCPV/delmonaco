@@ -28,6 +28,8 @@
             <select id="cmbJanela">
                 <option value="content-screen">Principal</option>
                 <option value="pop-up" selected>Pop-Up</option>
+                <option value="web-window">Web Window</option>
+                <option value="full-screen">Full Screen</option>
             </select>
         </div>
 
@@ -69,7 +71,8 @@
         pageScreen.querySelector('#edtLabel').value = pageData.label
         pageScreen.querySelector('#edtLargura').value = pageData.width 
         pageScreen.querySelector('#edtIcon').value = pageData.icone 
-        pageScreen.querySelector('#ckbAss').checked = pageData.pg   
+        pageScreen.querySelector('#ckbAss').checked = pageData.pg
+        pageScreen.querySelector('#cmbJanela').value = pageData.janela
     }
 
     function saveMenu(){
