@@ -334,6 +334,7 @@ DELIMITER $$
 			IF(Irazao_social = "")THEN
 				DELETE FROM tb_cliente WHERE id = Iid;
                 DELETE FROM tb_user_cli WHERE id_cliente=Iid;
+                DELETE FROM tb_norma_cli WHERE id_cliente=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_cliente (id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email) 
