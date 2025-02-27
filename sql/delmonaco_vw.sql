@@ -77,3 +77,14 @@ CREATE VIEW vw_usr_cli AS
 	AND UCL.id_cliente = CLI.id;
 
 SELECT * FROM vw_usr_cli;
+
+DROP VIEW IF EXISTS vw_norma_cli;
+ CREATE VIEW vw_norma_cli AS
+	SELECT NCL.*,CLI.fantasia AS cliente,NOR.nome 
+	FROM tb_norma_cli AS NCL
+	INNER JOIN tb_normas AS NOR
+	INNER JOIN tb_cliente AS CLI
+	ON NCL.id_norma=NOR.id
+	AND NCL.id_cliente = CLI.id;
+
+SELECT * FROM vw_norma_cli;

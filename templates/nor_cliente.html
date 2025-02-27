@@ -1,0 +1,144 @@
+<template>
+    <style>
+
+    .panel{
+        display: flex;
+        flex-direction: row;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    .panel fieldset{
+        width: 100%;
+        padding: 10px;
+    }
+
+    .middle{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .panel select{
+        margin: 0;
+        padding: 10px;
+    }
+
+    .line{
+        width: 100%;
+    }
+
+    </style>
+  
+    <div class="panel">
+        <fieldset>
+            <legend>Normas</legend>
+            <select id="cmbNorma" size="13"></select>
+        </fieldset>
+        <div class="middle">
+            <button id="btnAdd" class="btn-round"><span class="mdi mdi-arrow-right-bold"></span></button>
+            <button id="btnSub" class="btn-round"><span class="mdi mdi-arrow-left-bold"></span></button>
+        </div>
+        <fieldset>
+            <legend>Empresas</legend>
+            <select id="cmbEmp"></select>
+            <select id="cmbCliEmp" size="10"></select>
+        </fieldset>
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.nor_cliente.data
+    const pageFunc = main_data.nor_cliente.func
+    const pageScreen = document.querySelector('#card-nor_cliente')
+    const nor = pageScreen.querySelector('#cmbNorma')
+    const cli = pageScreen.querySelector('#cmbEmp')
+    const nor_cli = pageScreen.querySelector('#cmbCliEmp')
+
+    function pageStart(){
+        pageFunc.fillEmp().then(()=>{
+            pageFunc.fillCliNorma()
+        })
+        pageFunc.fillNorma()
+    }
+
+    pageFunc.fillEmp = ()=>{
+
+        const params = new Object;
+            params.field = 'razao_social'
+            params.signal = 'LIKE'
+            params.value = "'%%'"
+        const myPromisse = queryDB(params,'CLI-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].fantasia
+                cli.appendChild(opt)
+            }         
+        })
+    }
+
+    pageFunc.fillNorma = ()=>{      
+        const params = new Object;
+            params.nome = ''
+        const myPromisse = queryDB(params,'NOR-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].nome
+                nor.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.fillCliNorma = ()=>{      
+        const params = new Object;
+            params.id = cli.value
+            params.busca = 1
+        const myPromisse = queryDB(params,'NOR-5');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            nor_cli.innerHTML = ''   
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_norma
+                opt.innerHTML = json[i].nome
+                nor_cli.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.addNorma = (id_norma)=>{      
+        const params = new Object;
+            params.id_norma = id_norma
+            params.id_cliente = cli.value
+        const myPromisse = queryDB(params,'NOR-4');
+        myPromisse.then((resolve)=>{
+            pageFunc.fillCliNorma()
+        })
+    }
+
+    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+        if(nor.value.length){
+            pageFunc.addNorma(nor.value)        
+        }
+    })
+
+    pageScreen.querySelector('#btnSub').addEventListener('click',()=>{
+        if(nor_cli.value.length){
+            pageFunc.addNorma(nor_cli.value)        
+        }
+    })
+
+    cli.addEventListener('change',()=>{
+        pageFunc.fillCliNorma()
+    })
+
+    pageStart()
+
+</script>

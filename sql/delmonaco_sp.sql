@@ -383,7 +383,7 @@ DELIMITER $$
 			IF(Iid_cli)THEN
 				SELECT * FROM vw_usr_cli WHERE id_cliente=Iid;
             ELSE
-				SELECT * FROM vw_usr_cli WHERE id_cuser=Iid;
+				SELECT * FROM vw_usr_cli WHERE id_user=Iid;
             END IF;
         END IF;
 	END $$
@@ -743,6 +743,48 @@ DELIMITER $$
 				ELSE
 					UPDATE tb_normas SET nome=Inome, sobre=Isobre WHERE id=Iid;
                 END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_norma_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_norma_cli(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_norma int(11),
+		IN Iid_cliente int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_norma_cli WHERE id_norma=Iid_norma AND id_cliente=Iid_cliente);
+			IF(@has)THEN
+				DELETE FROM tb_norma_cli WHERE id_user=Iid_user AND id_cliente=Iid_cliente;
+            ELSE
+				INSERT INTO tb_norma_cli (id_norma,id_cliente)
+				VALUES (Iid_norma,Iid_cliente);
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_cli_norma;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_cli_norma(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_cli int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid_cli)THEN
+				SELECT * FROM vw_norma_cli WHERE id_cliente=Iid;
+            ELSE
+				SELECT * FROM vw_norma_cli WHERE id_norma=Iid;
             END IF;
         END IF;
 	END $$
