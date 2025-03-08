@@ -204,3 +204,16 @@ CREATE TABLE tb_norma_cli(
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
     PRIMARY KEY (id_norma,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_check;
+CREATE TABLE tb_check(
+    id_cliente int(11) NOT NULL,
+    id_lei int(11) NOT NULL,
+    ok bool DEFAULT 0,
+    obs VARCHAR(512) DEFAULT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+    FOREIGN KEY (id_lei) REFERENCES tb_leis(id),
+    PRIMARY KEY (id_cliente,id_lei)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+INSERT INTO tb_check (id_cliente,id_lei,ok,obs)VALUES(6,3,1,"Teste!!!");

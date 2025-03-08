@@ -88,3 +88,24 @@ DROP VIEW IF EXISTS vw_norma_cli;
 	AND NCL.id_cliente = CLI.id;
 
 SELECT * FROM vw_norma_cli;
+
+DROP VIEW IF EXISTS vw_lei_norma_cli;
+ CREATE VIEW vw_lei_norma_cli AS
+	SELECT NCL.id_cliente,LEI.*
+	FROM vw_norma_cli AS NCL
+	INNER JOIN tb_leis AS LEI
+	ON NCL.id_norma = LEI.id_norma;
+
+SELECT * FROM vw_lei_norma_cli WHERE id_cliente=6;
+
+DROP VIEW IF EXISTS vw_check_lei;
+ CREATE VIEW vw_check_lei AS
+	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome, NCL.esfera, NCL.ramo, NCL.assunto,NCL.ementa, NCL.aplicabilidade,
+		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs
+		FROM vw_lei_norma_cli AS NCL
+		LEFT JOIN tb_check AS CHK
+		ON NCL.id = CHK.id_lei
+		AND NCL.id_cliente = CHK.id_cliente
+		ORDER BY id_cliente, id_norma, id_lei;
+
+SELECT * FROM vw_check_lei;-- WHERE id_cliente=6;

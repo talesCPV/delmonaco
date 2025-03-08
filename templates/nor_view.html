@@ -121,12 +121,14 @@
     })
 
     pageScreen.querySelector('#btnNovaLei').addEventListener('click',()=>{
+        pageData.new = 1
         openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
     })
 
     pageScreen.querySelector('#tblLeis').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
         e.preventDefault()
+        data.new = 0
         openHTML('nor_lei_view.html','pop-up',pageData.nome,data)
     })
 
