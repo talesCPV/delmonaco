@@ -61,6 +61,17 @@
         })        
     }
 
+    pageFunc.fillCheckLeis = (id_cliente,id_norma)=>{      
+        const params = new Object;
+            params.id_cliente = id_cliente
+            params.id_norma = id_norma
+        const myPromisse = queryDB(params,'NOR-6');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve) 
+            console.log(json)
+        })        
+    }
+
     pageScreen.querySelector('#cmbEmpresa').addEventListener('change',()=>{
         const id_cliente = pageScreen.querySelector('#cmbEmpresa').value
         btnOpen.disabled = 1
@@ -73,6 +84,13 @@
     pageScreen.querySelector('#cmbNorma').addEventListener('change',()=>{
         btnOpen.disabled = 0
     })
+
+    pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
+        const id_cli = pageScreen.querySelector('#cmbEmpresa').value
+        const id_nor = pageScreen.querySelector('#cmbNorma').value
+        pageFunc.fillCheckLeis(id_cli,id_nor)
+    })
+
 
     pageStart()
 

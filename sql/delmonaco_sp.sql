@@ -335,6 +335,7 @@ DELIMITER $$
 				DELETE FROM tb_cliente WHERE id = Iid;
                 DELETE FROM tb_user_cli WHERE id_cliente=Iid;
                 DELETE FROM tb_norma_cli WHERE id_cliente=Iid;
+                DELETE FROM tb_check WHERE id_cliente=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_cliente (id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email) 
@@ -830,6 +831,7 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Inome = '')THEN
 				DELETE FROM tb_leis WHERE id=Iid;
+                DELETE FROM tb_check WHERE id_lei=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_leis (id_norma,nome,esfera,ramo,assunto,ementa,aplicabilidade) 
@@ -839,6 +841,26 @@ DELIMITER $$
                     SET nome=Inome, esfera=Iesfera,ramo=Iramo,assunto=Iassunto,ementa=Iementa,aplicabilidade=Iaplicabilidade 
                     WHERE id=Iid;
                 END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_check_lei;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_check_lei(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_cli int(11),
+        IN Iid_norma int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+			SET @user_allow = (SELECT COUNT(*) FROM tb_user_cli WHERE id_user=@id_call AND id_cliente=Iid_cli);
+			IF(@user_allow)THEN
+				SELECT * FROM vw_check_lei WHERE id_cliente=Iid_cli AND id_norma=Iid_norma;
             END IF;
         END IF;
 	END $$
