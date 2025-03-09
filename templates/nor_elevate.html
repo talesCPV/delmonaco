@@ -1,0 +1,47 @@
+<template>
+    <style>
+
+
+    </style>
+
+    <div class="laws">
+
+    </div>
+
+
+</template>
+<script>
+
+    const pageData = main_data.nor_elevate.data
+    const pageFunc = main_data.nor_elevate.func
+    const pageScreen = document.querySelector('#card-nor_elevate')
+
+
+    function pageStart(){
+        pageScreen.classList.add('fullscreen')
+        pageFunc.fillCheckLeis()
+        console.log(pageData)
+    }
+
+
+    pageFunc.fillCheckLeis = ()=>{      
+        const params = new Object;
+            params.id_cliente = pageData.id_cli
+            params.id_norma = pageData.id_nor
+        const myPromisse = queryDB(params,'NOR-6');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve) 
+            for(let i=0; i<json.length; i++){
+                console.log(json[i])
+
+            }
+        })        
+    }
+
+  
+
+
+
+    pageStart()
+
+</script>
