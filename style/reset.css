@@ -265,6 +265,10 @@
             margin: 2px 10px;
         }
 
+        .inline input{
+            max-width: unset !important;
+        }
+
         .line {
             flex-direction: column;
             gap: 0;

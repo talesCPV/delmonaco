@@ -78,8 +78,10 @@
         const data = new Object
         data.id_cli = pageScreen.querySelector('#cmbEmpresa').value
         data.id_nor = pageScreen.querySelector('#cmbNorma').value
+        data.cliente = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].text
+        data.norma = pageScreen.querySelector('#cmbNorma').options[pageScreen.querySelector('#cmbNorma').selectedIndex].text
         data.access = 'full'
-        openHTML('nor_elevate.html','pop-up','ELEVATE',data)
+        openHTML('nor_elevate.html','pop-up',`${data.norma} - ${data.cliente}`,data)
       
     })
 

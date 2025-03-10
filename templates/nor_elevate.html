@@ -1,13 +1,58 @@
 <template>
     <style>
+        .lei{
+            display: flex;
+            flex-direction: column;
+            background-color: #ded;
+            padding: 10px;
+            font-size: 1.1em;
+        }
+
+        .lei label{
+            font-weight: 700;
+        }
 
 
     </style>
 
-    <div class="laws">
-
+    <div class="tab-bar">
+        <div class="tab-item" id="tab-laws" onclick="pictab(this)"> Leis</div>
+        <div class="tab-item" id="tab-planos" onclick="pictab(this)">Planos de Ação</div>
     </div>
+    <div class="tab-screen">
+        <div id="laws" class="tab">
+            <div class="lei">
+                <div class="inline">
+                    <label for="">Lei:</label>
+                    <input type="text" class="nome" value="Lei num 415 artigo 12" disabled>
+                    <label for="">Esfera:</label>
+                    <input type="text" class="esfera" style="max-width: 150px;" value="FEDERAL" disabled>
+                    <label for="">Aplicabilidade:</label>
+                    <input type="text" class="aplica" style="max-width: 150px;" value="APLICÁVEL" disabled>
+                </div>
+                <div class="inline">
+                    <label for="">Assunto:</label>
+                    <input type="text" class="assunto" value="Assunto Teste 101" disabled>
+                    <label for="">Ramo:</label>
+                    <input type="text" class="ramo" style="max-width: 250px;" value="Ramo 101" disabled>
+                    <div class="line-ckb">
+                        <label for="ckb-1">Atende:</label>
+                        <input id="ckb-1" type="checkbox">
+                    </div>
+                </div>
+                <div class="inline">
 
+                </div>
+                <div class="inline">
+                    <label for="">Ementa:</label>
+                    <textarea class="ementa" rows="5" readonly disabled>teste 123\nblablablabla\nblablabla\nsksllks</textarea>
+                </div>
+                
+                <p class="ementa"></p>
+            </div>
+        </div>
+        <div id="planos" class="tab"></div>
+    </div>
 
 </template>
 <script>
@@ -19,6 +64,8 @@
 
     function pageStart(){
         pageScreen.classList.add('fullscreen')
+        pageScreen.querySelector('#tab-laws').click()
+
         pageFunc.fillCheckLeis()
         console.log(pageData)
     }

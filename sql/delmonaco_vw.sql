@@ -101,7 +101,7 @@ SELECT * FROM vw_lei_norma_cli WHERE id_cliente=6;
 DROP VIEW IF EXISTS vw_check_lei;
  CREATE VIEW vw_check_lei AS
 	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome, NCL.esfera, NCL.ramo, NCL.assunto,NCL.ementa, NCL.aplicabilidade,
-		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs
+		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
 		FROM vw_lei_norma_cli AS NCL
 		LEFT JOIN tb_check AS CHK
 		ON NCL.id = CHK.id_lei

@@ -252,7 +252,7 @@ ul>li>label>span, #logout_btn {
     }
 
     #open_btn{
-        top: 0;
+        top: 40px;
         right: -60px;
         border-radius: 0 50% 50% 0;
         background-color: var(--top-bar);

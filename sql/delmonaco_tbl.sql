@@ -211,9 +211,12 @@ CREATE TABLE tb_check(
     id_lei int(11) NOT NULL,
     ok bool DEFAULT 0,
     obs VARCHAR(512) DEFAULT NULL,
+    validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
     FOREIGN KEY (id_lei) REFERENCES tb_leis(id),
     PRIMARY KEY (id_cliente,id_lei)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+-- ALTER TABLE tb_check ADD COLUMN validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 INSERT INTO tb_check (id_cliente,id_lei,ok,obs)VALUES(6,3,1,"Teste!!!");
