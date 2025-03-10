@@ -1,9 +1,21 @@
 <template>
     <style>
+
+        .ok{
+            background-color: rgb(218, 238, 218);
+        }
+
+        .alert{
+            background-color: rgb(252, 255, 228);
+        }
+
+        .danger{
+            background-color: rgb(238, 222, 222);
+        }
+
         .lei{
             display: flex;
             flex-direction: column;
-            background-color: #ded;
             padding: 10px;
             font-size: 1.1em;
         }
@@ -21,33 +33,32 @@
     </div>
     <div class="tab-screen">
         <div id="laws" class="tab">
-            <div class="lei">
+            <div class="lei alert">
                 <div class="inline">
-                    <label for="">Lei:</label>
-                    <input type="text" class="nome" value="Lei num 415 artigo 12" disabled>
+                    <label for="nome-">Lei:</label>
+                    <input type="text" id="nome-" value="Lei num 415 artigo 12" disabled>
                     <label for="">Esfera:</label>
                     <input type="text" class="esfera" style="max-width: 150px;" value="FEDERAL" disabled>
-                    <label for="">Aplicabilidade:</label>
-                    <input type="text" class="aplica" style="max-width: 150px;" value="APLICÁVEL" disabled>
+                    <label for="">Ramo:</label>
+                    <input type="text" class="ramo" style="max-width: 250px;" value="Ramo 101" disabled>
                 </div>
                 <div class="inline">
                     <label for="">Assunto:</label>
                     <input type="text" class="assunto" value="Assunto Teste 101" disabled>
-                    <label for="">Ramo:</label>
-                    <input type="text" class="ramo" style="max-width: 250px;" value="Ramo 101" disabled>
-                    <div class="line-ckb">
-                        <label for="ckb-1">Atende:</label>
-                        <input id="ckb-1" type="checkbox">
-                    </div>
-                </div>
-                <div class="inline">
-
+                    <label for="">Aplicabilidade:</label>
+                    <input type="text" class="aplica" style="max-width: 150px;" value="APLICÁVEL" disabled>
                 </div>
                 <div class="inline">
                     <label for="">Ementa:</label>
                     <textarea class="ementa" rows="5" readonly disabled>teste 123\nblablablabla\nblablabla\nsksllks</textarea>
                 </div>
-                
+                <div class="line">
+                    <div class="line-ckb">
+                        <label for="ckb-1">Atende:</label>
+                        <input id="ckb-1" type="checkbox">
+                    </div>
+                    <button><span class="mdi mdi-puzzle-plus"></span> Plano de Ação</button>
+                </div>
                 <p class="ementa"></p>
             </div>
         </div>
@@ -70,6 +81,73 @@
         console.log(pageData)
     }
 
+    function addLei(data){
+
+        const lei = document.createElement('div')
+        lei.data = data
+        lei.className = 'lei'
+        if(data.expira == null){
+            lei.classList.add('alert')
+        }else if(Number(data.ok)){
+            lei.classList.add('ok')
+        }else{
+            lei.classList.add('danger')
+        }
+
+        const line_1 = document.createElement('div')
+        lei.appendChild(line_1)
+        line_1.className = 'inline'
+        line_1.innerHTML = `
+        <label for="nome-${data.id_cliente}-${data.id_lei}">Lei:</label>
+        <input type="text" id="nome-${data.id_cliente}-${data.id_lei}" value="${data.nome}" disabled>
+        <label for="esfera-${data.id_cliente}-${data.id_lei}">Esfera:</label>
+        <input type="text" id="esfera-${data.id_cliente}-${data.id_lei}" style="max-width: 150px;" value="${data.esfera}" disabled>
+        <label for="ramo-${data.id_cliente}-${data.id_lei}">Ramo:</label>
+        <input type="text" class="ramo-${data.id_cliente}-${data.id_lei}" style="max-width: 250px;" value="${data.ramo}" disabled>
+        `
+
+        const line_2 = document.createElement('div')
+        lei.appendChild(line_2)
+        line_2.className = 'inline'
+        line_2.innerHTML = `
+        <label for="assunto-${data.id_cliente}-${data.id_lei}">Assunto:</label>
+        <input type="text" id="assunto-${data.id_cliente}-${data.id_lei}" value="${data.assunto}" disabled>
+        <label for="aplica-${data.id_cliente}-${data.id_lei}">Aplicabilidade:</label>
+        <input type="text" id="aplica-${data.id_cliente}-${data.id_lei}" style="max-width: 150px;" value="${data.aplicabilidade}" disabled>
+        `
+
+        const line_3 = document.createElement('div')
+        lei.appendChild(line_3)
+        line_3.className = 'inline'
+        line_3.innerHTML = `
+        <label for="ementa-${data.id_cliente}-${data.id_lei}">Ementa:</label>
+        <textarea id="ementa-${data.id_cliente}-${data.id_lei}" rows="5" readonly disabled>${data.ementa}</textarea>
+        `
+
+        const line_4 = document.createElement('div')
+        lei.appendChild(line_4)
+        line_4.className = 'line'
+        line_4.innerHTML = `
+        <label for="ckb-${data.id_cliente}-${data.id_lei}">Atende:</label>
+        `
+
+        const ckb = document.createElement('input')
+        line_4.appendChild(ckb)
+        ckb.id = `ckb-${data.id_cliente}-${data.id_lei}`
+        ckb.type = 'checkbox'
+
+        const btn = document.createElement('button')
+        line_4.appendChild(btn)
+        btn.innerHTML = `<span class="mdi mdi-puzzle-plus"></span> Plano de Ação`
+        btn.addEventListener('click',()=>{
+            alert(data.nome)
+        })
+
+
+        return lei
+
+    }
+
 
     pageFunc.fillCheckLeis = ()=>{      
         const params = new Object;
@@ -78,8 +156,10 @@
         const myPromisse = queryDB(params,'NOR-6');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve) 
+            const laws = pageScreen.querySelector('#laws')
             for(let i=0; i<json.length; i++){
                 console.log(json[i])
+                laws.appendChild(addLei(json[i]))
 
             }
         })        
