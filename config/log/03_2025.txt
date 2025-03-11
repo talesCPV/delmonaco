@@ -3,3 +3,4 @@
 08/03/2025 13:51 tales@planet3.com.br : LEI Cadastrada  -> q
 08/03/2025 13:57 tales@planet3.com.br : LEI Cadastrada  -> w
 08/03/2025 13:57 tales@planet3.com.br : LEI Editada w -> www
+11/03/2025 16:19 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: true VALIDADE: 2999-12-31 23:59:59 OBS: teste

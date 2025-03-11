@@ -1,15 +1,15 @@
 <template>
     <style>
 
-        .ok{
+        .atende{
             background-color: rgb(218, 238, 218);
         }
 
-        .alert{
+        .sem-registro{
             background-color: rgb(252, 255, 228);
         }
 
-        .danger{
+        .nao-atende{
             background-color: rgb(238, 222, 222);
         }
 
@@ -29,10 +29,11 @@
 
     <div class="tab-bar">
         <div class="tab-item" id="tab-laws" onclick="pictab(this)"> Leis</div>
-        <div class="tab-item" id="tab-planos" onclick="pictab(this)">Planos de Ação</div>
+        <div class="tab-item" id="tab-graf" onclick="pictab(this)">Concluído</div>
     </div>
     <div class="tab-screen">
         <div id="laws" class="tab">
+<!--            
             <div class="lei alert">
                 <div class="inline">
                     <label for="nome-">Lei:</label>
@@ -53,16 +54,15 @@
                     <textarea class="ementa" rows="5" readonly disabled>teste 123\nblablablabla\nblablabla\nsksllks</textarea>
                 </div>
                 <div class="line">
-                    <div class="line-ckb">
-                        <label for="ckb-1">Atende:</label>
-                        <input id="ckb-1" type="checkbox">
-                    </div>
-                    <button><span class="mdi mdi-puzzle-plus"></span> Plano de Ação</button>
+                    <button><span class="mdi mdi-puzzle-plus"></span> Atende</button>
                 </div>
                 <p class="ementa"></p>
             </div>
+-->            
         </div>
-        <div id="planos" class="tab"></div>
+        <div id="graf" class="tab">
+            graf
+        </div>
     </div>
 
 </template>
@@ -78,7 +78,6 @@
         pageScreen.querySelector('#tab-laws').click()
 
         pageFunc.fillCheckLeis()
-        console.log(pageData)
     }
 
     function addLei(data){
@@ -87,11 +86,11 @@
         lei.data = data
         lei.className = 'lei'
         if(data.expira == null){
-            lei.classList.add('alert')
+            lei.classList.add('sem-registro')
         }else if(Number(data.ok)){
-            lei.classList.add('ok')
+            lei.classList.add('atende')
         }else{
-            lei.classList.add('danger')
+            lei.classList.add('nao-atende')
         }
 
         const line_1 = document.createElement('div')
@@ -127,20 +126,12 @@
         const line_4 = document.createElement('div')
         lei.appendChild(line_4)
         line_4.className = 'line'
-        line_4.innerHTML = `
-        <label for="ckb-${data.id_cliente}-${data.id_lei}">Atende:</label>
-        `
-
-        const ckb = document.createElement('input')
-        line_4.appendChild(ckb)
-        ckb.id = `ckb-${data.id_cliente}-${data.id_lei}`
-        ckb.type = 'checkbox'
 
         const btn = document.createElement('button')
         line_4.appendChild(btn)
-        btn.innerHTML = `<span class="mdi mdi-puzzle-plus"></span> Plano de Ação`
+        btn.innerHTML = `<span class="mdi mdi-check-bold"></span> Atende`
         btn.addEventListener('click',()=>{
-            alert(data.nome)
+            openHTML('nor_check.html','pop-up',data.nome,data,600)
         })
 
 
@@ -153,12 +144,12 @@
         const params = new Object;
             params.id_cliente = pageData.id_cli
             params.id_norma = pageData.id_nor
-        const myPromisse = queryDB(params,'NOR-6');
+        const myPromisse = queryDB(params,'ELE-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve) 
             const laws = pageScreen.querySelector('#laws')
+                laws.innerHTML = ''
             for(let i=0; i<json.length; i++){
-                console.log(json[i])
                 laws.appendChild(addLei(json[i]))
 
             }

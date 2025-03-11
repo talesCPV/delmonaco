@@ -1,11 +1,88 @@
 <template>
-    <style></style>
+    <style>
+        fieldset{
+            text-align: center;
+            padding-bottom: 20px;
+        }
 
+    </style>
+         
+        <fieldset>
+            <legend>Atende</legend>
+            <label for="atd-sim">Sim</label>
+            <input type="radio" name="atende" id="atd-sim" value="1">
+            <label for="atd-nao">Não</label>
+            <input type="radio" name="atende" id="atd-nao" value="0">
+        </fieldset>
 
+        <fieldset>
+            <legend>Validade</legend>
+            <div class="inline">
+                <div class="line-ckb">
+                    <label for="ckbVal">Indefinida:</label>
+                    <input id="ckbVal" type="checkbox" checked>
+                </div> 
+                <input id="edtVal" type="date" disabled>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Observações</legend>
+            <textarea id="edtObs" rows="5"></textarea>
+        </fieldset>
+
+        <div class="line">
+            <button id="btnReset">Resetar</button>
+            <button id="btnSave">Salvar</button>
+        </div>
 
 </template>
 <script>
 
+    const pageData = main_data.nor_check.data
+    const pageFunc = main_data.nor_check.func
+    const pageScreen = document.querySelector('#card-nor_check')
 
+
+    function pageStart(){
+       console.log(pageData)
+    }
+
+    pageFunc.setCheck = (reset=0)=>{      
+        const params = new Object;
+            params.id_cliente = pageData.id_cliente
+            params.id_lei = pageData.id_lei
+            params.ok = pageScreen.querySelector('#atd-sim').checked
+            params.obs = pageScreen.querySelector('#edtObs').value
+            params.validade =  pageScreen.querySelector('#ckbVal').checked ? '9999-12-31 23:59:59' : pageScreen.querySelector('#edtVal').value
+            params.reset = reset
+        const myPromisse = queryDB(params,'ELE-1');
+        myPromisse.then((resolve)=>{
+            if(reset){
+                setLog(`ELEVATE - id_cliente: ${pageData.id_cliente}, id_lei: ${pageData.id_lei} RESET`)
+            }else{
+                setLog(`ELEVATE - id_cliente: ${pageData.id_cliente}, id_lei: ${pageData.id_lei} OK: ${params.ok} VALIDADE: ${params.validade} OBS: ${params.obs}`)
+            }
+
+            try{
+                main_data.nor_elevate.func.fillCheckLeis()
+            }catch{
+                console.error('Tela fechada pelo usuário!')
+            }
+            alert('Cadastrado efetuado!')
+            closeModal('nor_check')
+       
+        })        
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setCheck()
+    })
+
+    pageScreen.querySelector('#btnReset').addEventListener('click',()=>{
+        pageFunc.setCheck(1)
+    })
+
+    pageStart()
 
 </script>

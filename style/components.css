@@ -93,6 +93,12 @@
 
 /*  ABAS (TAB) */
 
+    .tab{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     .tab-bar{
         display: flex;
         flex-wrap: wrap;

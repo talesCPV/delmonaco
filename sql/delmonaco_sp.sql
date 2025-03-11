@@ -865,3 +865,35 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_check_lei;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_check_lei(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_cliente int(11),
+        IN Iid_lei int(11),
+		IN Iok bool,
+        IN Iobs varchar(512),
+		IN Ivalidade datetime,
+        IN Ireset bool
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Ireset)THEN
+				DELETE FROM tb_check WHERE id_cliente=Iid_cliente AND id_lei=Iid_lei;
+            ELSE
+                SET @has = (SELECT COUNT(*) FROM tb_check WHERE id_cliente=Iid_cliente AND id_lei=Iid_lei);
+				IF(@has)THEN
+					UPDATE tb_check 
+                    SET ok=Iok, obs=Iobs, validade=Ivalidade 
+                    WHERE id_cliente=Iid_cliente AND id_lei=Iid_lei;
+				ELSE
+					INSERT INTO tb_check (id_cliente,id_lei,ok,obs,validade) 
+					VALUES (Iid_cliente,Iid_lei,Iok,Iobs,Ivalidade);
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
