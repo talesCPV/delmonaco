@@ -12,7 +12,7 @@
             <label for="atd-sim">Sim</label>
             <input type="radio" name="atende" id="atd-sim" value="1">
             <label for="atd-nao">Não</label>
-            <input type="radio" name="atende" id="atd-nao" value="0">
+            <input type="radio" name="atende" id="atd-nao" value="0" checked>
         </fieldset>
 
         <fieldset>
@@ -45,16 +45,23 @@
 
 
     function pageStart(){
-       console.log(pageData)
+//        console.log(pageData)
+        if(pageData.expira != null){
+            pageScreen.querySelector('#atd-sim').checked = Number(pageData.ok)
+            pageScreen.querySelector('#edtVal').disabled = pageData.expira.substr(0,4)=='0000'
+            pageScreen.querySelector('#ckbVal').checked = pageData.expira.substr(0,4)=='0000'
+            pageScreen.querySelector('#edtVal').value = pageData.expira.substr(0,10)
+            pageScreen.querySelector('#edtObs').value = pageData.obs
+        }
     }
 
     pageFunc.setCheck = (reset=0)=>{      
         const params = new Object;
             params.id_cliente = pageData.id_cliente
             params.id_lei = pageData.id_lei
-            params.ok = pageScreen.querySelector('#atd-sim').checked
+            params.ok = pageScreen.querySelector('#atd-sim').checked ? 1 : 0
             params.obs = pageScreen.querySelector('#edtObs').value
-            params.validade =  pageScreen.querySelector('#ckbVal').checked ? '9999-12-31 23:59:59' : pageScreen.querySelector('#edtVal').value
+            params.validade =  pageScreen.querySelector('#ckbVal').checked ? '0000-00-00 00:00:00' : pageScreen.querySelector('#edtVal').value
             params.reset = reset
         const myPromisse = queryDB(params,'ELE-1');
         myPromisse.then((resolve)=>{
@@ -81,6 +88,16 @@
 
     pageScreen.querySelector('#btnReset').addEventListener('click',()=>{
         pageFunc.setCheck(1)
+    })
+
+    pageScreen.querySelector('#ckbVal').addEventListener('change',()=>{
+        const chk = pageScreen.querySelector('#ckbVal').checked
+        const date = pageScreen.querySelector('#edtVal')
+        date.disabled = chk
+        date.focus()
+        if(pageScreen.querySelector('#edtVal').value == ''){
+            pageScreen.querySelector('#edtVal').value = today.getFormatDate()
+        }
     })
 
     pageStart()

@@ -4,3 +4,18 @@
 08/03/2025 13:57 tales@planet3.com.br : LEI Cadastrada  -> w
 08/03/2025 13:57 tales@planet3.com.br : LEI Editada w -> www
 11/03/2025 16:19 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: true VALIDADE: 2999-12-31 23:59:59 OBS: teste
+11/03/2025 19:54 tales@planet3.com.br : ELEVATE - id_cliente: 6, id_lei: 3 OK: true VALIDADE: 0000-00-00 00:00:00 OBS: 
+11/03/2025 19:54 tales@planet3.com.br : ELEVATE - id_cliente: 6, id_lei: 3 OK: true VALIDADE: 2025-06-19 OBS: 
+11/03/2025 19:57 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: 
+11/03/2025 19:59 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 1 VALIDADE: 2030-03-19 OBS: teste ok 
+123
+11/03/2025 20:00 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 RESET
+11/03/2025 20:01 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: Plano de Acao
+11/03/2025 20:02 tales@planet3.com.br : ELEVATE - id_cliente: 5, id_lei: 3 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: 
+11/03/2025 20:02 tales@planet3.com.br : ELEVATE - id_cliente: 5, id_lei: 3 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+11/03/2025 20:04 tales@planet3.com.br : LEI Cadastrada  -> Lei Norma Teste 1
+11/03/2025 20:05 tales@planet3.com.br : LEI Cadastrada  -> Lei Norma Teste 2
+11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: Gerenciar, Acesso:[[0,1]])
+11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0,1]])
+11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: Comercial, Acesso:[[0,1]])
+11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: GDM Elevate, Acesso:[[0,1,2]])
