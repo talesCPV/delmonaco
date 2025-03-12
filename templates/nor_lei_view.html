@@ -37,6 +37,7 @@
 
         <div class="line">
             <button id="btnEdit">Editar</button>
+            <button id="btnDel">Deletar</button>
             <button id="btnSave" class="only-view" disabled>Salvar</button>
         </div>
     </fieldset>
@@ -53,6 +54,7 @@
         if(newLei){
             openFields(1)
             pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('#btnDel').disabled = 1
             pageData.id_norma = pageData.id
         }else{
             pageData.id_lei = pageData.id
@@ -94,7 +96,14 @@
 
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setLei()
-//        closeModal('nor_lei_view')
+        closeModal('nor_lei_view')
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(confirm('Deseja remover definitivamente este ítem da norma?')){
+            pageFunc.setLei(1)
+            closeModal('nor_lei_view')
+        }
     })
 
     pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{

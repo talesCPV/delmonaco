@@ -34,3 +34,14 @@
 12/03/2025 20:24 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 RESET
 12/03/2025 20:24 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: 
 12/03/2025 20:24 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: 1 VALIDADE: 2035-11-15 OBS: 
+12/03/2025 20:36 tales@planet3.com.br : Item da Norma: Deletado q -> 
+12/03/2025 20:38 tales@planet3.com.br : Item da Norma: Deletado lei teste blabla -> 
+12/03/2025 20:38 tales@planet3.com.br : Item da Norma: Deletado Lei 2 -> 
+12/03/2025 20:39 tales@planet3.com.br : Item da Norma: Deletado Teste -> 
+12/03/2025 20:40 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.5
+12/03/2025 20:41 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.6
+12/03/2025 20:41 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.7
+12/03/2025 20:42 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.8
+12/03/2025 20:44 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.9
+12/03/2025 20:44 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.10
+12/03/2025 20:45 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 11 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
