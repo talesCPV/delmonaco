@@ -39,6 +39,7 @@
                 const opt = document.createElement('option')
                 opt.value = json[i].id_cliente
                 opt.innerHTML = json[i].cliente
+                opt.data = json[i]
                 cmb.appendChild(opt)
             }         
         })
@@ -56,6 +57,7 @@
                 const opt = document.createElement('option')
                 opt.value = json[i].id_norma
                 opt.innerHTML = json[i].nome
+                opt.data = json[i]
                 cmb.appendChild(opt)
             }         
         })        
@@ -75,14 +77,11 @@
     })
 
     pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
-        const data = new Object
-        data.id_cli = pageScreen.querySelector('#cmbEmpresa').value
-        data.id_nor = pageScreen.querySelector('#cmbNorma').value
-        data.cliente = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].text
-        data.norma = pageScreen.querySelector('#cmbNorma').options[pageScreen.querySelector('#cmbNorma').selectedIndex].text
+        const data = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].data
+        data.norma = pageScreen.querySelector('#cmbNorma').options[pageScreen.querySelector('#cmbNorma').selectedIndex].data
         data.access = 'full'
-        openHTML('nor_elevate.html','pop-up',`${data.norma} - ${data.cliente}`,data)
-//        closeModal('nor_open_elev')
+        openHTML('nor_elevate.html','pop-up',`${data.norma.nome} - ${data.cliente}`,data)
+        closeModal('nor_open_elev')
     })
 
 

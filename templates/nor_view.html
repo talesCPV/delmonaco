@@ -22,8 +22,32 @@
         </div>
 
         <div class="inline">
+            <label for="cmbEsfera">Esfera</label>
+            <select id="cmbEsfera" class="only-view" disabled>
+                <option value="FEDERAL">Federal</option>
+                <option value="ESTADUAL">Estadual</option>
+                <option value="MUNICIPAL">Municipal</option>
+            </select>
+        </div>
+
+        <div class="inline">
+            <label for="edtRamo">Ramo</label>
+            <input type="text" id="edtRamo" maxlength="90" class="only-view" disabled>
+        </div>
+
+        <div class="inline">
+            <label for="edtAssunto">Assunto</label>
+            <input type="text" id="edtAssunto" maxlength="120" class="only-view" disabled>
+        </div>
+
+        <div class="inline">
             <label for="edtSobre">Sobre</label>
-            <textarea class="only-view" id="edtSobre" rows="5" maxlength="2048" disabled></textarea>
+            <textarea class="only-view" id="edtSobre" onfocus="this.select();" rows="5" maxlength="2048" disabled></textarea>
+        </div>
+
+        <div class="inline">
+            <label for="edtLink">Link da Norma</label>
+            <input type="text" class="only-view" id="edtLink" onfocus="this.select();" maxlength="500" disabled>
         </div>
 
         <div class="line">
@@ -33,7 +57,7 @@
         </div>
     </fieldset>
     <fieldset class="leis">
-        <legend>Leis</legend>
+        <legend>Ítens</legend>
         <table id="tblLeis"></table>
         <div class="line">
             <button id="btnNovaLei"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
@@ -57,6 +81,10 @@
         }else{     
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtSobre').value = pageData.sobre
+            pageScreen.querySelector('#edtLink').value = pageData.link
+            pageScreen.querySelector('#edtAssunto').value = pageData.assunto
+            pageScreen.querySelector('#edtRamo').value = pageData.ramo
+            pageScreen.querySelector('#cmbEsfera').value = pageData.esfera
             pageScreen.querySelector('#btnEdit').disabled = 0
             pageFunc.fillLeis(pageData.id)
         }
@@ -73,7 +101,11 @@
         const params = new Object;
             params.id = newNorma ? 0 : pageData.id
             params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
-            params.sobre = pageScreen.querySelector('#edtSobre').value.trim()
+            params.sobre = Sanatize(pageScreen.querySelector('#edtSobre').value.trim())
+            params.link = pageScreen.querySelector('#edtLink').value.trim()
+            params.esfera = pageScreen.querySelector('#cmbEsfera').value
+            params.ramo = Sanatize(pageScreen.querySelector('#edtRamo').value.trim())
+            params.assunto = Sanatize(pageScreen.querySelector('#edtAssunto').value.trim())
           
         const myPromisse = queryDB(params,'NOR-1');
         myPromisse.then((resolve)=>{
@@ -98,9 +130,9 @@
         myPromisse.then((resolve)=>{            
             const json = JSON.parse(resolve)
             const tbl = pageScreen.querySelector('#tblLeis')
-            tbl.head('Lei,Esfera|min-field,Aplicabilidade|min-field')
+            tbl.head('Nome,Aplicabilidade|min-field')
             for(let i=0; i<json.length; i++){
-                tbl.plot(json[i],'nome,esfera|min-field,aplicabilidade|min-field','Upp,Upp,Upp')
+                tbl.plot(json[i],'nome,aplicabilidade|min-field','Upp,Upp')
             }
         })
     }

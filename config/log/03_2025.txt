@@ -19,3 +19,18 @@
 11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0,1]])
 11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: Comercial, Acesso:[[0,1]])
 11/03/2025 20:06 tales@planet3.com.br : Permissao alterada, Modulo: GDM Elevate, Acesso:[[0,1,2]])
+12/03/2025 14:47 tales@planet3.com.br : NORMA Editada NR-12 -> NR-12
+12/03/2025 14:49 tales@planet3.com.br : NORMA Editada NR-12 -> NR-12
+12/03/2025 14:52 tales@planet3.com.br : NORMA Editada NR-12 -> NR-12
+12/03/2025 14:54 tales@planet3.com.br : NORMA Editada NR 35 -> NR 35
+12/03/2025 19:39 tales@planet3.com.br : NORMA Editada NR-12 -> NR-12
+12/03/2025 19:49 tales@planet3.com.br : Item da Norma: Cadastrado  -> Teste
+12/03/2025 20:03 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 0 VALIDADE: 2025-03-28 OBS: Plano de Acao
+12/03/2025 20:03 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 1 VALIDADE: 2025-03-28 OBS: Plano de Acao
+12/03/2025 20:07 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 0 VALIDADE: 2025-03-28 OBS: Plano de Acao
+12/03/2025 20:22 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 1 VALIDADE: 2025-03-28 OBS: Plano de Acao
+12/03/2025 20:23 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 0 VALIDADE: 2025-03-28 OBS: Plano de Acao
+12/03/2025 20:23 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 RESET
+12/03/2025 20:24 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 RESET
+12/03/2025 20:24 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: 
+12/03/2025 20:24 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: 1 VALIDADE: 2035-11-15 OBS: 

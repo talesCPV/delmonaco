@@ -8,7 +8,7 @@
     </style>
          
         <fieldset>
-            <legend>Atende</legend>
+            <legend id="lgdAtende">Atende</legend>
             <label for="atd-sim">Sim</label>
             <input type="radio" name="atende" id="atd-sim" value="1">
             <label for="atd-nao">Não</label>
@@ -52,6 +52,8 @@
             pageScreen.querySelector('#ckbVal').checked = pageData.expira.substr(0,4)=='0000'
             pageScreen.querySelector('#edtVal').value = pageData.expira.substr(0,10)
             pageScreen.querySelector('#edtObs').value = pageData.obs
+            pageScreen.querySelector('#lgdAtende').innerHTML = pageData.aplicabilidade=='INFORMATIVO' ? 'Estou Ciente' : 'Atende'
+
         }
     }
 
@@ -87,7 +89,9 @@
     })
 
     pageScreen.querySelector('#btnReset').addEventListener('click',()=>{
-        pageFunc.setCheck(1)
+        if(confirm('Deseja resetar este registro?')){
+            pageFunc.setCheck(1)
+        }
     })
 
     pageScreen.querySelector('#ckbVal').addEventListener('change',()=>{

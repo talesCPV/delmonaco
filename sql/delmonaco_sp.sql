@@ -726,12 +726,16 @@ DELIMITER ;
 
  DROP PROCEDURE IF EXISTS sp_set_norma;
 DELIMITER $$
-	CREATE PROCEDURE sp_set_norma(	
+	CREATE PROCEDURE sp_set_norma(
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
         IN Iid int(11),
 		IN Inome varchar(120),
-        IN Isobre varchar(2048)
+        IN Isobre varchar(2048),
+        IN Ilink varchar(500),
+        IN Iesfera varchar(9),
+        IN Iramo varchar(90),
+		IN Iassunto varchar(120)
     )
 	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
@@ -740,10 +744,10 @@ DELIMITER $$
 				DELETE FROM tb_normas WHERE id=Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_normas (nome,sobre) 
-					VALUES (Inome,Isobre);
+					INSERT INTO tb_normas (nome,sobre,link,esfera,ramo,assunto) 
+					VALUES (Inome,Isobre,Ilink,Iesfera,Iramo,Iassunto);
 				ELSE
-					UPDATE tb_normas SET nome=Inome, sobre=Isobre WHERE id=Iid;
+					UPDATE tb_normas SET nome=Inome, sobre=Isobre, link=Ilink, esfera=Iesfera, ramo=Iramo, assunto=Iassunto WHERE id=Iid;
                 END IF;
             END IF;
         END IF;
@@ -820,9 +824,6 @@ DELIMITER $$
         IN Iid int(11),
         IN Iid_norma int(11),
 		IN Inome varchar(120),
-        IN Iesfera varchar(9),
-		IN Iramo varchar(90),
-		IN Iassunto varchar(120),
 		IN Iementa varchar(2048),
 		IN Iaplicabilidade varchar(13)
     )
@@ -834,11 +835,11 @@ DELIMITER $$
                 DELETE FROM tb_check WHERE id_lei=Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_leis (id_norma,nome,esfera,ramo,assunto,ementa,aplicabilidade) 
-					VALUES (Iid_norma,Inome,Iesfera,Iramo,Iassunto,Iementa,Iaplicabilidade);
+					INSERT INTO tb_leis (id_norma,nome,ementa,aplicabilidade) 
+					VALUES (Iid_norma,Inome,Iementa,Iaplicabilidade);
 				ELSE
 					UPDATE tb_leis 
-                    SET nome=Inome, esfera=Iesfera,ramo=Iramo,assunto=Iassunto,ementa=Iementa,aplicabilidade=Iaplicabilidade 
+                    SET nome=Inome,ementa=Iementa,aplicabilidade=Iaplicabilidade 
                     WHERE id=Iid;
                 END IF;
             END IF;

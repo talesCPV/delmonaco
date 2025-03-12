@@ -28,10 +28,37 @@
     </style>
 
     <div class="tab-bar">
-        <div class="tab-item" id="tab-laws" onclick="pictab(this)"> Leis</div>
+        <div class="tab-item" id="tab-norma" onclick="pictab(this)">Norma</div>
+        <div class="tab-item" id="tab-laws" onclick="pictab(this)">Ítens</div>
         <div class="tab-item" id="tab-graf" onclick="pictab(this)">Concluído</div>
     </div>
     <div class="tab-screen">
+        <div id="norma" class="tab">
+<!--            <iframe src="https://www.google.com/"></iframe>  -->
+            <div class="inline">
+                <label for="edtCliente">Cliente:</label>
+                <input type="text" id="edtCliente" disabled>
+            </div>
+            <div class="inline">
+                <label for="edtNorma">Norma:</label>
+                <input type="text" id="edtNorma" disabled>
+                <label for="edtEsfera">Esfera:</label>
+                <input type="text" id="edtEsfera" style="max-width: 150px;" disabled>
+            </div>
+            <div class="inline">
+                <label for="edtAssunto">Assunto:</label>
+                <input type="text" id="edtAssunto" disabled>
+                <label for="edtRamo">Ramo:</label>
+                <input type="text" id="edtRamo" style="max-width: 300px;" disabled>
+            </div>            
+            <div class="inline">
+                <label for="edtSobre">Sobre:</label>
+                <textarea id="edtSobre" rows="5" disabled></textarea>
+            </div>
+            <div class="line">
+                <button id="btnLei" disabled>Visualizar o Texto da Lei</button>
+            </div>
+        </div>
         <div id="laws" class="tab">
 <!--            
             <div class="lei alert">
@@ -76,19 +103,29 @@
     function pageStart(){
         pageScreen.classList.add('fullscreen')
         pageScreen.querySelector('#tab-laws').click()
-
+        pageScreen.querySelector('#edtCliente').value = pageData.norma.cliente
+        pageScreen.querySelector('#edtNorma').value = pageData.norma.nome
+        pageScreen.querySelector('#edtEsfera').value = pageData.norma.esfera
+        pageScreen.querySelector('#edtAssunto').value = pageData.norma.assunto
+        pageScreen.querySelector('#edtRamo').value = pageData.norma.ramo
+        pageScreen.querySelector('#edtSobre').value = pageData.norma.sobre
+        if(pageData.norma.link != null){
+            pageScreen.querySelector('#btnLei').disabled = 0
+            pageScreen.querySelector('#btnLei').addEventListener('click',()=>{
+                window.open(pageData.norma.link, '_blank').focus()
+            })
+        }
         pageFunc.fillCheckLeis()
     }
 
     function addLei(data){
-
         const lei = document.createElement('div')
         lei.data = data
         lei.className = 'lei'
-        if(data.expira == null){
-            lei.classList.add('sem-registro')
-        }else if(Number(data.ok)){
+        if(Number(data.ok) || data.aplicabilidade == 'NÃO APLICÁVEL'){
             lei.classList.add('atende')
+        }else if(data.expira == null){
+            lei.classList.add('sem-registro')
         }else{
             lei.classList.add('nao-atende')
         }
@@ -97,39 +134,30 @@
         lei.appendChild(line_1)
         line_1.className = 'inline'
         line_1.innerHTML = `
-        <label for="nome-${data.id_cliente}-${data.id_lei}">Lei:</label>
+        <label for="nome-${data.id_cliente}-${data.id_lei}">Ítem:</label>
         <input type="text" id="nome-${data.id_cliente}-${data.id_lei}" value="${data.nome}" disabled>
-        <label for="esfera-${data.id_cliente}-${data.id_lei}">Esfera:</label>
-        <input type="text" id="esfera-${data.id_cliente}-${data.id_lei}" style="max-width: 150px;" value="${data.esfera}" disabled>
-        <label for="ramo-${data.id_cliente}-${data.id_lei}">Ramo:</label>
-        <input type="text" class="ramo-${data.id_cliente}-${data.id_lei}" style="max-width: 250px;" value="${data.ramo}" disabled>
+        <label for="aplica-${data.id_cliente}-${data.id_lei}">Aplicabilidade:</label>
+        <input type="text" id="aplica-${data.id_cliente}-${data.id_lei}" style="max-width: 150px;" value="${data.aplicabilidade}" disabled>
+        <label for="validade-${data.id_cliente}-${data.id_lei}">Expira em::</label>
+        <input type="text" id="validade-${data.id_cliente}-${data.id_lei}" value="${data.expira==null || data.expira.substr(0,4)=='0000'  ?  'INDEFINIDO' : data.expira.viewDate() }" style="max-width: 120px;" disabled>
         `
 
         const line_2 = document.createElement('div')
         lei.appendChild(line_2)
         line_2.className = 'inline'
         line_2.innerHTML = `
-        <label for="assunto-${data.id_cliente}-${data.id_lei}">Assunto:</label>
-        <input type="text" id="assunto-${data.id_cliente}-${data.id_lei}" value="${data.assunto}" disabled>
-        <label for="aplica-${data.id_cliente}-${data.id_lei}">Aplicabilidade:</label>
-        <input type="text" id="aplica-${data.id_cliente}-${data.id_lei}" style="max-width: 150px;" value="${data.aplicabilidade}" disabled>
-        `
-
-        const line_3 = document.createElement('div')
-        lei.appendChild(line_3)
-        line_3.className = 'inline'
-        line_3.innerHTML = `
         <label for="ementa-${data.id_cliente}-${data.id_lei}">Ementa:</label>
         <textarea id="ementa-${data.id_cliente}-${data.id_lei}" rows="5" readonly disabled>${data.ementa}</textarea>
         `
 
-        const line_4 = document.createElement('div')
-        lei.appendChild(line_4)
-        line_4.className = 'line'
+        const line_3 = document.createElement('div')
+        lei.appendChild(line_3)
+        line_3.className = 'line'
 
         const btn = document.createElement('button')
-        line_4.appendChild(btn)
+        line_3.appendChild(btn)
         btn.innerHTML = `<span class="mdi mdi-check-bold"></span> Atende`
+        btn.disabled =  data.aplicabilidade == 'NÃO APLICÁVEL'
         btn.addEventListener('click',()=>{
             openHTML('nor_check.html','pop-up',data.nome,data,600)
         })
@@ -140,10 +168,10 @@
     }
 
 
-    pageFunc.fillCheckLeis = ()=>{      
+    pageFunc.fillCheckLeis = ()=>{ 
         const params = new Object;
-            params.id_cliente = pageData.id_cli
-            params.id_norma = pageData.id_nor
+            params.id_cliente = pageData.id_cliente
+            params.id_norma = pageData.norma.id_norma
         const myPromisse = queryDB(params,'ELE-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve) 

@@ -179,22 +179,31 @@ DROP TABLE IF EXISTS tb_normas;
 CREATE TABLE tb_normas(
     id int(11) NOT NULL AUTO_INCREMENT,
     nome varchar(120) NOT NULL,
+    esfera varchar(9) NOT NULL DEFAULT "FEDERAL",
+    ramo varchar(90) DEFAULT NULL,
+    assunto varchar(120) DEFAULT NULL,
     sobre varchar(2048) DEFAULT NULL,
+    link varchar(500) DEFAULT NULL,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+-- ALTER TABLE tb_normas DROP COLUMN lassunto;
+-- ALTER TABLE tb_normas ADD COLUMN link varchar(500) DEFAULT NULL;
+-- ALTER TABLE tb_normas ADD COLUMN esfera varchar(9) NOT NULL DEFAULT "FEDERAL";
+-- ALTER TABLE tb_normas ADD COLUMN ramo varchar(90) DEFAULT NULL;
+-- ALTER TABLE tb_normas ADD COLUMN assunto varchar(120) DEFAULT NULL;
 
 DROP TABLE IF EXISTS tb_leis;
 CREATE TABLE tb_leis(
     id int(11) NOT NULL AUTO_INCREMENT,
     id_norma int(11) NOT NULL,
     nome varchar(120) NOT NULL,
-    esfera varchar(9) NOT NULL DEFAULT "FEDERAL",
-    ramo varchar(90) DEFAULT NULL,
-    assunto varchar(120) DEFAULT NULL,
     ementa varchar(2048) DEFAULT NULL,
     aplicabilidade varchar(13) DEFAULT "NÃO APLICÁVEL",
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+	ALTER TABLE tb_leis DROP COLUMN ramo;
+
 
 DROP TABLE IF EXISTS tb_norma_cli;
 CREATE TABLE tb_norma_cli(

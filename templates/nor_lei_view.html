@@ -14,7 +14,7 @@
     </style>
   
     <fieldset class="frm" >
-        <legend>Lei</legend>
+        <legend>Ítem da Norma</legend>
 
         <div class="inline">
             <label for="edtNome">Nome *</label>
@@ -22,29 +22,12 @@
         </div>
 
         <div class="inline">
-            <label for="cmbEsfera">Esfera</label>
-            <select id="cmbEsfera" class="only-view" disabled>
-                <option value="FEDERAL">Federal</option>
-                <option value="ESTADUAL">Estadual</option>
-                <option value="MUNICIPAL">Municipal</option>
-            </select>
-
             <label for="cmbAplica">Aplicabilidade</label>
             <select id="cmbAplica" class="only-view" disabled>
                 <option value="APLICÁVEL">Aplicável</option>
                 <option value="NÃO APLICÁVEL">Não Aplicável</option>
                 <option value="INFORMATIVO">Somente Informativo</option>
             </select>
-        </div>
-
-        <div class="inline">
-            <label for="edtRamo">Ramo</label>
-            <input type="text" id="edtRamo" maxlength="90" class="only-view" disabled>
-        </div>
-
-        <div class="inline">
-            <label for="edtAssunto">Assunto</label>
-            <input type="text" id="edtAssunto" maxlength="120" class="only-view" disabled>
         </div>
 
         <div class="inline">
@@ -74,9 +57,6 @@
         }else{
             pageData.id_lei = pageData.id
             pageScreen.querySelector('#edtNome').value = pageData.nome
-            pageScreen.querySelector('#cmbEsfera').value = pageData.esfera
-            pageScreen.querySelector('#edtRamo').value = pageData.ramo
-            pageScreen.querySelector('#edtAssunto').value = pageData.assunto
             pageScreen.querySelector('#edtEmenta').value = pageData.ementa
             pageScreen.querySelector('#cmbAplica').value = pageData.aplicabilidade
             pageScreen.querySelector('#btnEdit').disabled = 0
@@ -88,16 +68,13 @@
             params.id = newLei ? 0 : pageData.id_lei
             params.id_norma = pageData.id_norma
             params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
-            params.esfera = pageScreen.querySelector('#cmbEsfera').value
-            params.ramo = pageScreen.querySelector('#edtRamo').value.trim()
-            params.assunto = pageScreen.querySelector('#edtAssunto').value.trim()
             params.ementa = pageScreen.querySelector('#edtEmenta').value.trim()
             params.aplicabidade = pageScreen.querySelector('#cmbAplica').value
             
           
         const myPromisse = queryDB(params,'NOR-3');
         myPromisse.then((resolve)=>{
-            setLog(`LEI ${newLei?'Cadastrada': del ? 'Deletada' : 'Editada'} ${ !newLei ? pageData.nome :''} -> ${params.nome}`)
+            setLog(`Item da Norma: ${newLei?'Cadastrado': del ? 'Deletado' : 'Editado'} ${ !newLei ? pageData.nome :''} -> ${params.nome}`)
             try{
                 main_data.nor_view.func.fillLeis(pageData.id_norma)
             }catch{
