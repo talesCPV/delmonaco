@@ -138,8 +138,6 @@
             }else{
                 pageData.graf[indice][1]++
             }
-            console.log(indice)
-
         }
 
         const line_1 = document.createElement('div')
@@ -193,14 +191,9 @@
             for(let i=0; i<json.length; i++){
                 laws.appendChild(addLei(json[i]))
             }
-            console.log(pageData.graf)
             loadChart()
         })        
     }
-
-  
-
-
 
     pageStart()
 

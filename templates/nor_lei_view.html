@@ -5,6 +5,10 @@
             padding: 10px;
         }
 
+        #btnCancel{
+            display: none;
+        }
+
         @media all and (max-width : 768px) {
             .frm input, .frm select{
                 width: 98% !important;
@@ -39,6 +43,7 @@
             <button id="btnEdit">Editar</button>
             <button id="btnDel">Deletar</button>
             <button id="btnSave" class="only-view" disabled>Salvar</button>
+            <button id="btnCancel">Cancelar</button>
         </div>
     </fieldset>
 
@@ -56,6 +61,12 @@
             pageScreen.querySelector('#btnEdit').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
             pageData.id_norma = pageData.id
+            if(pageData.lote){
+                pageScreen.querySelector('#edtNome').value = pageData.itens[pageData.index].item
+                pageScreen.querySelector('#cmbAplica').value = pageData.aplicabilidade 
+                pageScreen.querySelector('#edtEmenta').value = pageData.itens[pageData.index].ementa
+                pageScreen.querySelector('#btnCancel').style.display = 'block'
+            }
         }else{
             pageData.id_lei = pageData.id
             pageScreen.querySelector('#edtNome').value = pageData.nome
@@ -81,9 +92,15 @@
                 main_data.nor_view.func.fillLeis(pageData.id_norma)
             }catch{
                 console.error('Tela fechada pelo usuário!')
-            }
+            }            
             alert('Cadastrado efetuado!')
-            closeModal('nor_lei_view')
+            if(pageData.lote){
+                pageData.index++
+                pageData.aplicabilidade = params.aplicabidade
+                pageData.callback()
+            }else{
+                closeModal('nor_lei_view')
+            }
         })
     }
 
@@ -104,6 +121,13 @@
             pageFunc.setLei(1)
             closeModal('nor_lei_view')
         }
+    })
+
+    pageScreen.querySelector('#btnCancel').addEventListener('click',()=>{
+        if(confirm('Cancelar a adição desse registro?')){
+            closeModal('nor_lei_view')
+        }
+
     })
 
     pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{

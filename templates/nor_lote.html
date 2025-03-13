@@ -1,0 +1,64 @@
+<template>
+    <style></style>
+
+    <fieldset>
+        <legend>Ítens da Norma</legend>
+        <div class="inline">
+            <label for="edtTexto">Texto</label>
+            <textarea id="edtTexto" rows="10"></textarea>
+        </div>
+        <div class="line">
+            <button id="btnPrep">Preparar</button>
+            <button id="btnSave">Salvar</button>
+        </div>
+    </fieldset>
+
+    <div class="legenda">
+
+    </div>
+
+</template>
+<script>
+    const pageData = main_data.nor_lote.data
+    const pageFunc = main_data.nor_lote.func
+    const pageScreen = document.querySelector('#card-nor_lote')
+
+    pageScreen.querySelector('#btnPrep').addEventListener('click',()=>{
+        const txt = pageScreen.querySelector('#edtTexto').value
+        const head = prompt('Os ítens abaixo iniciam com :',txt.split(' ')[0])
+        const arr = txt.split('\n'+head)
+        pageData.itens = []
+        pageData.lote = 1
+        pageData.new = 1
+        pageData.aplicabilidade = 'INFORMATIVO'
+
+        for(let i=0; i<arr.length; i++){
+            const item = arr[i].split(' ')[0]          
+            const out = new Object
+            out['item'] = i==0 ? item : head+item
+            out['ementa'] = arr[i].substr(item.length,arr[i].length)
+            pageData.itens.push(out)
+        }
+
+        pageData.index = 0
+        pageData.callback = ()=>{
+            if(pageData.index < pageData.itens.length){
+                openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
+            }
+        }
+
+        pageData.callback()
+
+
+
+
+        
+
+
+    })
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        console.log(pageData)
+    })
+
+</script>

@@ -61,6 +61,7 @@
         <table id="tblLeis"></table>
         <div class="line">
             <button id="btnNovaLei"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
+            <button id="btnLote">Add em Lote</button>
         </div>
     </fieldset>
 
@@ -162,6 +163,10 @@
         e.preventDefault()
         data.new = 0
         openHTML('nor_lei_view.html','pop-up',pageData.nome,data)
+    })
+
+    pageScreen.querySelector('#btnLote').addEventListener('click',()=>{
+        openHTML('nor_lote.html','pop-up',pageData.nome,data)
     })
 
     startPage()
