@@ -45,3 +45,4 @@
 12/03/2025 20:44 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.9
 12/03/2025 20:44 tales@planet3.com.br : Item da Norma: Cadastrado  -> 12.1.10
 12/03/2025 20:45 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 11 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+13/03/2025 15:33 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 12 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: 

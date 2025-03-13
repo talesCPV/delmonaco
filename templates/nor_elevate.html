@@ -6,11 +6,11 @@
         }
 
         .sem-registro{
-            background-color: rgb(238, 222, 222);
+            background-color: rgb(252, 255, 228);
         }
 
         .nao-atende{
-            background-color: rgb(252, 255, 228);
+            background-color: rgb(238, 222, 222);
         }
 
         .lei{
@@ -22,6 +22,11 @@
 
         .lei label{
             font-weight: 700;
+        }
+
+        #donutchart:nth-child(1){
+            display: flex;
+            justify-content: center;
         }
 
 
@@ -59,36 +64,9 @@
                 <button id="btnLei" disabled>Visualizar o Texto da Lei</button>
             </div>
         </div>
-        <div id="laws" class="tab">
-<!--            
-            <div class="lei alert">
-                <div class="inline">
-                    <label for="nome-">Lei:</label>
-                    <input type="text" id="nome-" value="Lei num 415 artigo 12" disabled>
-                    <label for="">Esfera:</label>
-                    <input type="text" class="esfera" style="max-width: 150px;" value="FEDERAL" disabled>
-                    <label for="">Ramo:</label>
-                    <input type="text" class="ramo" style="max-width: 250px;" value="Ramo 101" disabled>
-                </div>
-                <div class="inline">
-                    <label for="">Assunto:</label>
-                    <input type="text" class="assunto" value="Assunto Teste 101" disabled>
-                    <label for="">Aplicabilidade:</label>
-                    <input type="text" class="aplica" style="max-width: 150px;" value="APLICÁVEL" disabled>
-                </div>
-                <div class="inline">
-                    <label for="">Ementa:</label>
-                    <textarea class="ementa" rows="5" readonly disabled>teste 123\nblablablabla\nblablabla\nsksllks</textarea>
-                </div>
-                <div class="line">
-                    <button><span class="mdi mdi-puzzle-plus"></span> Atende</button>
-                </div>
-                <p class="ementa"></p>
-            </div>
--->            
-        </div>
+        <div id="laws" class="tab"></div>
         <div id="graf" class="tab">
-            graf
+            <div id="donutchart" style="width: 100%; height: 500px;"></div>
         </div>
     </div>
 
@@ -115,19 +93,53 @@
                 window.open(pageData.norma.link, '_blank').focus()
             })
         }
-        pageFunc.fillCheckLeis()
+        pageFunc.fillCheckLeis()        
     }
 
-    function addLei(data){
+    function loadChart(){
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable(pageData.graf);
+
+
+            var options = {
+            title: `${pageData.norma.cliente} - ${pageData.norma.nome}`,
+            pieHole: 0.4,
+            'width':window.innerWidth * 0.8,
+            'height':window.innerHeight * 0.8
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+            chart.draw(data, options);
+        }
+    }
+
+    function addLei(data){   
         const lei = document.createElement('div')
         lei.data = data
         lei.className = 'lei'
         if(Number(data.ok) || data.aplicabilidade == 'NÃO APLICÁVEL'){
             lei.classList.add('atende')
+            addValue('Atende')
         }else if(data.expira == null){
             lei.classList.add('sem-registro')
+            addValue('Sem Registro')
         }else{
             lei.classList.add('nao-atende')
+            addValue('Não Atende')
+        }
+
+        function addValue(valor){
+            const indice = pageData.graf.findIndex(subarray => subarray[0] === valor)
+            if(indice<0){
+                pageData.graf.push([valor,1])
+            }else{
+                pageData.graf[indice][1]++
+            }
+            console.log(indice)
+
         }
 
         const line_1 = document.createElement('div')
@@ -177,10 +189,12 @@
             const json = JSON.parse(resolve) 
             const laws = pageScreen.querySelector('#laws')
                 laws.innerHTML = ''
+                pageData.graf = [['1','2']]
             for(let i=0; i<json.length; i++){
                 laws.appendChild(addLei(json[i]))
-
             }
+            console.log(pageData.graf)
+            loadChart()
         })        
     }
 
