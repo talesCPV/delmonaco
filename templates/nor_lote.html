@@ -8,8 +8,7 @@
             <textarea id="edtTexto" rows="10"></textarea>
         </div>
         <div class="line">
-            <button id="btnPrep">Preparar</button>
-            <button id="btnSave">Salvar</button>
+            <button id="btnPrep"><span class="mdi mdi-blender"></span> Processar</button>
         </div>
     </fieldset>
 
@@ -25,40 +24,38 @@
 
     pageScreen.querySelector('#btnPrep').addEventListener('click',()=>{
         const txt = pageScreen.querySelector('#edtTexto').value
-        const head = prompt('Os ítens abaixo iniciam com :',txt.split(' ')[0])
-        const arr = txt.split('\n'+head)
-        pageData.itens = []
-        pageData.lote = 1
-        pageData.new = 1
-        pageData.aplicabilidade = 'INFORMATIVO'
+        if(txt.trim().split(' ').length > 1){
+            console.log()
+            const head = prompt('Os ítens abaixo iniciam com :',txt.trim().split(' ')[0])
+            const arr = txt.split('\n'+head)
+            pageData.itens = []
+            pageData.lote = 1
+            pageData.new = 1
+            pageData.aplicabilidade = 'INFORMATIVO'
 
-        for(let i=0; i<arr.length; i++){
-            const item = arr[i].split(' ')[0]          
-            const out = new Object
-            out['item'] = i==0 ? item : head+item
-            out['ementa'] = arr[i].substr(item.length,arr[i].length)
-            pageData.itens.push(out)
-        }
-
-        pageData.index = 0
-        pageData.callback = ()=>{
-            if(pageData.index < pageData.itens.length){
-                openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
+            for(let i=0; i<arr.length; i++){
+                const item = arr[i].split(' ')[0]          
+                const out = new Object
+                out['item'] = i==0 ? item : head+item
+                out['ementa'] = arr[i].substr(item.length,arr[i].length)
+                pageData.itens.push(out)
             }
+
+            pageData.index = 0
+
+            pageData.callback = ()=>{
+                if(pageData.index < pageData.itens.length){
+                    openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
+                }
+            }
+
+            pageData.callback()
+        }else{
+            alert('Dados Insuficientes')
         }
 
-        pageData.callback()
-
-
-
-
-        
-
-
     })
 
-    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
-        console.log(pageData)
-    })
+
 
 </script>
