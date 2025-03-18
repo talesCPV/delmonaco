@@ -1,0 +1,76 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <fieldset class="fds-busca lei">
+        <legend>Filtro</legend>
+        <div class="inline">
+            <label for="edtBusca">por:</label>
+            <select id="cmbBusca">
+                <option value="nome" signal="LIKE">Nome</option>
+                <option value="esfera" signal="=" val="'FEDERAL'" >Federal</option>
+                <option value="esfera" signal="=" val="'ESTADUAL'" >Estadual</option>
+                <option value="esfera" signal="=" val="'MUNICIPAL'">Municipal</option>
+                <option value="Assunto" signal="LIKE" >Assunto</option>
+                <option value="revogada" signal="=" val="1">Revogada</option>
+                <option value="revogada" signal="=" val="0" selected>Vigentes</option>
+            </select>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+        </div>
+
+    </fieldset>
+    <div class="resp-busca">
+        <table id="tblLeis"></table>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.lei_busca.data
+    const pageFunc = main_data.lei_busca.func
+    const pageScreen = document.querySelector('#card-lei_busca')
+
+    function pageStart(){
+        pageFunc.fillLeis()
+    }
+    pageFunc.fillLeis = ()=>{
+        const params = new Object;
+        const query = getVal('lei')        
+            params.field = query[0]
+            params.signal = query[1]
+            params.value = query[2]
+          
+        const myPromisse = queryDB(params,'NOR-2');
+        myPromisse.then((resolve)=>{            
+            const json = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tblLeis')
+            tbl.head('Nome,Esfera|min-field,Aplicabilidade|min-field')
+            for(let i=0; i<json.length; i++){
+                tbl.plot(json[i],'nome,esfera|min-field,aplicabilidade|min-field','Upp,Upp,Upp')
+            }
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillLeis()
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('lei_view.html','pop-up','Nova Lei')
+    })
+
+    pageScreen.querySelector('#tblLeis').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        openHTML('lei_view.html','pop-up',data.nome,data)
+    })
+
+    pageStart()
+
+</script>

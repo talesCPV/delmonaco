@@ -85,3 +85,17 @@
 14/03/2025 18:29 tales@planet3.com.br : Item da Norma: Cadastrado  -> 35.4.4
 14/03/2025 18:29 tales@planet3.com.br : Item da Norma: Cadastrado  -> 35.4.4.1
 14/03/2025 18:30 tales@planet3.com.br : Item da Norma: Editado 35.4.2.1 -> 35.4.2.1
+18/03/2025 18:52 tales@planet3.com.br : NORMA Cadastrada  -> Meio Ambiente
+18/03/2025 18:53 tales@planet3.com.br : NORMA Editada Meio Ambiente -> Meio Ambiente 2
+18/03/2025 18:54 tales@planet3.com.br : NORMA Editada Meio Ambiente 2 -> Meio Ambiente
+18/03/2025 19:23 tales@planet3.com.br : Menu Incluido (Leis)
+18/03/2025 19:24 tales@planet3.com.br : Menu Alterado (Legislacao, nor_busca.html, pop-up, Legislacao)
+18/03/2025 19:26 tales@planet3.com.br : Menu Alterado (Leis, lei_busca.html, pop-up, Leis)
+18/03/2025 19:40 tales@planet3.com.br : Item da Norma: Cadastrado  -> teste
+18/03/2025 19:45 tales@planet3.com.br : Lei: Cadastrada  -> teste
+18/03/2025 19:54 tales@planet3.com.br : Lei: Editada teste -> Teste 2
+18/03/2025 19:56 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 3
+18/03/2025 19:57 tales@planet3.com.br : Lei: Editada Teste 3 -> Teste 2
+18/03/2025 19:57 tales@planet3.com.br : Lei: Editada teste -> teste
+18/03/2025 20:13 tales@planet3.com.br : NORMA Editada Meio Ambiente -> Meio Ambiente 2
+18/03/2025 20:13 tales@planet3.com.br : NORMA Editada Meio Ambiente 2 -> Meio Ambiente

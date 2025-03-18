@@ -80,7 +80,7 @@ SELECT * FROM vw_usr_cli;
 
 DROP VIEW IF EXISTS vw_norma_cli;
  CREATE VIEW vw_norma_cli AS
-	SELECT NCL.*,CLI.fantasia AS cliente,NOR.nome, NOR.sobre, NOR.link, NOR.esfera, NOR.ramo, NOR.assunto
+	SELECT NCL.*,CLI.fantasia AS cliente,NOR.nome, NOR.sobre
 	FROM tb_norma_cli AS NCL
 	INNER JOIN tb_normas AS NOR
 	INNER JOIN tb_cliente AS CLI
@@ -99,8 +99,8 @@ DROP VIEW IF EXISTS vw_lei_norma_cli;
 SELECT * FROM vw_lei_norma_cli; -- WHERE id_cliente=6;
 
 DROP VIEW IF EXISTS vw_check_lei;
--- CREATE VIEW vw_check_lei AS
-	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome, NCL.esfera, NCL.ramo, NCL.assunto,NCL.ementa, NCL.aplicabilidade,
+ CREATE VIEW vw_check_lei AS
+	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome, NCL.ementa, NCL.aplicabilidade,
 		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
 		FROM vw_lei_norma_cli AS NCL
 		LEFT JOIN tb_check AS CHK

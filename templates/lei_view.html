@@ -5,10 +5,6 @@
             padding: 10px;
         }
 
-        #btnCancel{
-            display: none;
-        }
-
         @media all and (max-width : 768px) {
             .frm input, .frm select{
                 width: 98% !important;
@@ -18,60 +14,83 @@
     </style>
   
     <fieldset class="frm" >
-        <legend>Ítem da Norma</legend>
+        <legend>Lei</legend>
 
         <div class="inline">
             <label for="edtNome">Nome *</label>
-            <input type="text" class="only-view" id="edtNome" onfocus="this.select();" maxlength="30" disabled>
+            <input type="text" class="only-view" id="edtNome" onfocus="this.select();" maxlength="240" disabled>
         </div>
 
         <div class="inline">
+            <label for="cmbEsfera">Esfera</label>
+            <select id="cmbEsfera" class="only-view" disabled>
+                <option value="FEDERAL">Federal</option>
+                <option value="ESTADUAL">Estadual</option>
+                <option value="MUNICIPAL">Municipal</option>
+            </select>
             <label for="cmbAplica">Aplicabilidade</label>
             <select id="cmbAplica" class="only-view" disabled>
                 <option value="APLICÁVEL">Aplicável</option>
                 <option value="NÃO APLICÁVEL">Não Aplicável</option>
-                <option value="INFORMATIVO">Somente Informativo</option>
+                <option value="CONHECIMENTO">Somente Conhecimento</option>
             </select>
         </div>
 
         <div class="inline">
-            <label for="edtEmenta">Ementa</label>
-            <textarea id="edtEmenta" maxlength="2048" rows="10" class="only-view" disabled></textarea>
+            <label for="edtAssunto">Assunto</label>
+            <input type="text" id="edtAssunto" maxlength="120" class="only-view" disabled>
         </div>
+
+        <div class="inline">
+            <label for="edtResumo">Resumo</label>
+            <textarea id="edtResumo" maxlength="10240" rows="10" class="only-view" disabled></textarea>
+        </div>
+
+        <div class="inline">
+            <label for="edtLink">Link</label>
+            <input type="text" class="only-view" id="edtLink" onfocus="this.select();" maxlength="500" disabled>
+        </div>
+
+        <fieldset class="tarefas">
+            <legend>Tarefas</legend>
+            <table id="tblLeis"></table>
+            <div class="line">
+                <button id="btnNovaLei"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
+                <button id="btnLote"><span class="mdi mdi-text-box-multiple"></span> Add em Lote</button>
+            </div>
+        </fieldset>
 
         <div class="line">
             <button id="btnEdit">Editar</button>
             <button id="btnDel">Deletar</button>
             <button id="btnSave" class="only-view" disabled>Salvar</button>
-            <button id="btnCancel">Cancelar</button>
         </div>
     </fieldset>
 
 </template>
 <script>
     
-    const pageData = main_data.nor_lei_view.data
-    const pageFunc = main_data.nor_lei_view.func
-    const pageScreen = document.querySelector('#card-nor_lei_view')
-    const newLei = pageData.new
+    const pageData = main_data.lei_view.data
+    const pageFunc = main_data.lei_view.func
+    const pageScreen = document.querySelector('#card-lei_view')
+    const newLei = Object.keys(pageData).length == 0
 
     function startPage(){
         if(newLei){
             openFields(1)
             pageScreen.querySelector('#btnEdit').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
-            pageData.id_norma = pageData.id
-            if(pageData.lote){
-                pageScreen.querySelector('#edtNome').value = pageData.itens[pageData.index].item
-                pageScreen.querySelector('#cmbAplica').value = pageData.aplicabilidade 
-                pageScreen.querySelector('#edtEmenta').value = pageData.itens[pageData.index].ementa
-                pageScreen.querySelector('#btnCancel').style.display = 'block'
-            }
+            pageScreen.querySelector('.tarefas').style.display = 'none'
+
         }else{
             pageData.id_lei = pageData.id
             pageScreen.querySelector('#edtNome').value = pageData.nome
-            pageScreen.querySelector('#edtEmenta').value = pageData.ementa
+            pageScreen.querySelector('#edtResumo').value = pageData.resumo
             pageScreen.querySelector('#cmbAplica').value = pageData.aplicabilidade
+            pageScreen.querySelector('#edtLink').value = pageData.link
+            pageScreen.querySelector('#edtAssunto').value = pageData.assunto
+            pageScreen.querySelector('#cmbEsfera').value = pageData.esfera
+
             pageScreen.querySelector('#btnEdit').disabled = 0
         }
     }
@@ -79,28 +98,23 @@
     pageFunc.setLei = (del=0)=>{
         const params = new Object;
             params.id = newLei ? 0 : pageData.id_lei
-            params.id_norma = pageData.id_norma
             params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
-            params.ementa = pageScreen.querySelector('#edtEmenta').value.trim()
-            params.aplicabidade = pageScreen.querySelector('#cmbAplica').value
-            
+            params.esfera = pageScreen.querySelector('#cmbEsfera').value
+            params.assunto = Sanatize(pageScreen.querySelector('#edtAssunto').value.trim())
+            params.resumo = pageScreen.querySelector('#edtResumo').value.trim()
+            params.aplicabilidade = pageScreen.querySelector('#cmbAplica').value
+            params.link = pageScreen.querySelector('#edtResumo').value.trim()
           
         const myPromisse = queryDB(params,'NOR-3');
         myPromisse.then((resolve)=>{
-            setLog(`Item da Norma: ${newLei?'Cadastrado': del ? 'Deletado' : 'Editado'} ${ !newLei ? pageData.nome :''} -> ${params.nome}`)
+            setLog(`Lei: ${newLei?'Cadastrada': del ? 'Deletada' : 'Editada'} ${ !newLei ? pageData.nome :''} -> ${params.nome}`)
             try{
-                main_data.nor_view.func.fillLeis(pageData.id_norma)
+                main_data.lei_busca.func.fillLeis()
             }catch{
                 console.error('Tela fechada pelo usuário!')
             }            
             alert('Cadastrado efetuado!')
-            if(pageData.lote){
-                pageData.index++
-                pageData.aplicabilidade = params.aplicabidade
-                pageData.callback()
-            }else{
-                closeModal('nor_lei_view')
-            }
+            closeModal('lei_view')
         })
     }
 
@@ -113,21 +127,12 @@
 
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setLei()
-        closeModal('nor_lei_view')
     })
 
     pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
         if(confirm('Deseja remover definitivamente este ítem da norma?')){
             pageFunc.setLei(1)
-            closeModal('nor_lei_view')
         }
-    })
-
-    pageScreen.querySelector('#btnCancel').addEventListener('click',()=>{
-        if(confirm('Cancelar a adição desse registro?')){
-            closeModal('nor_lei_view')
-        }
-
     })
 
     pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{

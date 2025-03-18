@@ -14,7 +14,7 @@
     </style>
   
     <fieldset class="frm" >
-        <legend>Norma</legend>
+        <legend>Legislação</legend>
 
         <div class="inline">
             <label for="edtNome">Nome *</label>
@@ -22,32 +22,8 @@
         </div>
 
         <div class="inline">
-            <label for="cmbEsfera">Esfera</label>
-            <select id="cmbEsfera" class="only-view" disabled>
-                <option value="FEDERAL">Federal</option>
-                <option value="ESTADUAL">Estadual</option>
-                <option value="MUNICIPAL">Municipal</option>
-            </select>
-        </div>
-
-        <div class="inline">
-            <label for="edtRamo">Ramo</label>
-            <input type="text" id="edtRamo" maxlength="90" class="only-view" disabled>
-        </div>
-
-        <div class="inline">
-            <label for="edtAssunto">Assunto</label>
-            <input type="text" id="edtAssunto" maxlength="120" class="only-view" disabled>
-        </div>
-
-        <div class="inline">
             <label for="edtSobre">Sobre</label>
             <textarea class="only-view" id="edtSobre" onfocus="this.select();" rows="5" maxlength="2048" disabled></textarea>
-        </div>
-
-        <div class="inline">
-            <label for="edtLink">Link da Norma</label>
-            <input type="text" class="only-view" id="edtLink" onfocus="this.select();" maxlength="500" disabled>
         </div>
 
         <div class="line">
@@ -56,14 +32,7 @@
             <button id="btnSave" class="only-view" disabled>Salvar</button>
         </div>
     </fieldset>
-    <fieldset class="leis">
-        <legend>Ítens</legend>
-        <table id="tblLeis"></table>
-        <div class="line">
-            <button id="btnNovaLei"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
-            <button id="btnLote"><span class="mdi mdi-text-box-multiple"></span> Add em Lote</button>
-        </div>
-    </fieldset>
+
 
 
 </template>
@@ -78,16 +47,9 @@
         if(newNorma){
             openFields(1)
             pageScreen.querySelector('#btnEdit').disabled = 1
-            pageScreen.querySelector('.leis').style.display = 'none'
         }else{     
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtSobre').value = pageData.sobre
-            pageScreen.querySelector('#edtLink').value = pageData.link
-            pageScreen.querySelector('#edtAssunto').value = pageData.assunto
-            pageScreen.querySelector('#edtRamo').value = pageData.ramo
-            pageScreen.querySelector('#cmbEsfera').value = pageData.esfera
-            pageScreen.querySelector('#btnEdit').disabled = 0
-            pageFunc.fillLeis(pageData.id)
         }
     }
 
@@ -103,11 +65,7 @@
             params.id = newNorma ? 0 : pageData.id
             params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
             params.sobre = Sanatize(pageScreen.querySelector('#edtSobre').value.trim())
-            params.link = pageScreen.querySelector('#edtLink').value.trim()
-            params.esfera = pageScreen.querySelector('#cmbEsfera').value
-            params.ramo = Sanatize(pageScreen.querySelector('#edtRamo').value.trim())
-            params.assunto = Sanatize(pageScreen.querySelector('#edtAssunto').value.trim())
-          
+
         const myPromisse = queryDB(params,'NOR-1');
         myPromisse.then((resolve)=>{
             setLog(`NORMA ${newNorma?'Cadastrada': del ? 'Deletada' : 'Editada'} ${ !newNorma ? pageData.nome :''} -> ${params.nome}`)
@@ -118,23 +76,6 @@
             }
             alert('Cadastrado efetuado!')
             closeModal('nor_view')
-        })
-    }
-
-    pageFunc.fillLeis = (id_norma)=>{
-        const params = new Object;
-            params.field = 'id_norma'
-            params.signal = '='
-            params.value = id_norma
-          
-        const myPromisse = queryDB(params,'NOR-2');
-        myPromisse.then((resolve)=>{            
-            const json = JSON.parse(resolve)
-            const tbl = pageScreen.querySelector('#tblLeis')
-            tbl.head('Nome,Aplicabilidade|min-field')
-            for(let i=0; i<json.length; i++){
-                tbl.plot(json[i],'nome,aplicabilidade|min-field','Upp,Upp')
-            }
         })
     }
 
@@ -151,22 +92,6 @@
         }else{
             openFields(0)
         }
-    })
-
-    pageScreen.querySelector('#btnNovaLei').addEventListener('click',()=>{
-        pageData.new = 1
-        openHTML('nor_lei_view.html','pop-up',pageData.nome,pageData)
-    })
-
-    pageScreen.querySelector('#tblLeis').addEventListener('click',(e)=>{
-        const data = e.target.parentNode.data
-        e.preventDefault()
-        data.new = 0
-        openHTML('nor_lei_view.html','pop-up',pageData.nome,data)
-    })
-
-    pageScreen.querySelector('#btnLote').addEventListener('click',()=>{
-        openHTML('nor_lote.html','pop-up',pageData.nome,data)
     })
 
     startPage()

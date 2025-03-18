@@ -51,9 +51,9 @@
 
         /* NORMAS */
         "NOR-0"  => 'CALL sp_view_normas(@access,@hash,"x00");', // nome
-        "NOR-1"  => 'CALL sp_set_norma(@access,@hash,x00,"x01","x02","x03","x04","x05","x06");', // id,nome,sobre,link,esfera,ramo,assunto
+        "NOR-1"  => 'CALL sp_set_norma(@access,@hash,x00,"x01","x02");', // id,nome,sobre
         "NOR-2"  => 'CALL sp_view_leis(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
-        "NOR-3"  => 'CALL sp_set_lei(@access,@hash,x00,x01,"x02","x03","x04");', // id,id_norma,nome,ementa,aplicabilidade
+        "NOR-3"  => 'CALL sp_set_lei(@access,@hash,x00,"x01","x02","x03","x04","x05","x06");', // id,nome,esfera,assunto,resumo,aplicabilidade,link
         "NOR-4"  => 'CALL sp_set_norma_cli(@access,@hash,x00,x01);', // ID_NORMA, ID_CLIENTE
         "NOR-5"  => 'CALL sp_view_cli_norma(@access,@hash,x00,x01);', // ID, ID=(0-id_norma 1-ID_cliente)
         

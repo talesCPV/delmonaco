@@ -731,11 +731,7 @@ DELIMITER $$
 		IN Ihash varchar(64),
         IN Iid int(11),
 		IN Inome varchar(120),
-        IN Isobre varchar(2048),
-        IN Ilink varchar(500),
-        IN Iesfera varchar(9),
-        IN Iramo varchar(90),
-		IN Iassunto varchar(120)
+        IN Isobre varchar(2048)
     )
 	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
@@ -744,10 +740,10 @@ DELIMITER $$
 				DELETE FROM tb_normas WHERE id=Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_normas (nome,sobre,link,esfera,ramo,assunto) 
-					VALUES (Inome,Isobre,Ilink,Iesfera,Iramo,Iassunto);
+					INSERT INTO tb_normas (nome,sobre) 
+					VALUES (Inome,Isobre);
 				ELSE
-					UPDATE tb_normas SET nome=Inome, sobre=Isobre, link=Ilink, esfera=Iesfera, ramo=Iramo, assunto=Iassunto WHERE id=Iid;
+					UPDATE tb_normas SET nome=Inome, sobre=Isobre WHERE id=Iid;
                 END IF;
             END IF;
         END IF;
@@ -767,7 +763,7 @@ DELIMITER $$
 		IF(@allow)THEN
 			SET @has = (SELECT COUNT(*) FROM tb_norma_cli WHERE id_norma=Iid_norma AND id_cliente=Iid_cliente);
 			IF(@has)THEN
-				DELETE FROM tb_norma_cli WHERE id_user=Iid_user AND id_cliente=Iid_cliente;
+				DELETE FROM tb_norma_cli WHERE id_norma=Iid_norma AND id_cliente=Iid_cliente;
             ELSE
 				INSERT INTO tb_norma_cli (id_norma,id_cliente)
 				VALUES (Iid_norma,Iid_cliente);
@@ -810,7 +806,7 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-			SET @quer = CONCAT('SELECT * FROM tb_leis WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			SET @quer = CONCAT('SELECT * FROM tb_leis WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');            
 			PREPARE stmt1 FROM @quer;
 			EXECUTE stmt1;        END IF;
 	END $$
@@ -822,10 +818,12 @@ DELIMITER $$
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
         IN Iid int(11),
-        IN Iid_norma int(11),
-		IN Inome varchar(120),
-		IN Iementa varchar(2048),
-		IN Iaplicabilidade varchar(13)
+		IN Inome varchar(240),
+        IN Iesfera varchar(9),
+		IN Iassunto varchar(120),
+        IN Iresumo varchar(10240),
+		IN Iaplicabilidade varchar(13),
+        IN Ilink varchar(500)
     )
 	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
@@ -835,11 +833,11 @@ DELIMITER $$
                 DELETE FROM tb_check WHERE id_lei=Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_leis (id_norma,nome,ementa,aplicabilidade) 
-					VALUES (Iid_norma,Inome,Iementa,Iaplicabilidade);
+					INSERT INTO tb_leis (nome,esfera,assunto,resumo,aplicabilidade,link) 
+					VALUES (Inome,Iesfera,Iassunto,Iresumo,Iaplicabilidade,Ilink);
 				ELSE
 					UPDATE tb_leis 
-                    SET nome=Inome,ementa=Iementa,aplicabilidade=Iaplicabilidade 
+                    SET nome=Inome,esfera=Iesfera,assunto=Iassunto,resumo=Iresumo,aplicabilidade=Iaplicabilidade,link=Ilink
                     WHERE id=Iid;
                 END IF;
             END IF;
