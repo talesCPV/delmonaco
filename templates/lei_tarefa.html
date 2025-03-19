@@ -1,0 +1,107 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >        
+        <legend>Tarefa</legend>
+
+        <div class="inline">
+            <label for="edtPerg">Pergunta*</label>
+            <textarea rows="5" class="only-view" id="edtPerg" onfocus="this.select();" maxlength="1024" disabled></textarea>
+        </div>
+
+        <div class="line line-ck">
+            <label for="ckbConhecimento">Somente Conhecimento</label>
+            <input type="checkbox" class="only-view" id="ckbConhecimento" disabled>
+        </div>
+
+        <div class="line">
+            <button id="btnEdit">Editar</button>
+            <button id="btnDel" class="only-view" disabled>Deletar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+        </div>
+    </fieldset>
+
+
+
+</template>
+<script>
+    
+    const pageData = main_data.lei_tarefa.data
+    const pageFunc = main_data.lei_tarefa.func
+    const pageScreen = document.querySelector('#card-lei_tarefa')
+    const newTarefa = !pageData.hasOwnProperty('tarefa')
+
+    function startPage(){
+        if(pageData.newTarefa){
+            openFields(1)
+            pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('#btnDel').disabled = 1
+            pageScreen.querySelector('#ckbConhecimento').checked = 0
+        }else{     
+            pageScreen.querySelector('#edtPerg').value = pageData.tarefa.pergunta
+            pageScreen.querySelector('#ckbConhecimento').checked = Number(pageData.tarefa.conhecimento)
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+    pageFunc.setTarefa = (del=0)=>{
+        const params = new Object;
+            params.id = newTarefa ? 0 : pageData.id
+            params.id_lei = pageData.id_lei
+            params.pergunta = del ? "" : Sanatize(pageScreen.querySelector('#edtPerg').value.trim())
+            params.conhecimento = pageScreen.querySelector('#ckbConhecimento').checked ? 1 : 0
+
+        const myPromisse = queryDB(params,'NOR-8');
+        myPromisse.then((resolve)=>{
+            setLog(`Pergunta ${newTarefa?'Cadastrada': del ? 'Deletada' : 'Editada'} ${ !newTarefa ? pageData.pergunta :''} -> ${params.pergunta}`)
+            try{
+                main_data.lei_view.func.fillTarefas()
+            }catch{
+                console.error('Tela fechada pelo usuário!')
+            }
+            alert('Cadastrado efetuado!')
+            closeModal('lei_tarefa')
+        })
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setTarefa()
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(confirm('Deseja remover esta tarefa definitivamente?')){
+            pageFunc.setTarefa(1)
+        }
+    })
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>

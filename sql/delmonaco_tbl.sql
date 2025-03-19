@@ -198,11 +198,15 @@ CREATE TABLE tb_leis(
     revogada bool DEFAULT 0,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
--- ALTER TABLE tb_leis DROP COLUMN ramo;
--- ALTER TABLE tb_leis ADD COLUMN esfera varchar(9) NOT NULL DEFAULT "FEDERAL";
--- ALTER TABLE tb_leis ADD COLUMN ramo varchar(90) DEFAULT NULL;
--- ALTER TABLE tb_leis ADD COLUMN assunto varchar(120) DEFAULT NULL;
--- ALTER TABLE tb_leis ADD COLUMN resumo varchar(10240) DEFAULT NULL;
+
+DROP TABLE IF EXISTS tb_tarefas;
+CREATE TABLE tb_tarefas(
+    id int(11) NOT NULL AUTO_INCREMENT,
+    id_lei int(11) NOT NULL,
+    pergunta varchar(1024) NOT NULL,
+    conhecimento bool DEFAULT 0,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_norma_cli;
 CREATE TABLE tb_norma_cli(
@@ -211,6 +215,15 @@ CREATE TABLE tb_norma_cli(
 	FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
     PRIMARY KEY (id_norma,id_cliente)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_norma_lei;
+CREATE TABLE tb_norma_lei(
+    id_norma int(11) NOT NULL,
+    id_lei int(11) NOT NULL,
+	FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
+    FOREIGN KEY (id_lei) REFERENCES tb_leis(id),
+    PRIMARY KEY (id_norma,id_lei)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_check;

@@ -49,14 +49,18 @@
         "ORC-7"  => 'CALL sp_orc_view_texto(@access,@hash,x00);', // id_orc
         "ORC-8"  => 'CALL sp_up_texto(@access,@hash,x00);', // id
 
-        /* NORMAS */
+        /* LEGISLAÇÂO */
         "NOR-0"  => 'CALL sp_view_normas(@access,@hash,"x00");', // nome
         "NOR-1"  => 'CALL sp_set_norma(@access,@hash,x00,"x01","x02");', // id,nome,sobre
         "NOR-2"  => 'CALL sp_view_leis(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
         "NOR-3"  => 'CALL sp_set_lei(@access,@hash,x00,"x01","x02","x03","x04","x05","x06");', // id,nome,esfera,assunto,resumo,aplicabilidade,link
         "NOR-4"  => 'CALL sp_set_norma_cli(@access,@hash,x00,x01);', // ID_NORMA, ID_CLIENTE
         "NOR-5"  => 'CALL sp_view_cli_norma(@access,@hash,x00,x01);', // ID, ID=(0-id_norma 1-ID_cliente)
-        
+        "NOR-6"  => 'CALL sp_set_norma_lei(@access,@hash,x00,x01);', // ID_NORMA, ID_LEI
+        "NOR-7"  => 'CALL sp_view_norma_lei(@access,@hash,x00,x01);', // ID, ID=(0-id_norma 1-ID_lei)
+        "NOR-8"  => 'CALL sp_set_tarefa(@access,@hash,x00,x01,"x02",x03);', // ID,ID_LEI, PERGUNTA, Conhecimento (0-NÃO, 1-SIM)
+        "NOR-9"  => 'CALL sp_view_tarefas(@access,@hash,x00);', // ID_LEI
+
         /* ELEVATE */
         "ELE-0"  => 'CALL sp_view_check_lei(@access,@hash,x00,x01);', // id_cli, id_norma
         "ELE-1"  => 'CALL sp_set_check_lei(@access,@hash,x00,x01,x02,"x03","x04",x05);', // id_cliente,id_lei,ok,obs,validade,reset

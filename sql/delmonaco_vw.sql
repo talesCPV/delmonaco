@@ -109,3 +109,14 @@ DROP VIEW IF EXISTS vw_check_lei;
 		ORDER BY id_cliente, id_norma, id_lei;
 
 SELECT * FROM vw_check_lei;-- WHERE id_cliente=6;
+
+DROP VIEW IF EXISTS vw_legis_lei;
+--  CREATE VIEW vw_legis_lei AS
+	SELECT NLEI.id_norma,NOR.nome AS norma, LEI.*
+	FROM tb_leis AS LEI
+    INNER JOIN tb_normas AS NOR
+	INNER JOIN tb_norma_lei AS NLEI    
+	ON NLEI.id_lei = LEI.id
+    AND NLEI.id_lei = NOR.id;
+    
+SELECT * FROM vw_legis_lei;

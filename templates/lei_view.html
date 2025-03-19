@@ -5,10 +5,48 @@
             padding: 10px;
         }
 
+        .panel{
+            display: flex;
+            flex-direction: row;
+            min-height: 300px;
+            width: 100%;
+        }
+
+        .panel fieldset{
+            width: 100%;
+            padding: 10px;
+        }
+
+        .middle{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .panel select{
+            margin: 0;
+            padding: 10px;
+        }
+
         @media all and (max-width : 768px) {
             .frm input, .frm select{
                 width: 98% !important;
             }
+
+            .panel{
+                flex-wrap: wrap;
+            }
+
+            .middle{
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .middle button{
+                transform: rotate(90deg);
+            }
+
         }
 
     </style>
@@ -51,20 +89,36 @@
             <input type="text" class="only-view" id="edtLink" onfocus="this.select();" maxlength="500" disabled>
         </div>
 
-        <fieldset class="tarefas">
-            <legend>Tarefas</legend>
-            <table id="tblLeis"></table>
-            <div class="line">
-                <button id="btnNovaLei"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
-                <button id="btnLote"><span class="mdi mdi-text-box-multiple"></span> Add em Lote</button>
-            </div>
-        </fieldset>
-
         <div class="line">
             <button id="btnEdit">Editar</button>
             <button id="btnDel">Deletar</button>
             <button id="btnSave" class="only-view" disabled>Salvar</button>
         </div>
+
+        <div class="panel legis">
+            <fieldset>
+                <legend>Legislações</legend>
+                <select id="cmbLegis" size="10"></select>
+            </fieldset>
+            <div class="middle">
+                <button id="btnAdd" class="btn-round"><span class="mdi mdi-arrow-right-bold"></span></button>
+                <button id="btnSub" class="btn-round"><span class="mdi mdi-arrow-left-bold"></span></button>
+            </div>
+            <fieldset>
+                <legend id="lgnLei">Lei</legend>
+                <select id="cmbLegisLei" size="10"></select>
+            </fieldset>
+        </div>
+
+
+        <fieldset class="tarefas">
+            <legend>Tarefas</legend>
+            <table id="tbTarefas"></table>
+            <div class="line">
+                <button id="btnNovaTarefa"><span class="mdi mdi-plus-thick"></span>Adicionar</button>
+            </div>
+        </fieldset>
+
     </fieldset>
 
 </template>
@@ -74,6 +128,8 @@
     const pageFunc = main_data.lei_view.func
     const pageScreen = document.querySelector('#card-lei_view')
     const newLei = Object.keys(pageData).length == 0
+    const legis = pageScreen.querySelector('#cmbLegis')
+    const legis_lei = pageScreen.querySelector('#cmbLegisLei')
 
     function startPage(){
         if(newLei){
@@ -81,17 +137,20 @@
             pageScreen.querySelector('#btnEdit').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
             pageScreen.querySelector('.tarefas').style.display = 'none'
-
+            pageScreen.querySelector('.legis').style.display = 'none'
         }else{
             pageData.id_lei = pageData.id
+            pageScreen.querySelector('#lgnLei').innerHTML = pageData.nome
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtResumo').value = pageData.resumo
             pageScreen.querySelector('#cmbAplica').value = pageData.aplicabilidade
             pageScreen.querySelector('#edtLink').value = pageData.link
             pageScreen.querySelector('#edtAssunto').value = pageData.assunto
             pageScreen.querySelector('#cmbEsfera').value = pageData.esfera
-
             pageScreen.querySelector('#btnEdit').disabled = 0
+            pageFunc.fillNorma()
+            pageFunc.fillNormaLei()
+            pageFunc.fillTarefas()
         }
     }
 
@@ -125,6 +184,62 @@
         }
     }
 
+    pageFunc.fillNorma = ()=>{      
+        const params = new Object;
+            params.nome = ''
+        const myPromisse = queryDB(params,'NOR-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].nome
+                legis.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.fillNormaLei = ()=>{      
+        const params = new Object;
+            params.id = pageData.id
+            params.busca = 1
+        const myPromisse = queryDB(params,'NOR-7');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            legis_lei.innerHTML = ''   
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_norma
+                opt.innerHTML = json[i].norma
+                legis_lei.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.fillTarefas = ()=>{      
+        const params = new Object;
+            params.id_lei = pageData.id
+        const myPromisse = queryDB(params,'NOR-9')
+        const tbl = pageScreen.querySelector('#tbTarefas')
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.head('Pergunta')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'pergunta','Upp')
+            }         
+        })        
+    }
+
+    pageFunc.addNormaLei = (id_norma)=>{      
+        const params = new Object;
+            params.id_norma = id_norma
+            params.id_lei = pageData.id
+        const myPromisse = queryDB(params,'NOR-6');
+        myPromisse.then((resolve)=>{
+            pageFunc.fillNormaLei()
+        })
+    }
+
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setLei()
     })
@@ -142,6 +257,28 @@
             }
         }else{
             openFields(0)
+        }
+    })
+
+    pageScreen.querySelector('#btnNovaTarefa').addEventListener('click',()=>{
+        openHTML('lei_tarefa.html','pop-up','Nova Tarefa',pageData)
+    })
+    
+    pageScreen.querySelector('#tbTarefas').addEventListener('click',(e)=>{
+        pageData.tarefa = e.target.parentNode.data
+        openHTML('lei_tarefa.html','pop-up','Lei - '+pageData.nome,pageData)
+    })
+    
+
+    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+        if(legis.value.length){
+            pageFunc.addNormaLei(legis.value)        
+        }
+    })
+
+    pageScreen.querySelector('#btnSub').addEventListener('click',()=>{
+        if(legis_lei.value.length){
+            pageFunc.addNormaLei(legis_lei.value)        
         }
     })
 

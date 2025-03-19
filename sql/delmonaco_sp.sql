@@ -738,6 +738,8 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Inome = '')THEN
 				DELETE FROM tb_normas WHERE id=Iid;
+                DELETE FROM tb_norma_cli WHERE id_norma=Iid;
+                DELETE FROM tb_norma_lei WHERE id_norma=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_normas (nome,sobre) 
@@ -840,6 +842,93 @@ DELIMITER $$
                     SET nome=Inome,esfera=Iesfera,assunto=Iassunto,resumo=Iresumo,aplicabilidade=Iaplicabilidade,link=Ilink
                     WHERE id=Iid;
                 END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_tarefas;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_tarefas(	
+		IN Iallow varchar(80),
+        IN Ihash varchar(64),
+		IN Iid_lei int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM tb_tarefas WHERE id_lei=Iid_lei;
+		END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_tarefa;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_tarefa(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+        IN Iid_lei int(11),
+		IN Ipergunta varchar(1024),
+        IN Iconhecimento bool
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Ipergunta = '')THEN
+				DELETE FROM tb_tarefas WHERE id=Iid;
+                DELETE FROM tb_check WHERE id_tarefa=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_tarefas (id_lei,pergunta,conhecimento) 
+					VALUES (Iid_lei,Ipergunta,Iconhecimento);
+				ELSE
+					UPDATE tb_tarefas 
+                    SET pergunta=Ipergunta,conhecimento=Iconhecimento
+                    WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_norma_lei;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_norma_lei(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_lei int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid_lei)THEN
+				SELECT * FROM vw_legis_lei WHERE id=Iid;
+            ELSE
+				SELECT * FROM vw_legis_lei WHERE id_norma=Iid;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_norma_lei;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_norma_lei(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_norma int(11),
+		IN Iid_lei int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_norma_lei WHERE id_norma=Iid_norma AND id_lei=Iid_lei);
+			IF(@has)THEN
+				DELETE FROM tb_norma_lei WHERE id_norma=Iid_norma AND id_lei=Iid_lei;
+            ELSE
+				INSERT INTO tb_norma_lei (id_norma,id_lei)
+				VALUES (Iid_norma,Iid_lei);
             END IF;
         END IF;
 	END $$
