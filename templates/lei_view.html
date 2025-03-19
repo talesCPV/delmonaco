@@ -162,7 +162,7 @@
             params.assunto = Sanatize(pageScreen.querySelector('#edtAssunto').value.trim())
             params.resumo = pageScreen.querySelector('#edtResumo').value.trim()
             params.aplicabilidade = pageScreen.querySelector('#cmbAplica').value
-            params.link = pageScreen.querySelector('#edtResumo').value.trim()
+            params.link = pageScreen.querySelector('#edtLink').value.trim()
           
         const myPromisse = queryDB(params,'NOR-3');
         myPromisse.then((resolve)=>{
@@ -261,6 +261,7 @@
     })
 
     pageScreen.querySelector('#btnNovaTarefa').addEventListener('click',()=>{
+        delete(pageData.tarefa)
         openHTML('lei_tarefa.html','pop-up','Nova Tarefa',pageData)
     })
     

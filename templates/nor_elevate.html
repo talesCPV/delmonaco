@@ -76,7 +76,8 @@ console.log(pageData)
         pageScreen.querySelector('#edtCliente').value = pageData.norma.cliente
         pageScreen.querySelector('#edtNorma').value = pageData.norma.nome
         pageScreen.querySelector('#edtSobre').value = pageData.norma.sobre
-//        pageFunc.fillCheckLeis()        
+//        pageFunc.fillCheckTarefas()
+        pageFunc.fillLeis()
     }
 
     function loadChart(){
@@ -100,15 +101,15 @@ console.log(pageData)
     }
 
     function addLei(data){   
+console.log(data)
+        const perc = Number(data.perc)
+console.log(perc)        
         const lei = document.createElement('div')
         lei.data = data
         lei.className = 'lei'
-        if(Number(data.ok) || data.aplicabilidade == 'NÃO APLICÁVEL'){
+        if(perc > 99 || data.aplicabilidade == 'NÃO APLICÁVEL'){
             lei.classList.add('atende')
             addValue('Atende')
-        }else if(data.expira == null){
-            lei.classList.add('sem-registro')
-            addValue('Sem Registro')
         }else{
             lei.classList.add('nao-atende')
             addValue('Não Atende')
@@ -127,29 +128,48 @@ console.log(pageData)
         lei.appendChild(line_1)
         line_1.className = 'inline'
         line_1.innerHTML = `
-        <label for="nome-${data.id_cliente}-${data.id_lei}">Ítem:</label>
-        <input type="text" id="nome-${data.id_cliente}-${data.id_lei}" value="${data.nome}" disabled>
-        <label for="aplica-${data.id_cliente}-${data.id_lei}">Aplicabilidade:</label>
-        <input type="text" id="aplica-${data.id_cliente}-${data.id_lei}" style="max-width: 150px;" value="${data.aplicabilidade}" disabled>
-        <label for="validade-${data.id_cliente}-${data.id_lei}">Expira em::</label>
-        <input type="text" id="validade-${data.id_cliente}-${data.id_lei}" value="${data.expira==null || data.expira.substr(0,4)=='0000'  ?  'INDEFINIDO' : data.expira.viewDate() }" style="max-width: 120px;" disabled>
+        <label for="nome-${data.id_cliente}-${data.id_lei}">Lei:</label>
+        <input type="text" id="nome-${data.id_cliente}-${data.id_lei}" value="${data.lei}" disabled>
+        <label for="perc-${data.id_cliente}-${data.id_lei}">Atendido:</label>
+        <input type="text" id="perc-${data.id_cliente}-${data.id_lei}" value="${data.perc}%" style="max-width: 100px;" disabled>
+
         `
 
         const line_2 = document.createElement('div')
         lei.appendChild(line_2)
         line_2.className = 'inline'
         line_2.innerHTML = `
-        <label for="ementa-${data.id_cliente}-${data.id_lei}">Ementa:</label>
-        <textarea id="ementa-${data.id_cliente}-${data.id_lei}" rows="5" readonly disabled>${data.ementa}</textarea>
+        <label for="esfera-${data.id_cliente}-${data.id_lei}">Esfera:</label>
+        <input type="text" id="esfera-${data.id_cliente}-${data.id_lei}" value="${data.esfera}" disabled>
+        <label for="aplica-${data.id_cliente}-${data.id_lei}">Aplicabilidade:</label>
+        <input type="text" id="aplica-${data.id_cliente}-${data.id_lei}" value="${data.aplicabilidade}" disabled>
+        <label for="validade-${data.id_cliente}-${data.id_lei}">Expira em:</label>
+        <input type="text" id="validade-${data.id_cliente}-${data.id_lei}" value="${data.expira==null || data.expira.substr(0,4)=='0000'  ?  'INDEFINIDO' : data.expira.viewDate() }" disabled>
         `
 
         const line_3 = document.createElement('div')
         lei.appendChild(line_3)
-        line_3.className = 'line'
+        line_3.className = 'inline'
+        line_3.innerHTML = `
+        <label for="ementa-${data.id_cliente}-${data.id_lei}">Resumo:</label>
+        <textarea id="ementa-${data.id_cliente}-${data.id_lei}" rows="5" readonly disabled>${data.resumo    }</textarea>
+        `
+
+        const line_4 = document.createElement('div')
+        lei.appendChild(line_4)
+        line_4.className = 'line'
+
+        const link = document.createElement('button')
+        line_4.appendChild(link)
+        link.innerHTML = `<span class="mdi mdi-link-variant"></span> Texto da Lei`
+        link.addEventListener('click',()=>{
+            window.open(data.link.trim(), "_blank");
+        })
+        link.disabled = data.link.trim() == ''
 
         const btn = document.createElement('button')
-        line_3.appendChild(btn)
-        btn.innerHTML = `<span class="mdi mdi-check-bold"></span> Atende`
+        line_4.appendChild(btn)
+        btn.innerHTML = `<span class="mdi mdi-check-bold"></span> Tarefas`
         btn.disabled =  data.aplicabilidade == 'NÃO APLICÁVEL'
         btn.addEventListener('click',()=>{
             openHTML('nor_check.html','pop-up',data.nome,data,600)
@@ -160,14 +180,32 @@ console.log(pageData)
 
     }
 
+    pageFunc.fillLeis = ()=>{ 
+        const params = new Object;
+            params.id_cliente = pageData.norma.id_cliente
+            params.id_norma = pageData.norma.id_norma
+        const myPromisse = queryDB(params,'ELE-2');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve) 
+            const laws = pageScreen.querySelector('#laws')
+                laws.innerHTML = ''
+                pageData.graf = [['1','2']]
+            for(let i=0; i<json.length; i++){
+                laws.appendChild(addLei(json[i]))
+            }
+            loadChart()           
+        })        
+    }
 
-    pageFunc.fillCheckLeis = ()=>{ 
+
+    pageFunc.fillCheckTarefas = ()=>{ 
         const params = new Object;
             params.id_cliente = pageData.id_cliente
             params.id_norma = pageData.norma.id_norma
         const myPromisse = queryDB(params,'ELE-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve) 
+console.log(json)            
             const laws = pageScreen.querySelector('#laws')
                 laws.innerHTML = ''
                 pageData.graf = [['1','2']]

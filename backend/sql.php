@@ -62,9 +62,11 @@
         "NOR-9"  => 'CALL sp_view_tarefas(@access,@hash,x00);', // ID_LEI
 
         /* ELEVATE */
-        "ELE-0"  => 'CALL sp_view_check_lei(@access,@hash,x00,x01);', // id_cli, id_norma
+        "ELE-0"  => 'CALL sp_view_check_tarefa(@access,@hash,x00,x01);', // id_cli, id_norma
         "ELE-1"  => 'CALL sp_set_check_lei(@access,@hash,x00,x01,x02,"x03","x04",x05);', // id_cliente,id_lei,ok,obs,validade,reset
+        "ELE-2"  => 'CALL sp_view_cli_leis(@access,@hash,x00,x01);', // id_cliente,id_norma
 
+        
 
     );
 

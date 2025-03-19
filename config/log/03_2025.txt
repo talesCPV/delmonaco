@@ -106,3 +106,59 @@
 19/03/2025 15:12 tales@planet3.com.br : Pergunta Cadastrada  -> Tarefa 1
 19/03/2025 15:15 tales@planet3.com.br : Pergunta Cadastrada  -> Lei 4
 19/03/2025 15:15 tales@planet3.com.br : Pergunta Editada undefined -> Tarefa 2
+19/03/2025 19:32 tales@planet3.com.br : Pergunta Cadastrada  -> Tarefa 3
+19/03/2025 19:38 tales@planet3.com.br : Pergunta Cadastrada  -> Nova Tarefa
+19/03/2025 20:12 tales@planet3.com.br : Lei: Editada teste -> NR-12
+19/03/2025 20:13 tales@planet3.com.br : Pergunta Editada undefined -> A adocao de sistemas de seguranca nas zonas de perigo deve considerar as
+caracteristicas tecnicas da maquina e do processo de trabalho e as medidas e
+alternativas tecnicas existentes, de modo a atingir o nivel necessario de seguranca
+previsto nesta NR.
+19/03/2025 20:14 tales@planet3.com.br : Pergunta Editada undefined -> Cabe aos trabalhadores:
+a) cumprir todas as orientacoes relativas aos procedimentos seguros de operacao,
+alimentacao, abastecimento, limpeza, manutencao, inspecao, transporte,
+desativacao, desmonte e descarte das maquinas e equipamentos;
+b) nao realizar qualquer tipo de alteracao nas protecoes mecanicas ou dispositivos de
+seguranca de maquinas e equipamentos, de maneira que possa colocar em risco a
+sua saude e integridade fisica ou de terceiros;
+c) comunicar seu superior imediato se uma protecao ou dispositivo de seguranca foi
+removido, danificado ou se perdeu sua funcao;
+d) participar dos treinamentos fornecidos pelo empregador para atender as
+exigencias/requisitos descritos nesta NR;
+19/03/2025 20:14 tales@planet3.com.br : Pergunta Cadastrada  -> Tarefa 2 da Lei 1
+19/03/2025 20:16 tales@planet3.com.br : Pergunta Cadastrada  -> Cabe aos trabalhadores:
+a) cumprir todas as orientacoes relativas aos procedimentos seguros de operacao,
+alimentacao, abastecimento, limpeza, manutencao, inspecao, transporte,
+desativacao, desmonte e descarte das maquinas e equipamentos;
+b) nao realizar qualquer tipo de alteracao nas protecoes mecanicas ou dispositivos de
+seguranca de maquinas e equipamentos, de maneira que possa colocar em risco a
+sua saude e integridade fisica ou de terceiros;
+c) comunicar seu superior imediato se uma protecao ou dispositivo de seguranca foi
+removido, danificado ou se perdeu sua funcao;
+d) participar dos treinamentos fornecidos pelo empregador para atender as
+exigencias/requisitos descritos nesta NR;
+19/03/2025 20:16 tales@planet3.com.br : Pergunta Editada undefined -> slckjslakjsclkjas saclask 12
+19/03/2025 20:16 tales@planet3.com.br : Pergunta Editada undefined -> 1 Cabe aos trabalhadores:
+a) cumprir todas as orientacoes relativas aos procedimentos seguros de operacao,
+alimentacao, abastecimento, limpeza, manutencao, inspecao, transporte,
+desativacao, desmonte e descarte das maquinas e equipamentos;
+b) nao realizar qualquer tipo de alteracao nas protecoes mecanicas ou dispositivos de
+seguranca de maquinas e equipamentos, de maneira que possa colocar em risco a
+sua saude e integridade fisica ou de terceiros;
+c) comunicar seu superior imediato se uma protecao ou dispositivo de seguranca foi
+removido, danificado ou se perdeu sua funcao;
+d) participar dos treinamentos fornecidos pelo empregador para atender as
+exigencias/requisitos descritos nesta NR;
+19/03/2025 20:22 tales@planet3.com.br : Pergunta Cadastrada  -> teste
+19/03/2025 20:22 tales@planet3.com.br : Pergunta Editada undefined -> Nova Tarefa 2
+19/03/2025 20:25 tales@planet3.com.br : Pergunta Editada undefined -> Nova Tarefa 2
+19/03/2025 20:25 tales@planet3.com.br : Pergunta Editada undefined -> Nova Tarefa 2
+19/03/2025 20:25 tales@planet3.com.br : Pergunta Deletada undefined -> 
+19/03/2025 20:26 tales@planet3.com.br : Pergunta Editada undefined -> Nova Tarefa
+19/03/2025 20:26 tales@planet3.com.br : Pergunta Cadastrada  -> Tarefa 22
+19/03/2025 20:27 tales@planet3.com.br : Pergunta Editada undefined -> Tarefa 22
+19/03/2025 20:33 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
+19/03/2025 20:33 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
+19/03/2025 20:37 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
+19/03/2025 20:37 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
+19/03/2025 20:39 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
+19/03/2025 20:39 tales@planet3.com.br : Lei: Editada NR-12 -> NR-12

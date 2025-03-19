@@ -64,7 +64,7 @@
 
     pageFunc.setTarefa = (del=0)=>{
         const params = new Object;
-            params.id = newTarefa ? 0 : pageData.id
+            params.id = newTarefa ? 0 : pageData.tarefa.id
             params.id_lei = pageData.id_lei
             params.pergunta = del ? "" : Sanatize(pageScreen.querySelector('#edtPerg').value.trim())
             params.conhecimento = pageScreen.querySelector('#ckbConhecimento').checked ? 1 : 0

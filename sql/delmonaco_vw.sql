@@ -89,19 +89,6 @@ DROP VIEW IF EXISTS vw_norma_cli;
 
 SELECT * FROM vw_norma_cli;
 
-/*
-DROP VIEW IF EXISTS vw_lei_norma_cli;
- CREATE VIEW vw_lei_norma_cli AS
-	SELECT NCL.id_cliente,NCL.id_norma,LEI.*
-	FROM vw_norma_cli AS NCL
-    INNER JOIN tb_norma_lei AS NLEI
-	INNER JOIN tb_leis AS LEI
-	ON NLEI.id_norma = NCL.id_norma
-    AND NCL.id_norma = LEI.id;
-
-SELECT * FROM vw_lei_norma_cli; -- WHERE id_cliente=6;
-*/
-
 DROP VIEW IF EXISTS vw_legis_lei;
   CREATE VIEW vw_legis_lei AS
 	SELECT NLEI.*, NOR.nome AS norma, LEI.nome AS lei, LEI.esfera, LEI.assunto, LEI.resumo, LEI.aplicabilidade, LEI.link
@@ -115,34 +102,47 @@ SELECT * FROM vw_legis_lei;
 
 DROP VIEW IF EXISTS vw_legis_lei_tarefa;
   CREATE VIEW vw_legis_lei_tarefa AS
-	SELECT LEI.*,TRF.id AS id_tarefa, TRF.pergunta,TRF.conhecimento
+	SELECT LEI.id_norma, LEI.id_lei,TRF.id AS id_tarefa,LEI.norma,LEI.lei,LEI.esfera,LEI.assunto,LEI.resumo,LEI.aplicabilidade,LEI.link,TRF.pergunta AS tarefa,TRF.conhecimento
 	FROM tb_tarefas AS TRF
 	INNER JOIN vw_legis_lei AS LEI
-	ON TRF.id_lei=LEI.id_lei;
+	ON TRF.id_lei=LEI.id_lei
+    ORDER BY id_norma, id_lei, id_tarefa;
 
 SELECT * FROM vw_legis_lei_tarefa;
 
+DROP VIEW IF EXISTS vw_tarefa_cliente;
+ CREATE VIEW vw_tarefa_cliente AS
+	SELECT NCL.id_cliente,LLT.*
+	FROM vw_legis_lei_tarefa AS LLT
+    INNER JOIN vw_norma_cli AS NCL
+	ON LLT.id_norma = NCL.id_norma
+    ORDER BY id_cliente, id_norma, id_lei,id_tarefa;
+
+SELECT * FROM vw_tarefa_cliente; -- WHERE id_cliente=6;
+
 DROP VIEW IF EXISTS vw_check_tarefa;
--- CREATE VIEW vw_check_tarefa AS
-	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome,NCL.assunto, NCL.resumo, NCL.aplicabilidade,NCL.link,NCL.revogada,
+ CREATE VIEW vw_check_tarefa AS
+	SELECT TCL.*,
 		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
-		FROM vw_lei_norma_cli AS NCL
+		FROM vw_tarefa_cliente AS TCL
 		LEFT JOIN tb_check AS CHK
-		ON NCL.id = CHK.id_lei
-		AND NCL.id_cliente = CHK.id_cliente
+		ON TCL.id_tarefa = CHK.id_tarefa
+		AND TCL.id_cliente = CHK.id_cliente
 		ORDER BY id_cliente, id_norma, id_lei;
 
-SELECT * FROM vw_check_lei;-- WHERE id_cliente=6;
-SELECT * FROM vw_norma_cli;
+SELECT * FROM vw_check_tarefa;-- WHERE id_cliente=6;
+/*
+DROP VIEW IF EXISTS vw_user_legis;
+ CREATE VIEW vw_user_legis AS
+	SELECT UCL.id_user, NCL.id_norma
+	FROM tb_user_cli AS UCL
+	INNER JOIN tb_norma_cli AS NCL
+	ON UCL.id_cliente = NCL.id_cliente;
+    
+SELECT * FROM vw_user_legis;
+SELECT * FROM vw_legis_lei;
+*/
 
-
-DROP VIEW IF EXISTS vw_tarefa;
- CREATE VIEW vw_tarefa AS
-	SELECT LLT.*,
-		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
-		FROM vw_legis_lei_tarefa AS LLT
-		LEFT JOIN tb_check AS CHK
-		ON LLT.id_tarefa = CHK.id_tarefa
-		ORDER BY id_norma, id_lei;
-
-SELECT * FROM vw_tarefa;
+SELECT id_cliente,id_norma,id_lei,lei,esfera,assunto,resumo,aplicabilidade,link, COUNT(*) AS TOT, SUM(ok) AS ok, ROUND(SUM(ok)/COUNT(*) * 100,2) AS perc
+FROM vw_check_tarefa
+GROUP BY id_cliente,id_norma, id_lei;
