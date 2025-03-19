@@ -88,19 +88,27 @@ DROP VIEW IF EXISTS vw_norma_cli;
 	AND NCL.id_cliente = CLI.id;
 
 SELECT * FROM vw_norma_cli;
+SELECT * FROM tb_norma_lei;
 
 DROP VIEW IF EXISTS vw_lei_norma_cli;
  CREATE VIEW vw_lei_norma_cli AS
-	SELECT NCL.id_cliente,LEI.*
+	SELECT NCL.id_cliente,NCL.id_norma,LEI.*
 	FROM vw_norma_cli AS NCL
+    INNER JOIN tb_norma_lei AS NLEI
 	INNER JOIN tb_leis AS LEI
-	ON NCL.id_norma = LEI.id_norma;
+	ON NLEI.id_norma = NCL.id_norma
+    AND NCL.id_norma = LEI.id;
 
 SELECT * FROM vw_lei_norma_cli; -- WHERE id_cliente=6;
 
+	SELECT NCLI.*, TRF.pergunta,TRF.conhecimento
+    FROM vw_lei_norma_cli AS NCLI
+    INNER JOIN tb_tarefas AS TRF
+    ON NCLI.id = TRF.id_lei;
+
 DROP VIEW IF EXISTS vw_check_lei;
- CREATE VIEW vw_check_lei AS
-	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome, NCL.ementa, NCL.aplicabilidade,
+-- CREATE VIEW vw_check_lei AS
+	SELECT NCL.id_cliente, NCL.id_norma, NCL.id AS id_lei, NCL.nome,NCL.assunto, NCL.resumo, NCL.aplicabilidade,NCL.link,NCL.revogada,
 		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
 		FROM vw_lei_norma_cli AS NCL
 		LEFT JOIN tb_check AS CHK
@@ -111,12 +119,13 @@ DROP VIEW IF EXISTS vw_check_lei;
 SELECT * FROM vw_check_lei;-- WHERE id_cliente=6;
 
 DROP VIEW IF EXISTS vw_legis_lei;
---  CREATE VIEW vw_legis_lei AS
-	SELECT NLEI.id_norma,NOR.nome AS norma, LEI.*
-	FROM tb_leis AS LEI
+  CREATE VIEW vw_legis_lei AS
+	SELECT NLEI.*, NOR.nome AS orma, LEI.nome AS lei, LEI.esfera, LEI.assunto, LEI.resumo, LEI.aplicabilidade, LEI.link
+	FROM tb_norma_lei AS NLEI
     INNER JOIN tb_normas AS NOR
-	INNER JOIN tb_norma_lei AS NLEI    
+	INNER JOIN tb_leis AS LEI
 	ON NLEI.id_lei = LEI.id
-    AND NLEI.id_lei = NOR.id;
+    AND NLEI.id_norma = NOR.id;
     
 SELECT * FROM vw_legis_lei;
+SELECT * FROM tb_norma_lei;

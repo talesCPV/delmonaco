@@ -44,8 +44,8 @@
     const newTarefa = !pageData.hasOwnProperty('tarefa')
 
     function startPage(){
-        if(pageData.newTarefa){
-            openFields(1)
+        openFields(newTarefa)
+        if(newTarefa){            
             pageScreen.querySelector('#btnEdit').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
             pageScreen.querySelector('#ckbConhecimento').checked = 0

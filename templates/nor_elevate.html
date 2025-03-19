@@ -45,24 +45,15 @@
                 <input type="text" id="edtCliente" disabled>
             </div>
             <div class="inline">
-                <label for="edtNorma">Norma:</label>
+                <label for="edtNorma">Legislação:</label>
                 <input type="text" id="edtNorma" disabled>
-                <label for="edtEsfera">Esfera:</label>
-                <input type="text" id="edtEsfera" style="max-width: 150px;" disabled>
             </div>
-            <div class="inline">
-                <label for="edtAssunto">Assunto:</label>
-                <input type="text" id="edtAssunto" disabled>
-                <label for="edtRamo">Ramo:</label>
-                <input type="text" id="edtRamo" style="max-width: 300px;" disabled>
-            </div>            
+         
             <div class="inline">
                 <label for="edtSobre">Sobre:</label>
                 <textarea id="edtSobre" rows="5" disabled></textarea>
             </div>
-            <div class="line">
-                <button id="btnLei" disabled>Visualizar o Texto da Lei</button>
-            </div>
+
         </div>
         <div id="laws" class="tab"></div>
         <div id="graf" class="tab">
@@ -79,21 +70,13 @@
 
 
     function pageStart(){
+console.log(pageData)        
         pageScreen.classList.add('fullscreen')
         pageScreen.querySelector('#tab-laws').click()
         pageScreen.querySelector('#edtCliente').value = pageData.norma.cliente
         pageScreen.querySelector('#edtNorma').value = pageData.norma.nome
-        pageScreen.querySelector('#edtEsfera').value = pageData.norma.esfera
-        pageScreen.querySelector('#edtAssunto').value = pageData.norma.assunto
-        pageScreen.querySelector('#edtRamo').value = pageData.norma.ramo
         pageScreen.querySelector('#edtSobre').value = pageData.norma.sobre
-        if(pageData.norma.link != null){
-            pageScreen.querySelector('#btnLei').disabled = 0
-            pageScreen.querySelector('#btnLei').addEventListener('click',()=>{
-                window.open(pageData.norma.link, '_blank').focus()
-            })
-        }
-        pageFunc.fillCheckLeis()        
+//        pageFunc.fillCheckLeis()        
     }
 
     function loadChart(){

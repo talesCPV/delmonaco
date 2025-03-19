@@ -207,7 +207,7 @@
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
             legis_lei.innerHTML = ''   
-            for(let i=0; i<json.length;i++){
+            for(let i=0; i<json.length;i++){             
                 const opt = document.createElement('option')
                 opt.value = json[i].id_norma
                 opt.innerHTML = json[i].norma

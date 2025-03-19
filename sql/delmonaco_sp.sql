@@ -904,7 +904,7 @@ DELIMITER $$
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			IF(Iid_lei)THEN
-				SELECT * FROM vw_legis_lei WHERE id=Iid;
+				SELECT * FROM vw_legis_lei WHERE id_lei=Iid;
             ELSE
 				SELECT * FROM vw_legis_lei WHERE id_norma=Iid;
             END IF;

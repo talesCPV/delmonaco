@@ -229,13 +229,15 @@ CREATE TABLE tb_norma_lei(
 DROP TABLE IF EXISTS tb_check;
 CREATE TABLE tb_check(
     id_cliente int(11) NOT NULL,
-    id_lei int(11) NOT NULL,
+    id_tarefa int(11) NOT NULL,
+    id_resp int(11) NOT NULL,
     ok bool DEFAULT 0,
     obs VARCHAR(512) DEFAULT NULL,
     validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
-    FOREIGN KEY (id_lei) REFERENCES tb_leis(id),
-    PRIMARY KEY (id_cliente,id_lei)
+    FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id),
+    FOREIGN KEY (id_resp) REFERENCES tb_usuario(id),
+    PRIMARY KEY (id_cliente,id_tarefa)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- ALTER TABLE tb_check ADD COLUMN validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
