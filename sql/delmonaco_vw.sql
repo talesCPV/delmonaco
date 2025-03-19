@@ -120,7 +120,7 @@ SELECT * FROM vw_check_lei;-- WHERE id_cliente=6;
 
 DROP VIEW IF EXISTS vw_legis_lei;
   CREATE VIEW vw_legis_lei AS
-	SELECT NLEI.*, NOR.nome AS orma, LEI.nome AS lei, LEI.esfera, LEI.assunto, LEI.resumo, LEI.aplicabilidade, LEI.link
+	SELECT NLEI.*, NOR.nome AS norma, LEI.nome AS lei, LEI.esfera, LEI.assunto, LEI.resumo, LEI.aplicabilidade, LEI.link
 	FROM tb_norma_lei AS NLEI
     INNER JOIN tb_normas AS NOR
 	INNER JOIN tb_leis AS LEI
