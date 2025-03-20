@@ -162,3 +162,4 @@ exigencias/requisitos descritos nesta NR;
 19/03/2025 20:37 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
 19/03/2025 20:39 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
 19/03/2025 20:39 tales@planet3.com.br : Lei: Editada NR-12 -> NR-12
+20/03/2025 13:30 tales@planet3.com.br : Pergunta Deletada undefined -> 

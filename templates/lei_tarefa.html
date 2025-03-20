@@ -43,12 +43,12 @@
     const pageScreen = document.querySelector('#card-lei_tarefa')
     const newTarefa = !pageData.hasOwnProperty('tarefa')
 
-    function startPage(){
+    function startPage(){     
         openFields(newTarefa)
         if(newTarefa){            
             pageScreen.querySelector('#btnEdit').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
-            pageScreen.querySelector('#ckbConhecimento').checked = 0
+            pageScreen.querySelector('#ckbConhecimento').checked = pageData.aplicabilidade=='CONHECIMENTO'
         }else{     
             pageScreen.querySelector('#edtPerg').value = pageData.tarefa.pergunta
             pageScreen.querySelector('#ckbConhecimento').checked = Number(pageData.tarefa.conhecimento)
