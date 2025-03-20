@@ -966,7 +966,7 @@ DELIMITER $$
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
 		IN Iid_cli int(11),
-        IN Iid_norma int(11)
+        IN Iid_lei int(11)
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
@@ -974,7 +974,7 @@ DELIMITER $$
 			SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
 			SET @user_allow = (SELECT COUNT(*) FROM tb_user_cli WHERE id_user=@id_call AND id_cliente=Iid_cli);
 			IF(@user_allow)THEN
-				SELECT * FROM vw_check_tarefa WHERE id_cliente=Iid_cli AND id_norma=Iid_norma;
+				SELECT * FROM vw_check_tarefa WHERE id_cliente=Iid_cli AND id_lei=Iid_lei;
             END IF;
         END IF;
 	END $$

@@ -212,3 +212,28 @@ function getVal(fds){
 
     return [field,signal,value]
 }
+
+/* GRÁFICO DE Porcentagem */
+
+function grafico(canvas,valor, centro=[95,100],raio=80){
+    const ctx = canvas.getContext("2d");
+    
+    function fill(valor,centro,raio,cor){
+        ctx.beginPath();
+        ctx.moveTo(centro[0],centro[1]); // Ponto central do gráfico
+        ctx.arc(centro[0],centro[1], raio, 0, (valor / 100) * 2 * Math.PI);
+        ctx.fillStyle = cor
+        ctx.fill();
+    }
+
+    fill(100,centro,raio+3,'white')
+    fill(180,centro,raio,'#F2D0D0')
+    fill(valor,centro,raio,'#C5EACA')
+    fill(180,centro,raio-25,'white')
+
+    ctx.font = "32px Arial"
+    ctx.fillStyle = 'black'
+    let offset = valor >=100 ? 40 : valor <= 9 ? 20 : 30
+    ctx.fillText(valor+'%',centro[0]-offset,centro[1]+10)
+
+}

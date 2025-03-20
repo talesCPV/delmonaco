@@ -13,23 +13,6 @@
             background-color: rgb(238, 222, 222);
         }
 
-        .lei{
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            font-size: 1.1em;
-        }
-
-        .lei label{
-            font-weight: 700;
-        }
-
-        #donutchart:nth-child(1){
-            display: flex;
-            justify-content: center;
-        }
-
-
         .board{
             display: flex;
             flex-direction: column;
@@ -39,13 +22,33 @@
             display: flex;
             flex-wrap: wrap;
             width: 100%;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .ln{
             display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .field{
+            display: flex;
             gap: 10px;
-            padding: 0 10px;
+            padding: 0 0 0 30px ;
+        }
+
+        .field textarea{
+            border: unset;
+            border-radius: 10px;
+            overflow-y: scroll;
+            background-color: unset;
+            color: black;
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .lf{
+            flex-grow: 1;
         }
 
         .rg{
@@ -66,7 +69,11 @@
             font-weight: bold;
         }
 
-
+        @media all and (max-width : 768px) {
+            .field{
+                padding-right: 0;
+            }
+        }
 
     </style>
 
@@ -93,6 +100,7 @@
 
         </div>
         <div id="laws" class="tab">
+<!--            
             <div class="board">
                 <div class="head">
                     <p>LEI N1750-5 18/04/1995</p>
@@ -100,16 +108,23 @@
                 <div class="content">
                     <div class="lf">
                         <div class="ln">
-                            <p class="lbl">Esfera:</p><p>Federal</p>
+                            <div class="field">
+                                <p class="lbl">Esfera:</p><p>Federal</p>
+                            </div>
+                            <div class="field">
+                                <p class="lbl">Ação:</p><p>Aplicável</p>
+                            </div>       
+                            <div class="field">
+                                <p class="lbl">Validade:</p><p>19/03/2045</p>
+                            </div>  
                         </div>
-                        <div class="ln">
-                            <p class="lbl">Ação:</p><p>Aplicável</p>
+                        <div class="field">
+                            <p class="lbl">Resumo:</p>                  
                         </div>
-                        <div class="ln">
-                            <p class="lbl">Validade:</p><p>19/03/2045</p>
-                        </div>
-                        <div class="ln">
-                            <p class="lbl">Resumo:</p><textarea id="" rows="5"></textarea>
+                        <div class="field">
+                            <textarea id="" rows="5">
+Esta Norma Regulamentadora - NR e seus anexos definem referências técnicas, princípios fundamentais e medidas de proteção para resguardar a saúde e a integridade física dos trabalhadores e estabelece requisitos mínimos para a prevenção de acidentes e doenças do trabalho nas fases de projeto e de utilização de máquinas e equipamentos, e ainda à sua fabricação, importação, comercialização, exposição e cessão a qualquer título, em todas as atividades econômicas, sem prejuízo da observância do disposto nas demais NRs aprovadas pela Portaria MTb n.º 3.214, de 8 de junho de 1978, nas normas técnicas oficiais ou nas normas internacionais aplicáveis e, na ausência ou omissão destas, opcionalmente, nas normas Europeias tipo “C” harmonizadas
+                            </textarea>
                         </div>                        
                     </div>
                     <div class="rg">
@@ -119,7 +134,7 @@
                     </div>
                 </div>
             </div>
-
+-->
         </div>
         <div id="graf" class="tab">
             <div id="donutchart" style="width: 100%; height: 500px;"></div>
@@ -135,7 +150,6 @@
 
 
     function pageStart(){
-console.log(pageData)        
         pageScreen.classList.add('fullscreen')
         pageScreen.querySelector('#tab-laws').click()
         pageScreen.querySelector('#edtCliente').value = pageData.norma.cliente
@@ -147,70 +161,21 @@ console.log(pageData)
 // *************
 
 
-        function grafico(id,valor, centro=[95,100],raio=80){
-            const canvas = document.getElementById(id);
-            const ctx = canvas.getContext("2d");
-            
-            function fill(valor,centro,raio,cor){
-                ctx.beginPath();
-                ctx.moveTo(centro[0],centro[1]); // Ponto central do gráfico
-                ctx.arc(centro[0],centro[1], raio, 0, (valor / 100) * 2 * Math.PI);
-                ctx.fillStyle = cor
-                ctx.fill();
-            }
-
-            fill(100,centro,raio+3,'white')
-            fill(180,centro,raio,'#F2D0D0')
-            fill(valor,centro,raio,'#C5EACA')
-            fill(180,centro,raio-25,'white')
-
-            ctx.font = "20px Arial";
-            ctx.fillStyle = 'black'
-            ctx.fillText(valor,centro[0]-11,centro[1]+6);
-
-
-        }
-
-        grafico('myCanvas',80)
-
-
-    }
-
-    function loadChart(){
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-
-            var data = google.visualization.arrayToDataTable(pageData.graf);
-
-
-            var options = {
-            title: `${pageData.norma.cliente} - ${pageData.norma.nome}`,
-            pieHole: 0.4,
-            'width':window.innerWidth * 0.8,
-            'height':window.innerHeight * 0.8
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-            chart.draw(data, options);
-        }
     }
 
     function addLei(data){   
-console.log(data)
-        const perc = Number(data.perc)
-console.log(perc)        
+        const perc = Number(data.perc)   
         const lei = document.createElement('div')
         lei.data = data
-        lei.className = 'lei'
+        lei.className = 'board'
         if(perc > 99 || data.aplicabilidade == 'NÃO APLICÁVEL'){
             lei.classList.add('atende')
-            addValue('Atende')
+//            addValue('Atende')
         }else{
             lei.classList.add('nao-atende')
-            addValue('Não Atende')
+//            addValue('Não Atende')
         }
-
+/*
         function addValue(valor){
             const indice = pageData.graf.findIndex(subarray => subarray[0] === valor)
             if(indice<0){
@@ -219,38 +184,61 @@ console.log(perc)
                 pageData.graf[indice][1]++
             }
         }
+*/
+        const head = document.createElement('div')
+        lei.appendChild(head)
+        head.className = 'head'
+        head.innerHTML = `<p id="lei-${data.id_cliente}-${data.id_lei}">${data.lei}</p>`
 
-        const line_1 = document.createElement('div')
-        lei.appendChild(line_1)
-        line_1.className = 'inline'
-        line_1.innerHTML = `
-        <label for="nome-${data.id_cliente}-${data.id_lei}">Lei:</label>
-        <input type="text" id="nome-${data.id_cliente}-${data.id_lei}" value="${data.lei}" disabled>
-        <label for="perc-${data.id_cliente}-${data.id_lei}">Atendido:</label>
-        <input type="text" id="perc-${data.id_cliente}-${data.id_lei}" value="${data.perc}%" style="max-width: 100px;" disabled>
+        const content = document.createElement('div')
+        lei.appendChild(content)
+        content.className = 'content'
 
-        `
+        const lf = document.createElement('div')
+        content.appendChild(lf)
+        lf.className = 'lf'
 
-        const line_2 = document.createElement('div')
-        lei.appendChild(line_2)
-        line_2.className = 'inline'
-        line_2.innerHTML = `
-        <label for="esfera-${data.id_cliente}-${data.id_lei}">Esfera:</label>
-        <input type="text" id="esfera-${data.id_cliente}-${data.id_lei}" value="${data.esfera}" disabled>
-        <label for="aplica-${data.id_cliente}-${data.id_lei}">Aplicabilidade:</label>
-        <input type="text" id="aplica-${data.id_cliente}-${data.id_lei}" value="${data.aplicabilidade}" disabled>
-        <label for="validade-${data.id_cliente}-${data.id_lei}">Expira em:</label>
-        <input type="text" id="validade-${data.id_cliente}-${data.id_lei}" value="${data.expira==null || data.expira.substr(0,4)=='0000'  ?  'INDEFINIDO' : data.expira.viewDate() }" disabled>
-        `
+        const ln = document.createElement('div')
+        lf.appendChild(ln)
+        ln.className = 'ln'
 
-        const line_3 = document.createElement('div')
-        lei.appendChild(line_3)
-        line_3.className = 'inline'
-        line_3.innerHTML = `
-        <label for="ementa-${data.id_cliente}-${data.id_lei}">Resumo:</label>
-        <textarea id="ementa-${data.id_cliente}-${data.id_lei}" rows="5" readonly disabled>${data.resumo    }</textarea>
-        `
+        const esfera = document.createElement('div')
+        ln.appendChild(esfera)
+        esfera.className = 'field'
+        esfera.innerHTML = `<p class="lbl">Esfera:</p><p>${data.esfera}</p>`
 
+        const acao = document.createElement('div')
+        ln.appendChild(acao)
+        acao.className = 'field'
+        acao.innerHTML = `<p class="lbl">Ação:</p><p>${data.aplicabilidade}</p>`
+
+        const expira = document.createElement('div')
+        ln.appendChild(expira)
+        expira.className = 'field'
+        expira.innerHTML = `<p class="lbl">Validade:</p><p>${data.expira==null || data.expira.substr(0,4)=='0000'  ?  'INDEFINIDO' : data.expira.viewDate() }</p>`
+
+        const lbl_resumo = document.createElement('div')
+        lf.appendChild(lbl_resumo)
+        lbl_resumo.className = 'field'
+        lbl_resumo.innerHTML = `<p class="lbl">Resumo:</p>`
+
+        const resumo = document.createElement('div')
+        lf.appendChild(resumo)
+        resumo.className = 'field'
+        resumo.innerHTML = `<textarea rows="5"readonly disabled>${data.resumo}</textarea>`
+
+        const rg = document.createElement('div')
+        content.appendChild(rg)
+        rg.className = 'rg'
+
+        const canva = document.createElement('canvas')
+        rg.appendChild(canva)
+        canva.width = 200
+        canva.height = 200
+        canva.id = `graf-${data.id_cliente}-${data.id_lei}`
+
+        grafico(canva,perc.toFixed(0))
+       
         const line_4 = document.createElement('div')
         lei.appendChild(line_4)
         line_4.className = 'line'
@@ -268,7 +256,7 @@ console.log(perc)
         btn.innerHTML = `<span class="mdi mdi-check-bold"></span> Tarefas`
         btn.disabled =  data.aplicabilidade == 'NÃO APLICÁVEL'
         btn.addEventListener('click',()=>{
-            openHTML('nor_check.html','pop-up',data.nome,data,600)
+            openHTML('lei_view_tarefas.html','pop-up',data.lei,data,600)
         })
 
         return lei
@@ -286,27 +274,7 @@ console.log(perc)
                 pageData.graf = [['1','2']]
             for(let i=0; i<json.length; i++){
                 laws.appendChild(addLei(json[i]))
-            }
-            loadChart()           
-        })        
-    }
-
-
-    pageFunc.fillCheckTarefas = ()=>{ 
-        const params = new Object;
-            params.id_cliente = pageData.id_cliente
-            params.id_norma = pageData.norma.id_norma
-        const myPromisse = queryDB(params,'ELE-0');
-        myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve) 
-console.log(json)            
-            const laws = pageScreen.querySelector('#laws')
-                laws.innerHTML = ''
-                pageData.graf = [['1','2']]
-            for(let i=0; i<json.length; i++){
-                laws.appendChild(addLei(json[i]))
-            }
-            loadChart()
+            }      
         })        
     }
 

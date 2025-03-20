@@ -1,0 +1,49 @@
+
+<template>
+    <style>
+ 
+    </style>
+  
+    <div class="tarefas">
+        <div class="pergunta">
+            Cabe aos trabalhadores:\na) cumprir todas as orientações relativas aos procedimentos seguros de operação,\nalimentação, abastecimento, limpeza, manutenção, inspeção, transporte,\ndesativação, desmonte e descarte das máquinas e equipamentos;\nb) não realizar qualquer tipo de alteração nas proteções mecânicas ou dispositivos de\nsegurança de máquinas e equipamentos, de maneira que possa colocar em risco a\nsua saúde e integridade física ou de terceiros;\nc) comunicar seu superior imediato se uma proteção ou dispositivo de segurança foi\nremovido, danificado ou se perdeu sua função;\nd) participar dos treinamentos fornecidos pelo empregador para atender às\nexigências/requisitos descritos nesta NR;
+        </div>
+
+    </div>
+
+</template>
+<script>
+    
+    const pageData = main_data.lei_view_tarefas.data
+    const pageFunc = main_data.lei_view_tarefas.func
+    const pageScreen = document.querySelector('#card-lei_view_tarefas')
+
+    console.log(pageData)
+
+
+    function startPage(){
+        pageFunc.fillCheckTarefas()
+    }
+
+    pageFunc.fillCheckTarefas = ()=>{ 
+        const params = new Object;
+            params.id_cliente = pageData.id_cliente
+            params.id_lei = pageData.id_lei
+        const myPromisse = queryDB(params,'ELE-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve) 
+            console.log(json)
+/*            
+            const laws = pageScreen.querySelector('#laws')
+                laws.innerHTML = ''
+                pageData.graf = [['1','2']]
+            for(let i=0; i<json.length; i++){
+                laws.appendChild(addLei(json[i]))
+            }
+*/                
+        })        
+    }
+
+    startPage()
+
+</script>

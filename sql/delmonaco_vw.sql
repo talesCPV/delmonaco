@@ -130,7 +130,7 @@ DROP VIEW IF EXISTS vw_check_tarefa;
 		AND TCL.id_cliente = CHK.id_cliente
 		ORDER BY id_cliente, id_norma, id_lei;
 
-SELECT * FROM vw_check_tarefa;-- WHERE id_cliente=6;
+SELECT * FROM vw_check_tarefa WHERE id_cliente=2 AND id_lei=3;
 /*
 DROP VIEW IF EXISTS vw_user_legis;
  CREATE VIEW vw_user_legis AS
