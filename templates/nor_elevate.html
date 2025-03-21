@@ -5,7 +5,7 @@
             background-color: rgb(218, 238, 218);
         }
 
-        .sem-registro{
+        .atende-parcial{
             background-color: rgb(252, 255, 228);
         }
 
@@ -99,43 +99,7 @@
             </div>
 
         </div>
-        <div id="laws" class="tab">
-<!--            
-            <div class="board">
-                <div class="head">
-                    <p>LEI N1750-5 18/04/1995</p>
-                </div>
-                <div class="content">
-                    <div class="lf">
-                        <div class="ln">
-                            <div class="field">
-                                <p class="lbl">Esfera:</p><p>Federal</p>
-                            </div>
-                            <div class="field">
-                                <p class="lbl">Ação:</p><p>Aplicável</p>
-                            </div>       
-                            <div class="field">
-                                <p class="lbl">Validade:</p><p>19/03/2045</p>
-                            </div>  
-                        </div>
-                        <div class="field">
-                            <p class="lbl">Resumo:</p>                  
-                        </div>
-                        <div class="field">
-                            <textarea id="" rows="5">
-Esta Norma Regulamentadora - NR e seus anexos definem referências técnicas, princípios fundamentais e medidas de proteção para resguardar a saúde e a integridade física dos trabalhadores e estabelece requisitos mínimos para a prevenção de acidentes e doenças do trabalho nas fases de projeto e de utilização de máquinas e equipamentos, e ainda à sua fabricação, importação, comercialização, exposição e cessão a qualquer título, em todas as atividades econômicas, sem prejuízo da observância do disposto nas demais NRs aprovadas pela Portaria MTb n.º 3.214, de 8 de junho de 1978, nas normas técnicas oficiais ou nas normas internacionais aplicáveis e, na ausência ou omissão destas, opcionalmente, nas normas Europeias tipo “C” harmonizadas
-                            </textarea>
-                        </div>                        
-                    </div>
-                    <div class="rg">
-                        <canvas id="myCanvas" width="200" height="200" >
-                            Sorry, your browser does not support canvas.
-                        </canvas>
-                    </div>
-                </div>
-            </div>
--->
-        </div>
+        <div id="laws" class="tab"></div>
         <div id="graf" class="tab">
             <div id="donutchart" style="width: 100%; height: 500px;"></div>
         </div>
@@ -155,11 +119,7 @@ Esta Norma Regulamentadora - NR e seus anexos definem referências técnicas, pr
         pageScreen.querySelector('#edtCliente').value = pageData.norma.cliente
         pageScreen.querySelector('#edtNorma').value = pageData.norma.nome
         pageScreen.querySelector('#edtSobre').value = pageData.norma.sobre
-//        pageFunc.fillCheckTarefas()
         pageFunc.fillLeis()
-
-// *************
-
 
     }
 
@@ -256,7 +216,7 @@ Esta Norma Regulamentadora - NR e seus anexos definem referências técnicas, pr
         btn.innerHTML = `<span class="mdi mdi-check-bold"></span> Tarefas`
         btn.disabled =  data.aplicabilidade == 'NÃO APLICÁVEL'
         btn.addEventListener('click',()=>{
-            openHTML('lei_view_tarefas.html','pop-up',data.lei,data,600)
+            openHTML('lei_view_tarefas.html','pop-up','Tarefas - '+data.lei,data,600)
         })
 
         return lei
@@ -270,7 +230,7 @@ Esta Norma Regulamentadora - NR e seus anexos definem referências técnicas, pr
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve) 
             const laws = pageScreen.querySelector('#laws')
-//                laws.innerHTML = ''
+                laws.innerHTML = ''
                 pageData.graf = [['1','2']]
             for(let i=0; i<json.length; i++){
                 laws.appendChild(addLei(json[i]))

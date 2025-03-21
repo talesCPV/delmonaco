@@ -232,6 +232,7 @@ CREATE TABLE tb_check(
     id_tarefa int(11) NOT NULL,
     id_resp int(11) NOT NULL,
     ok bool DEFAULT 0,
+    nao_aplica BOOL DEFAULT 0,
     obs VARCHAR(512) DEFAULT NULL,
     validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
@@ -240,9 +241,10 @@ CREATE TABLE tb_check(
     PRIMARY KEY (id_cliente,id_tarefa)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT INTO tb_check SET (id_cliente,id_tarefa,id_resp,ok) VALUES (2,3,1,1);
+INSERT INTO tb_check (id_cliente,id_tarefa,id_resp,ok) VALUES (2,3,1,1);
 
--- ALTER TABLE tb_check ADD COLUMN validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
- ALTER TABLE tb_check CHANGE COLUMN validade_timestamp BIGINT NOT NULL DEFAULT CURRENT_TIMESTAMP;
+-- ALTER TABLE tb_check DROP COLUMN aplicavel;
+-- ALTER TABLE tb_check ADD COLUMN nao_aplica BOOL DEFAULT 0;
+--  ALTER TABLE tb_check CHANGE COLUMN validade_timestamp BIGINT NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 INSERT INTO tb_check (id_cliente,id_lei,ok,obs)VALUES(6,3,1,"Teste!!!");

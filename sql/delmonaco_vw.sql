@@ -121,9 +121,9 @@ DROP VIEW IF EXISTS vw_tarefa_cliente;
 SELECT * FROM vw_tarefa_cliente; -- WHERE id_cliente=6;
 
 DROP VIEW IF EXISTS vw_check_tarefa;
- CREATE VIEW vw_check_tarefa AS
+-- CREATE VIEW vw_check_tarefa AS
 	SELECT TCL.*,
-		IFNULL(CHK.ok,0) AS ok, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
+		IFNULL(CHK.ok,0) AS ok,IFNULL(CHK.nao_aplica,0) AS nao_aplica, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
 		FROM vw_tarefa_cliente AS TCL
 		LEFT JOIN tb_check AS CHK
 		ON TCL.id_tarefa = CHK.id_tarefa

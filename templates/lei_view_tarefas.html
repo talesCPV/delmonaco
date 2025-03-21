@@ -1,9 +1,30 @@
 
 <template>
     <style>
+
+        .atende{
+            background-color: rgb(218, 238, 218);
+        }
+
+        .atende-parcial{
+            background-color: rgb(252, 255, 228);
+        }
+
+        .nao-atende{
+            background-color: rgb(238, 222, 222);
+        }
+
+        .tasks{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+        }
+
         .pergunta{
             display: flex;
             width: 100%;
+            padding: 0 10px;
             max-height: 100px;
             overflow-y: scroll;
         }
@@ -15,12 +36,7 @@
 
     </style>
   
-    <div class="tarefas">
-        <div class="pergunta">
-            <p>Cabe aos trabalhadores:\na) cumprir todas as orientações relativas aos procedimentos seguros de operação,\nalimentação, abastecimento, limpeza, manutenção, inspeção, transporte,\ndesativação, desmonte e descarte das máquinas e equipamentos;\nb) não realizar qualquer tipo de alteração nas proteções mecânicas ou dispositivos de\nsegurança de máquinas e equipamentos, de maneira que possa colocar em risco a\nsua saúde e integridade física ou de terceiros;\nc) comunicar seu superior imediato se uma proteção ou dispositivo de segurança foi\nremovido, danificado ou se perdeu sua função;\nd) participar dos treinamentos fornecidos pelo empregador para atender às\nexigências/requisitos descritos nesta NR;</p>
-        </div>
-
-    </div>
+    <div class="tasks"></div>
 
 </template>
 <script>
@@ -29,11 +45,25 @@
     const pageFunc = main_data.lei_view_tarefas.func
     const pageScreen = document.querySelector('#card-lei_view_tarefas')
 
-    console.log(pageData)
-
-
     function startPage(){
         pageFunc.fillCheckTarefas()
+    }
+
+    function addTask(data){
+        const task = document.createElement('div')
+        task.className = Number(data.ok) ? 'atende' : 'nao-atende'
+
+        const quest = document.createElement('div')
+        task.appendChild(quest)
+        quest.className = 'pergunta'
+        quest.innerHTML = data.tarefa
+
+        task.addEventListener('click',()=>{
+            openHTML('lei_check.html','pop-up','Tarefa - '+data.lei,data,600)
+        })
+
+
+        return task
     }
 
     pageFunc.fillCheckTarefas = ()=>{ 
@@ -42,16 +72,12 @@
             params.id_lei = pageData.id_lei
         const myPromisse = queryDB(params,'ELE-0');
         myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve) 
-            console.log(json)
-/*            
-            const laws = pageScreen.querySelector('#laws')
-                laws.innerHTML = ''
-                pageData.graf = [['1','2']]
+            const json = JSON.parse(resolve)
+            const task = pageScreen.querySelector('.tasks')
+            task.innerHTML = ''
             for(let i=0; i<json.length; i++){
-                laws.appendChild(addLei(json[i]))
+                task.appendChild(addTask(json[i]))
             }
-*/                
         })        
     }
 

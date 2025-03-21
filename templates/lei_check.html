@@ -6,13 +6,21 @@
         }
 
     </style>
-         
+        
+        <fieldset>
+            <legend>pergunta</legend>
+            <textarea id="edtTarefa" rows="3" readonly disabled></textarea>
+        </fieldset>
+
+
         <fieldset>
             <legend id="lgdAtende">Atende</legend>
             <label for="atd-sim">Sim</label>
             <input type="radio" name="atende" id="atd-sim" value="1">
             <label for="atd-nao">Não</label>
-            <input type="radio" name="atende" id="atd-nao" value="0" checked>
+            <input type="radio" name="atende" id="atd-nao" value="2" checked>
+            <label for="atd-naoaplica">Não se aplica</label>
+            <input type="radio" name="atende" id="atd-naoaplica" value="3">
         </fieldset>
 
         <fieldset>
@@ -28,7 +36,7 @@
 
         <fieldset>
             <legend>Observações</legend>
-            <textarea id="edtObs" rows="5"></textarea>
+            <textarea id="edtObs" rows="3"></textarea>
         </fieldset>
 
         <div class="line">
@@ -39,47 +47,49 @@
 </template>
 <script>
 
-    const pageData = main_data.nor_check.data
-    const pageFunc = main_data.nor_check.func
-    const pageScreen = document.querySelector('#card-nor_check')
+    const pageData = main_data.lei_check.data
+    const pageFunc = main_data.lei_check.func
+    const pageScreen = document.querySelector('#card-lei_check')
 
 
     function pageStart(){
-//        console.log(pageData)
+        pageScreen.querySelector('#edtTarefa').value = pageData.tarefa
         if(pageData.expira != null){
             pageScreen.querySelector('#atd-sim').checked = Number(pageData.ok)
+            pageScreen.querySelector('#atd-nao').checked = Number(pageData.ok) == 0 ? 1 : 0
+            pageScreen.querySelector('#atd-naoaplica').checked = Number(pageData.nao_aplica)
             pageScreen.querySelector('#edtVal').disabled = pageData.expira.substr(0,4)=='0000'
             pageScreen.querySelector('#ckbVal').checked = pageData.expira.substr(0,4)=='0000'
             pageScreen.querySelector('#edtVal').value = pageData.expira.substr(0,10)
             pageScreen.querySelector('#edtObs').value = pageData.obs
             pageScreen.querySelector('#lgdAtende').innerHTML = pageData.aplicabilidade=='INFORMATIVO' ? 'Estou Ciente' : 'Atende'
-
         }
     }
 
     pageFunc.setCheck = (reset=0)=>{      
         const params = new Object;
             params.id_cliente = pageData.id_cliente
-            params.id_lei = pageData.id_lei
-            params.ok = pageScreen.querySelector('#atd-sim').checked ? 1 : 0
-            params.obs = pageScreen.querySelector('#edtObs').value
-            params.validade =  pageScreen.querySelector('#ckbVal').checked ? '0000-00-00 00:00:00' : pageScreen.querySelector('#edtVal').value
-            params.reset = reset
+            params.id_tarefa = pageData.id_tarefa
+            params.ok = pageScreen.querySelector('#atd-nao').checked ? 0 : 1
+            params.nao_aplica = pageScreen.querySelector('#atd-naoaplica').checked ? 1 : 0
+            params.obs = reset ? 'DELETAR' : pageScreen.querySelector('#edtObs').value.trim()
+            params.validade =  pageScreen.querySelector('#ckbVal').checked  || params.nao_aplica ? '0000-00-00 00:00:00' : pageScreen.querySelector('#edtVal').value
         const myPromisse = queryDB(params,'ELE-1');
         myPromisse.then((resolve)=>{
             if(reset){
-                setLog(`ELEVATE - id_cliente: ${pageData.id_cliente}, id_lei: ${pageData.id_lei} RESET`)
+                setLog(`ELEVATE - id_cliente: ${pageData.id_cliente}, id_lei: ${pageData.id_tarefa} RESET`)
             }else{
-                setLog(`ELEVATE - id_cliente: ${pageData.id_cliente}, id_lei: ${pageData.id_lei} OK: ${params.ok} VALIDADE: ${params.validade} OBS: ${params.obs}`)
+                setLog(`ELEVATE - id_cliente: ${pageData.id_cliente}, id_lei: ${pageData.id_tarefa} OK: ${params.ok} VALIDADE: ${params.validade} OBS: ${params.obs}`)
             }
 
             try{
-                main_data.nor_elevate.func.fillCheckLeis()
+                main_data.lei_view_tarefas.func.fillCheckTarefas()
+                main_data.nor_elevate.func.fillLeis()
             }catch{
                 console.error('Tela fechada pelo usuário!')
             }
             alert('Cadastrado efetuado!')
-            closeModal('nor_check')
+            closeModal('lei_check')
        
         })        
     }

@@ -163,3 +163,11 @@ exigencias/requisitos descritos nesta NR;
 19/03/2025 20:39 tales@planet3.com.br : Lei: Editada Teste 2 -> Teste 2
 19/03/2025 20:39 tales@planet3.com.br : Lei: Editada NR-12 -> NR-12
 20/03/2025 13:30 tales@planet3.com.br : Pergunta Deletada undefined -> 
+21/03/2025 14:44 tales@planet3.com.br : Pergunta Cadastrada  -> Tarefa 3
+21/03/2025 15:57 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: teste
+21/03/2025 15:59 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: teste
+21/03/2025 16:00 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 2 RESET
+21/03/2025 16:02 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 7 OK: 0 VALIDADE: 0000-00-00 00:00:00 OBS: askjash
+21/03/2025 16:03 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 7 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: askjash
+21/03/2025 16:03 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 8 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+21/03/2025 16:03 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 10 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
