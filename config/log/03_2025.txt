@@ -176,3 +176,10 @@ exigencias/requisitos descritos nesta NR;
 23/03/2025 00:08 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
 23/03/2025 00:17 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 RESET
 23/03/2025 00:20 tales@planet3.com.br : Menu Alterado (Cliente -Legislacao, nor_cliente.html, pop-up, Norma / Cliente)
+24/03/2025 14:23 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+24/03/2025 14:34 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 3 OK: 1 VALIDADE: 2025-03-25 OBS: 
+24/03/2025 14:36 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 3 OK: 1 VALIDADE: 2025-03-19 OBS: 
+24/03/2025 14:37 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 3 OK: 0 VALIDADE: 2025-03-24 OBS: 
+24/03/2025 14:38 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 3 OK: 0 VALIDADE: 2025-03-25 OBS: 
+24/03/2025 14:38 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 3 OK: 1 VALIDADE: 2025-03-25 OBS: 
+24/03/2025 14:38 tales@planet3.com.br : ELEVATE - id_cliente: 2, id_lei: 1 RESET

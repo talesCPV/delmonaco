@@ -121,16 +121,16 @@ DROP VIEW IF EXISTS vw_tarefa_cliente;
 SELECT * FROM vw_tarefa_cliente; -- WHERE id_cliente=6;
 
 DROP VIEW IF EXISTS vw_check_tarefa;
--- CREATE VIEW vw_check_tarefa AS
+ CREATE VIEW vw_check_tarefa AS
 	SELECT TCL.*,
-		IFNULL(CHK.ok,0) AS ok,IFNULL(CHK.nao_aplica,0) AS nao_aplica, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
+		IFNULL(IF(CHK.nao_aplica OR (CHK.ok AND (CHK.validade >= CURDATE() OR CHK.validade = "0000-00-00 00:00:00")) AND 1,1,0),0) AS ok,IFNULL(CHK.nao_aplica,0) AS nao_aplica, IFNULL(CHK.obs,'') AS obs, CHK.validade AS expira
 		FROM vw_tarefa_cliente AS TCL
 		LEFT JOIN tb_check AS CHK
 		ON TCL.id_tarefa = CHK.id_tarefa
 		AND TCL.id_cliente = CHK.id_cliente
 		ORDER BY id_cliente, id_norma, id_lei;
 
-SELECT * FROM vw_check_tarefa WHERE id_cliente=2 AND id_lei=3;
+SELECT * FROM vw_check_tarefa WHERE id_cliente=2 AND id_norma=1;
 /*
 DROP VIEW IF EXISTS vw_user_legis;
  CREATE VIEW vw_user_legis AS

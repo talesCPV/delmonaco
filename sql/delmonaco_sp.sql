@@ -949,12 +949,10 @@ DELIMITER $$
 			SET @user_allow = (SELECT COUNT(*) FROM tb_user_cli WHERE id_user=@id_call AND id_cliente=Iid_cli);
 			IF(@user_allow)THEN
             
-				SELECT id_cliente,id_norma,id_lei,lei,esfera,assunto,resumo,aplicabilidade,link, COUNT(*) AS TOT, SUM(ok) AS ok, ROUND(SUM(ok)/COUNT(*) * 100,2) AS perc
+ 				SELECT id_cliente,id_norma,id_lei,lei,esfera,assunto,resumo,aplicabilidade,link, COUNT(*) AS TOT, SUM(ok) AS ok, ROUND(SUM(ok)/COUNT(*) * 100,2) AS perc
 				FROM vw_check_tarefa
                 WHERE id_cliente=Iid_cli AND id_norma=Iid_norma
 				GROUP BY id_cliente,id_norma, id_lei;
-            
--- 				SELECT * FROM vw_legis_lei WHERE id_norma=Iid_norma ORDER BY id_lei;
             END IF;
         END IF;
 	END $$
