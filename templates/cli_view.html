@@ -5,6 +5,10 @@
             padding: 10px;
         }
 
+        .legis{
+            display: none;
+        }
+
         @media all and (max-width : 768px) {
             .frm input, .frm select{
                 width: 98% !important;
@@ -91,6 +95,10 @@
             <label for="edtMail">Email</label>
             <input type="email" class="only-view" id="edtMail" onfocus="this.select();" maxlength="80" onkeyup="validaEmail(this)" disabled>
         </div>
+        <fieldset class="inline legis">
+            <legend>Legislações</legend>
+            <table id="tblLegis"></table>
+        </fieldset>
 
         <div class="line">
             <button id="btnCNPJ">Pesquisar Cartão CNPJ</button>            
@@ -131,6 +139,7 @@
             pageScreen.querySelector('#edtTel').value = pageData.tel
             pageScreen.querySelector('#edtMail').value = pageData.email
             pageScreen.querySelector('#btnEdit').disabled = 0
+            pageFunc.fillLegis()
         }
     }
 
@@ -139,6 +148,23 @@
         for(let i=0; i<view.length; i++){
             view[i].disabled = !open
         }
+    }
+
+    pageFunc.fillLegis = ()=>{
+        const params = new Object;
+            params.id = pageData.id
+            params.set = 1
+          
+        const myPromisse = queryDB(params,'NOR-5');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const tbl = pageScreen.querySelector('#tblLegis')
+            tbl.head('Nome,Expira em|min-field')
+            for(let i=0; i<json.length; i++){
+                tbl.plot(json[i],'nome,expira|min-field','Upp,dat')
+                pageScreen.querySelector('.legis').style.display = 'block'
+            }
+        })
     }
 
     pageFunc.setEmp = (del=0)=>{

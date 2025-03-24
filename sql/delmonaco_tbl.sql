@@ -212,10 +212,13 @@ DROP TABLE IF EXISTS tb_norma_cli;
 CREATE TABLE tb_norma_cli(
     id_norma int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
+    expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
     PRIMARY KEY (id_norma,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+-- ALTER TABLE tb_norma_cli ADD COLUMN expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 DROP TABLE IF EXISTS tb_norma_lei;
 CREATE TABLE tb_norma_lei(

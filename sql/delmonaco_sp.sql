@@ -767,8 +767,8 @@ DELIMITER $$
 			IF(@has)THEN
 				DELETE FROM tb_norma_cli WHERE id_norma=Iid_norma AND id_cliente=Iid_cliente;
             ELSE
-				INSERT INTO tb_norma_cli (id_norma,id_cliente)
-				VALUES (Iid_norma,Iid_cliente);
+				INSERT INTO tb_norma_cli (id_norma,id_cliente,expira)
+				VALUES (Iid_norma,Iid_cliente,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 1 MONTH));
             END IF;
         END IF;
 	END $$
