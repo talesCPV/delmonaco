@@ -26,10 +26,16 @@
     const pageFunc = main_data.tool_upload_file.func
     const pageScreen = document.querySelector('#card-tool_upload_file')
 
+    function pageStart(){
+        if(pageData.ext != undefined){
+            pageScreen.querySelector('#up_file').accept = pageData.ext
+        }
+    }
+
     pageScreen.querySelector('#btnUpload').addEventListener('click',()=>{
-        const up = uploadImage('up_file',`files/${pageData.id_acervo}/${pageData.id_item}/`,pageScreen.querySelector('#up_file').files[0].name)
+        const up = uploadImage('up_file',`files/${pageData.path}`,pageScreen.querySelector('#up_file').files[0].name)
         up.then((resp)=>{
-            setLog(`Imagem Adicionada -> : ${pageData.nome}`)
+            setLog(`Arquivo Adicionado -> : ${pageData.nome}`)
             if(main_data.hasOwnProperty(pageData.org)){
                 main_data[pageData.org].func.fillAnexo()             
             }
@@ -41,6 +47,6 @@
         showFile()
     })
 
-
+    pageStart()
 
 </script>

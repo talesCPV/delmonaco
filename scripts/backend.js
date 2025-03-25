@@ -54,6 +54,15 @@ function backFunc(params,cod){
     });      
 }
 
+function downloadFile(url, filename) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 function getConfig(field){
     const data = new URLSearchParams();        
         data.append("user", localStorage.getItem('id_user'));
@@ -125,7 +134,7 @@ function uploadImage(fileID,path,filename){
     return myPromisse
 }
 
-function listNF(path,ext='txt'){
+async function listFiles(path,ext='txt'){
 
     const data = new URLSearchParams()
         data.append("dir",path)
@@ -144,14 +153,7 @@ function listNF(path,ext='txt'){
             }
         })
     })
-    myPromisse.then((txt)=>{
-        const list = JSON.parse(txt)
-        const sel = document.querySelector(`#${ext}Files`)
-        sel.innerHTML=''
-        for(let i=list.length-1; i>1;  i--){
-            sel.innerHTML += `<option value="${list[i]}">${list[i]}</option>`
-        }
-    })
+    return await myPromisse.then((txt))
 }
 
 function getFile(path){

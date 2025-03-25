@@ -5,6 +5,12 @@
             padding-bottom: 20px;
         }
 
+
+        .lineup{
+            display: flex;
+            justify-content: space-around;
+        }
+
     </style>
         
         <fieldset>
@@ -13,14 +19,20 @@
         </fieldset>
 
 
-        <fieldset>
+        <fieldset class="lineup">
             <legend id="lgdAtende">Atende</legend>
-            <label for="atd-sim">Sim</label>
-            <input type="radio" name="atende" id="atd-sim" value="1">
-            <label for="atd-nao">Não</label>
-            <input type="radio" name="atende" id="atd-nao" value="2" checked>
-            <label for="atd-naoaplica">Não se aplica</label>
-            <input type="radio" name="atende" id="atd-naoaplica" value="3">
+            <div>
+                <label for="atd-sim">Sim</label>
+                <input type="radio" name="atende" id="atd-sim" value="1">
+            </div>
+            <div>
+                <label for="atd-nao">Não</label>
+                <input type="radio" name="atende" id="atd-nao" value="2" checked>
+            </div>
+            <div>
+                <label for="atd-naoaplica">Não se aplica</label>
+                <input type="radio" name="atende" id="atd-naoaplica" value="3">
+            </div>
         </fieldset>
 
         <fieldset>
@@ -39,6 +51,12 @@
             <textarea id="edtObs" rows="3"></textarea>
         </fieldset>
 
+        <fieldset>
+            <legend>Arquivos</legend>
+            <table id="tblFiles"></table>
+            <button id="btnAddFile"><span class="mdi mdi-plus"></span>Adicionar</button>
+        </fieldset>
+
         <div class="line">
             <button id="btnReset">Resetar</button>
             <button id="btnSave">Salvar</button>
@@ -50,7 +68,9 @@
     const pageData = main_data.lei_check.data
     const pageFunc = main_data.lei_check.func
     const pageScreen = document.querySelector('#card-lei_check')
-
+    pageData.ext = '*.*'
+    pageData.path = `tarefas/${pageData.id_cliente}/${pageData.id_tarefa}/`
+    pageData.org = 'lei_check'
 
     function pageStart(){
         pageScreen.querySelector('#edtTarefa').value = pageData.tarefa
@@ -64,9 +84,55 @@
             pageScreen.querySelector('#edtObs').value = pageData.obs
             pageScreen.querySelector('#lgdAtende').innerHTML = pageData.aplicabilidade=='INFORMATIVO' ? 'Estou Ciente' : 'Atende'
         }
+        pageFunc.fillAnexo()
     }
 
-    pageFunc.setCheck = (reset=0)=>{      
+    function subMenu(e){
+        const data = e.target.parentNode.data
+        const tbl = []
+
+        const open = new Object
+        open.label = 'Abrir'
+        open.link = ()=>{
+            console.log(data)
+            window.open(window.location.href+'files/'+pageData.path+data.filename, '_blank');
+        }            
+        tbl.push(open)
+
+        const del = new Object
+        del.label = 'Deletar'
+        del.link = ()=>{
+            if(confirm('Deseja remover definidamente este arquivo?')){
+                delFile('/../files/'+pageData.path+data.filename).then(()=>{
+                    pageFunc.fillAnexo()
+                })
+            }
+        }            
+        tbl.push(del)
+
+        const download = new Object
+        download.label = 'Download'
+        download.link = ()=>{
+            downloadFile(window.location.href+'files/'+pageData.path+data.filename,data.filename)
+        }            
+        tbl.push(download)
+
+        menuContext(tbl,e)
+    }
+
+    pageFunc.fillAnexo = ()=>{
+        listFiles('files/'+pageData.path,pageData.ext).then((txt)=>{
+            const json = JSON.parse(txt)
+            const tbl = pageScreen.querySelector('#tblFiles')
+            tbl.innerHTML = ''
+            for(let i=2; i<json.length; i++){
+                tbl.plot({"filename" : json[i]},'filename','Upp')
+            }
+        })
+
+    }
+
+    pageFunc.setCheck = (reset=0)=>{
         const params = new Object;
             params.id_cliente = pageData.id_cliente
             params.id_tarefa = pageData.id_tarefa
@@ -104,6 +170,10 @@
         }
     })
 
+    pageScreen.querySelector('#btnAddFile').addEventListener('click',()=>{
+        openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',pageData,600)
+    })
+
     pageScreen.querySelector('#ckbVal').addEventListener('change',()=>{
         const chk = pageScreen.querySelector('#ckbVal').checked
         const date = pageScreen.querySelector('#edtVal')
@@ -112,6 +182,10 @@
         if(pageScreen.querySelector('#edtVal').value == ''){
             pageScreen.querySelector('#edtVal').value = today.getFormatDate()
         }
+    })
+
+    pageScreen.querySelector('#tblFiles').addEventListener('click',(e)=>{        
+        subMenu(e)
     })
 
     pageStart()

@@ -18,6 +18,7 @@ then
     git add sql/
     git add style/
     git add templates/
+    git add files/
     git add index.html
     git add commit.sh
     
