@@ -105,7 +105,7 @@
     }
 
     .tab-screen{
-        overflow: scroll;
+/*        overflow: scroll;*/
         border: solid;
         width: 100%;
 /*        height: 80vh;*/
@@ -115,8 +115,12 @@
     .tab-item{
 /*        margin: 20px 0 0 0;*/
         padding: 0 10px 0 10px;
-        border: rgb(10, 10, 10) solid;
+/*        border: #000000 solid;*/
         border-radius: 10px 10px 0 0;
+        border-top: #000000 solid;
+        border-right: #000000 solid;
+        border-left: #000000 solid;
+
     }
 
     .tab-item:hover{
@@ -130,8 +134,8 @@
     }
 
     .check-tab{
-        background-color: var(--win-font);
-        color: var(--win-back);
+        background-color: #506060;
+        color: #FFFFFF;
     }
 
     .btnAdd{
