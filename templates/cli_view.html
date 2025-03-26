@@ -234,7 +234,7 @@
             params.expira = dt +' 00:00:00'
             const myPromisse = queryDB(params,'NOR-10')
             myPromisse.then((resolve)=>{
-                setLog(`Cliente:${data.cliente} - Legislação:${data.nome} data de expiração passa de ${data.expira} para ${dt}`)
+                setLog(`Cliente:${data.cliente} - Legislação:${data.nome} - Validade passa de ${data.expira.viewDate()} para ${dt.viewDate()}`)
                 pageFunc.fillLegis()
             })
         }

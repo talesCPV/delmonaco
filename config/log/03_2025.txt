@@ -209,3 +209,5 @@ exigencias/requisitos descritos nesta NR;
 26/03/2025 18:26 tales@planet3.com.br : NORMA Deletada ISO 9000 -> 
 26/03/2025 19:31 tales@planet3.com.br : Cliente:Cliente Teste - Legislacao:undefined data de expiracao passa de 2025-03-24 16:01:23 para 2025-03-28
 26/03/2025 19:31 tales@planet3.com.br : Cliente:Cliente Teste - Legislacao:undefined data de expiracao passa de 2025-03-28 00:00:00 para 2025-03-31
+26/03/2025 19:57 tales@planet3.com.br : Cliente:Cliente Teste - Legislacao:Meio Ambiente data de expiracao passa de 2025-03-31 00:00:00 para 2025-03-30
+26/03/2025 19:59 tales@planet3.com.br : Cliente:Cliente Teste - Legislacao:Meio Ambiente data de expiracao passa de 30/03/2025 para 29/03/2025
