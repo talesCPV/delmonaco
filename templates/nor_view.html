@@ -81,7 +81,12 @@
 
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setNorma()
-        closeModal('esc_view')
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(confirm('Deseja remover definitivamente esta legislação?')){
+            pageFunc.setNorma(1)
+        }
     })
 
     pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{

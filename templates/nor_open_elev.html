@@ -51,7 +51,7 @@
             params.busca = 1
         const myPromisse = queryDB(params,'NOR-5');
         myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve) 
+            const json = JSON.parse(resolve)           
             const cmb = pageScreen.querySelector('#cmbNorma')
             for(let i=0; i<json.length;i++){
                 const opt = document.createElement('option')

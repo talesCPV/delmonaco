@@ -224,6 +224,24 @@
         }
     })
 
+    pageScreen.querySelector('#tblLegis').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+
+        data.callback = (dt)=>{
+            const params = new Object;
+            params.id_norma = data.id_norma
+            params.id_cliente = data.id_cliente
+            params.expira = dt +' 00:00:00'
+            const myPromisse = queryDB(params,'NOR-10');
+            myPromisse.then((resolve)=>{
+                setLog(`Cliente:${data.cliente} - Legislação:${data.norma} data de expiração passa de ${data.expira} para ${dt}`)
+                pageFunc.fillLegis()
+            })
+        }
+        openHTML('tool_date.html','pop-up','Expira dia:',data,300)
+    })
+
+
     startPage()
 
 </script>

@@ -105,6 +105,8 @@
             <div class="inline">
                 <label for="edtNorma">Legislação:</label>
                 <input type="text" id="edtNorma" disabled>
+                <label for="edtExpira">Expira em:</label>
+                <input type="text" id="edtExpira" style="max-width: 120px;text-align: center;" disabled>
             </div>
          
             <div class="inline">
@@ -127,15 +129,21 @@
     const pageData = main_data.nor_elevate.data
     const pageFunc = main_data.nor_elevate.func
     const pageScreen = document.querySelector('#card-nor_elevate')
-
+    const valido = ! (new Date(pageData.norma.expira) < new Date())
 
     function pageStart(){
         pageScreen.classList.add('fullscreen')
-        pageScreen.querySelector('#tab-laws').click()
         pageScreen.querySelector('#edtCliente').value = pageData.norma.cliente
         pageScreen.querySelector('#edtNorma').value = pageData.norma.nome
         pageScreen.querySelector('#edtSobre').value = pageData.norma.sobre
+        pageScreen.querySelector('#edtExpira').value = pageData.norma.expira.viewDate()
         pageFunc.fillLeis()
+
+        if(valido){
+            pageScreen.querySelector('#tab-laws').click()
+        }else{
+            pageScreen.querySelector('#tab-norma').click()
+        }
 
     }
 
@@ -180,10 +188,15 @@
         acao.className = 'field'
         acao.innerHTML = `<p class="lbl">Ação:</p><p>${data.aplicabilidade}</p>`
 
-        const expira = document.createElement('div')
-        ln.appendChild(expira)
-        expira.className = 'field'
-        expira.innerHTML = `<p class="lbl">Validade:</p><p>${data.expira==null || data.expira.substr(0,4)=='0000'  ?  'INDEFINIDO' : data.expira.viewDate() }</p>`
+        const ln2 = document.createElement('div')
+        lf.appendChild(ln2)
+        ln2.className = 'ln'
+
+
+        const assunto = document.createElement('div')
+        ln2.appendChild(assunto)
+        assunto.className = 'field'
+        assunto.innerHTML = `<p class="lbl">Assunto:</p><p>${data.assunto}</p>`
 
         const lbl_resumo = document.createElement('div')
         lf.appendChild(lbl_resumo)

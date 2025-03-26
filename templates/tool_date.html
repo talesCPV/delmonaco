@@ -1,0 +1,39 @@
+<template>
+    <style></style>
+
+    <fieldset>
+        <legend>Selecione a data</legend>
+        <div class="inline"> 
+            <input type="date" id="edtDate">
+        </div>
+        <div class="line">
+            <button id="btnSave">OK</button>
+        </div>
+    </fieldset>
+
+    <div class="legenda">
+
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.tool_date.data
+    const pageFunc = main_data.tool_date.func
+    const pageScreen = document.querySelector('#card-tool_date')
+
+    function pageStart(){
+        pageScreen.querySelector('#edtDate').value = pageData.expira.substr(0,10)
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        if(pageData.hasOwnProperty('callback')){
+            pageData.callback(pageScreen.querySelector('#edtDate').value)
+        }
+        closeModal('tool_date')
+    })
+
+
+    pageStart()
+
+</script>

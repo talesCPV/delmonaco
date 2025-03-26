@@ -336,6 +336,7 @@ DELIMITER $$
                 DELETE FROM tb_user_cli WHERE id_cliente=Iid;
                 DELETE FROM tb_norma_cli WHERE id_cliente=Iid;
                 DELETE FROM tb_check WHERE id_cliente=Iid;
+                DELETE FROM tb_orcamento WHERE id_cli=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_cliente (id,razao_social,fantasia,cnpj,ie,im,end,num,comp,bairro,cidade,uf,cep,ramo,tel,email) 
@@ -774,6 +775,29 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
+ DROP PROCEDURE IF EXISTS sp_valida_norma_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_valida_norma_cli(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_norma int(11),
+		IN Iid_cliente int(11),
+        IN Iexpira datetime
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_norma_cli WHERE id_norma=Iid_norma AND id_cliente=Iid_cliente);
+			IF(@has)THEN
+				UPDATE tb_norma_cli 
+                SET expira=Iexpira 
+                WHERE id_norma=Iid_norma 
+                AND id_cliente=Iid_cliente;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
  DROP PROCEDURE IF EXISTS sp_view_cli_norma;
 DELIMITER $$
 	CREATE PROCEDURE sp_view_cli_norma(
@@ -832,6 +856,7 @@ DELIMITER $$
 		IF(@allow)THEN
 			IF(Inome = '')THEN
 				DELETE FROM tb_leis WHERE id=Iid;
+                DELETE FROM tb_norma_lei WHERE id_lei=Iid;
                 DELETE FROM tb_check WHERE id_lei=Iid;
             ELSE
 				IF(Iid=0)THEN
@@ -972,7 +997,8 @@ DELIMITER $$
 			SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
 			SET @user_allow = (SELECT COUNT(*) FROM tb_user_cli WHERE id_user=@id_call AND id_cliente=Iid_cli);
 			IF(@user_allow)THEN
-				SELECT * FROM vw_check_tarefa WHERE id_cliente=Iid_cli AND id_lei=Iid_lei;
+				SELECT * FROM vw_check_tarefa WHERE id_cliente=Iid_cli AND id_lei=Iid_lei
+                GROUP BY id_tarefa;
             END IF;
         END IF;
 	END $$

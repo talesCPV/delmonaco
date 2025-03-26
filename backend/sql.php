@@ -60,6 +60,7 @@
         "NOR-7"  => 'CALL sp_view_norma_lei(@access,@hash,x00,x01);', // ID, ID=(0-id_norma 1-ID_lei)
         "NOR-8"  => 'CALL sp_set_tarefa(@access,@hash,x00,x01,"x02",x03);', // ID,ID_LEI, PERGUNTA, Conhecimento (0-NÃO, 1-SIM)
         "NOR-9"  => 'CALL sp_view_tarefas(@access,@hash,x00);', // ID_LEI
+        "NOR-10"  => 'CALL sp_valida_norma_cli(@access,@hash,x00,x01,"x02");', // ID_NORMA, ID_CLIENTE, EXPIRA (datetime)
 
         /* ELEVATE */
         "ELE-0"  => 'CALL sp_view_check_tarefa(@access,@hash,x00,x01);', // id_cli, id_norma
