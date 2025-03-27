@@ -1032,7 +1032,7 @@ DELIMITER $$
                 SET @has = (SELECT COUNT(*) FROM tb_check WHERE id_cliente=Iid_cliente AND id_tarefa=Iid_tarefa);
 				IF(@has)THEN
 					UPDATE tb_check 
-                    SET ok=Iok, obs=Iobs, validade=Ivalidade 
+                    SET ok=Iok, obs=Iobs, validade=Ivalidade, nao_aplica=Inao_aplica
                     WHERE id_cliente=Iid_cliente AND id_tarefa=Iid_tarefa;
 				ELSE
 					SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);

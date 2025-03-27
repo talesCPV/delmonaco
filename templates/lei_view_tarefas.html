@@ -14,10 +14,27 @@
             background-color: rgb(238, 222, 222);
         }
 
+        .task{
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            padding: 0 5px;
+            border: solid 2px;
+            border-radius: 10px;
+        }
+
+        .task:hover{
+            cursor: pointer;
+            background-color: rgb(65, 63, 63);
+            color: rgb(226, 229, 231);  
+        }
+
         .tasks{
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 10px;
             padding: 5px;
         }
 
@@ -27,11 +44,6 @@
             padding: 0 10px;
             max-height: 100px;
             overflow-y: scroll;
-        }
-
-        .pergunta:hover{
-            cursor: pointer;
-            background-color: aquamarine;
         }
 
     </style>
@@ -49,9 +61,14 @@
         pageFunc.fillCheckTarefas()
     }
 
-    function addTask(data){
+    function addTask(data,n){
         const task = document.createElement('div')
         task.className = Number(data.ok) ? 'atende' : 'nao-atende'
+        task.classList.add('task')
+
+        const num = document.createElement('div')
+        task.appendChild(num)
+        num.innerHTML =  (n+1).toString().padStart(2,0)
 
         const quest = document.createElement('div')
         task.appendChild(quest)
@@ -76,7 +93,7 @@
             const task = pageScreen.querySelector('.tasks')
             task.innerHTML = ''
             for(let i=0; i<json.length; i++){
-                task.appendChild(addTask(json[i]))
+                task.appendChild(addTask(json[i],i))
             }
         })        
     }

@@ -241,3 +241,10 @@ seguranca.
 27/03/2025 15:26 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7
 27/03/2025 15:26 tales@planet3.com.br : Acesso REMOVIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7
 27/03/2025 15:26 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7
+27/03/2025 19:37 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: Obs
+27/03/2025 19:40 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 14 OK: 1 VALIDADE: 2025-03-28 OBS: 
+27/03/2025 19:45 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: Obs
+27/03/2025 19:46 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: Obs
+27/03/2025 19:48 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: Obs
+27/03/2025 19:49 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 15 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+27/03/2025 19:49 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 15 RESET
