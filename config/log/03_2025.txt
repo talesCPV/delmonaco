@@ -254,3 +254,4 @@ seguranca.
 27/03/2025 20:22 tales@planet3.com.br : Cliente:Cliente Teste - Legislacao:Seguranca do Trabalho - Validade passa de 26/04/2025 para 26/03/2025
 27/03/2025 20:29 tales@planet3.com.br : Cliente:Cliente Teste - Legislacao:Seguranca do Trabalho - Validade passa de 26/03/2025 para 26/04/2025
 27/03/2025 20:35 tales@planet3.com.br : Cliente:STN UNIFORMES - Legislacao:Meio Ambiente - Validade passa de 24/03/2025 para 24/04/2025
+27/03/2025 20:38 tales@planet3.com.br : ELEVATE - id_cliente: 4, id_lei: 15 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
