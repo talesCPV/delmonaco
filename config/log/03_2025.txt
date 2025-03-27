@@ -248,3 +248,6 @@ seguranca.
 27/03/2025 19:48 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: Obs
 27/03/2025 19:49 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 15 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
 27/03/2025 19:49 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 15 RESET
+27/03/2025 19:50 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 14 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+27/03/2025 19:50 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 14 RESET
+27/03/2025 19:58 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: Obs

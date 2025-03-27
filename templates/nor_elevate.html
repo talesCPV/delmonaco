@@ -149,7 +149,6 @@
 
     function addLei(data){   
         const perc = Number(data.perc)
-// console.log(data)       
         pageData.tarefa_tot += Number(data.TOT) 
         pageData.tarefa_exec += Number(data.ok) 
         const lei = document.createElement('div')
@@ -257,7 +256,13 @@
             for(let i=0; i<json.length; i++){
                 laws.appendChild(addLei(json[i]))
             }
-            grafico(pageScreen.querySelector('#perc_tot'),(pageData.tarefa_exec/pageData.tarefa_tot * 100).toFixed(0))
+            console.log(pageData.tarefa_tot)
+
+            if(pageData.tarefa_tot > 0){
+                grafico(pageScreen.querySelector('#perc_tot'),(pageData.tarefa_exec/pageData.tarefa_tot * 100).toFixed(0))
+            }else{
+                grafico(pageScreen.querySelector('#perc_tot'),(100).toFixed(0))
+            }
         })        
     }
 

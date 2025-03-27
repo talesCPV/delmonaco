@@ -17,11 +17,15 @@
             align-items: center;
         }
 
+        #edtTarefa{
+            padding: 0 5px;
+        }
+
     </style>
         
         <fieldset>
-            <legend>pergunta</legend>
-            <textarea id="edtTarefa" rows="3" readonly disabled></textarea>
+            <legend>Pergunta</legend>
+            <div id="edtTarefa" rows="3" readonly disabled></div>
         </fieldset>
 
 
@@ -79,7 +83,7 @@
     pageData.org = 'lei_check'
 
     function pageStart(){
-        pageScreen.querySelector('#edtTarefa').value = pageData.tarefa
+        pageScreen.querySelector('#edtTarefa').innerHTML = pageData.tarefa
         if(pageData.expira != null){
             pageScreen.querySelector('#atd-sim').checked = Number(pageData.ok)
             pageScreen.querySelector('#atd-nao').checked = Number(pageData.ok) == 0 ? 1 : 0
