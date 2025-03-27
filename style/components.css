@@ -265,6 +265,31 @@
         background-color: rgba(0, 0, 0, 0);
     }
 
+/* Painel side change */
+
+    .panel{
+        display: flex;
+        flex-direction: row;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    .panel fieldset{
+        width: 100%;
+        padding: 10px;
+    }
+
+    .middle{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .panel select{
+        margin: 0;
+        padding: 10px;
+    }
+
 
 @container busca (max-width: 500px) {
 
@@ -351,6 +376,20 @@
 
     .tab-bar{
         padding-left: 33px;
+    }
+
+    .panel{
+        flex-wrap: wrap;
+    }
+
+    .middle{
+        width: 100%;
+        display: flex;
+        flex-direction: row !important;
+    }
+
+    .middle button{
+        transform: rotate(90deg);
     }
 
 }

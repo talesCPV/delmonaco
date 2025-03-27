@@ -24,6 +24,10 @@
 
         }
 
+        .access-cli{
+            display: none;
+        }
+
     </style>
     
     <fieldset>
@@ -61,25 +65,53 @@
     
       </fieldset>    
 
+      <fieldset class="access-cli">
+        <legend>Acesso a Clientes</legend>
+        <div class="panel">
+            <fieldset>
+                <legend>Clientes</legend>
+                <select id="cmbEmp" size="10"></select>
+            </fieldset>
+            <div class="middle">
+                <button id="btnAdd" class="btn-round"><span class="mdi mdi-arrow-right-bold"></span></button>
+                <button id="btnSub" class="btn-round"><span class="mdi mdi-arrow-left-bold"></span></button>
+            </div>
+            <fieldset>
+                <legend>Acesso</legend>
+                <select id="cmbCliEmp" size="10"></select>
+            </fieldset>
+        </div>
+      </fieldset>
+
+
 </template>
 <script>
 
     const pageData = main_data.sys_view_user.data
     const pageFunc = main_data.sys_view_user.func
     const pageScreen = document.querySelector('#card-sys_view_user')
+    const cli = pageScreen.querySelector('#cmbEmp')
+    const usr_cli = pageScreen.querySelector('#cmbCliEmp')
+    const newUser = pageData.id == '0'
 
-    pageFunc.fillData = ()=>{
-        if(parseInt(pageData.id)>0){
+    function pageStart(){
+        if(!newUser){
             pageScreen.querySelector('#edtEmail').value = pageData.email
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#cmbPerfil').value = pageData.access
             pageScreen.querySelector('#btnDelUser').style.display = 'block'
+            pageScreen.querySelector('.access-cli').style.display = 'block'
+
+            pageFunc.fillEmp()
+            pageFunc.fillCliUser()
+
+
         }
+        pageFunc.fillPerm()
     }
 
     pageFunc.setUser = (id, email)=>{
 
-        const message = email=='' ? 'Deleção de usuário' : id>0 ? 'Alteração de usuário' : 'Inserção de novo usuários' 
         const nome = pageScreen.querySelector('#edtNome').value.trim()
         const params = new Object
             params.id = id
@@ -90,6 +122,7 @@
         
         const myPromisse = queryDB(params,'USR-1');
         myPromisse.then((resolve)=>{
+            const message = email=='' ? 'Deleção de usuário' : !newUser ? 'Alteração de usuário' : 'Inserção de novo usuários' 
             setLog(`${message}, email:${pageData.email} -> ${params.email}, acesso:${pageData.access} -> ${params.acesso}`)                
             try{
                 main_data.sys_usuarios.func.fillUser()
@@ -127,7 +160,51 @@
             for(let i=0; i<json.length;i++){               
                 addOpt(json[i].id,json[i].nome)
             }
-        });
+        })
+    }
+
+    pageFunc.fillEmp = ()=>{
+
+        const params = new Object;
+            params.field = 'razao_social'
+            params.signal = 'LIKE'
+            params.value = "'%%'"
+        const myPromisse = queryDB(params,'CLI-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].fantasia
+                cli.appendChild(opt)
+            }         
+        })
+    }
+
+    pageFunc.fillCliUser = ()=>{      
+        const params = new Object;
+            params.id = pageData.id
+        const myPromisse = queryDB(params,'CLI-3');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            usr_cli.innerHTML = ''   
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_cliente
+                opt.innerHTML = json[i].cliente
+                usr_cli.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.addUser = (id_cliente)=>{      
+        const params = new Object;
+            params.id_user = pageData.id
+            params.id_cliente = id_cliente
+        const myPromisse = queryDB(params,'CLI-2');
+        myPromisse.then((resolve)=>{
+            pageFunc.fillCliUser()
+        })
     }
 
     pageScreen.querySelector('#btnSaveUser').addEventListener('click',()=>{
@@ -151,7 +228,19 @@
         }        
     })
 
-    pageFunc.fillData()
-    pageFunc.fillPerm()
+    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+        if(cli.value.length){
+            pageFunc.addUser(cli.value)        
+        }
+    })
+
+    pageScreen.querySelector('#btnSub').addEventListener('click',()=>{
+        if(usr_cli.value.length){
+            pageFunc.addUser(usr_cli.value)        
+        }
+    })
+
+    pageStart()
+
 
 </script>

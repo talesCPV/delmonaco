@@ -857,7 +857,12 @@ DELIMITER $$
 			IF(Inome = '')THEN
 				DELETE FROM tb_leis WHERE id=Iid;
                 DELETE FROM tb_norma_lei WHERE id_lei=Iid;
-                DELETE FROM tb_check WHERE id_lei=Iid;
+                DELETE CHK
+					FROM tb_check AS CHK
+					JOIN tb_tarefas AS TASK 
+                    ON CHK.id_tarefa = TASK.id
+					WHERE TASK.id_lei = Iid;
+                DELETE FROM tb_tarefas WHERE id_lei=Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_leis (nome,esfera,assunto,resumo,aplicabilidade,link) 

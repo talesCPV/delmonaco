@@ -11,6 +11,12 @@
             justify-content: space-around;
         }
 
+        .anexo{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
     </style>
         
         <fieldset>
@@ -51,10 +57,10 @@
             <textarea id="edtObs" rows="3"></textarea>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="anexo">
             <legend>Arquivos</legend>
             <table id="tblFiles"></table>
-            <button id="btnAddFile"><span class="mdi mdi-plus"></span>Adicionar</button>
+            <button id="btnAddFile"  class="btn-round"><span class="mdi mdi-plus-thick"></span></button>
         </fieldset>
 
         <div class="line">
