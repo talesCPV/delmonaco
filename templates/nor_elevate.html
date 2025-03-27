@@ -94,7 +94,7 @@
 
     <div class="tab-bar">
         <div class="tab-item" id="tab-norma" onclick="pictab(this)">Legislação</div>
-        <div class="tab-item" id="tab-laws" onclick="pictab(this)">Leis</div>
+        <div class="tab-item" id="tab-laws" >Leis</div>
     </div>
     <div class="tab-screen">
         <div id="norma" class="tab">
@@ -141,8 +141,11 @@
 
         if(valido){
             pageScreen.querySelector('#tab-laws').click()
-        }else{
+        }else{            
             pageScreen.querySelector('#tab-norma').click()
+            alert('Seus Créditos de acesso expirarm, favor entrar em contato com a GDM para efetuar o pagamento.')
+            pageScreen.querySelector('#tab-laws').disabled = 1
+            pageScreen.querySelector('#edtExpira').classList.add('alert-field')
         }
 
     }
@@ -256,7 +259,6 @@
             for(let i=0; i<json.length; i++){
                 laws.appendChild(addLei(json[i]))
             }
-            console.log(pageData.tarefa_tot)
 
             if(pageData.tarefa_tot > 0){
                 grafico(pageScreen.querySelector('#perc_tot'),(pageData.tarefa_exec/pageData.tarefa_tot * 100).toFixed(0))
@@ -265,6 +267,11 @@
             }
         })        
     }
+
+    pageScreen.querySelector('#tab-laws').addEventListener('click',()=>{
+        const laws = pageScreen.querySelector('#tab-laws')
+        valido ? pictab(laws) : alert('Favor entrar em contato com a GDM para aquisição de mais créditos.')
+    })
 
     pageStart()
 
