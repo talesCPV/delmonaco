@@ -237,3 +237,7 @@ seguranca.
 27/03/2025 13:53 tales@planet3.com.br : Arquivo Adicionado -> : undefined
 27/03/2025 13:53 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 14 OK: 1 VALIDADE: 2025-03-28 OBS: 
 27/03/2025 15:08 tales@planet3.com.br : Menu Deletado (Gerenciar)
+27/03/2025 15:25 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7
+27/03/2025 15:26 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7
+27/03/2025 15:26 tales@planet3.com.br : Acesso REMOVIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7
+27/03/2025 15:26 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:7

@@ -364,9 +364,11 @@ DELIMITER $$
 			SET @has = (SELECT COUNT(*) FROM tb_user_cli WHERE id_user=Iid_user AND id_cliente=Iid_cliente);
 			IF(@has)THEN
 				DELETE FROM tb_user_cli WHERE id_user=Iid_user AND id_cliente=Iid_cliente;
+                SELECT 0 AS acesso;
             ELSE
 				INSERT INTO tb_user_cli (id_user,id_cliente)
 				VALUES (Iid_user,Iid_cliente);
+                SELECT 1 AS acesso;                
             END IF;
         END IF;
 	END $$
@@ -383,7 +385,7 @@ DELIMITER $$
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			IF(Iid > 0)THEN
-				SELECT * FROM vw_usr_cli WHERE id_cliente=Iid;
+				SELECT * FROM vw_usr_cli WHERE id_user=Iid;
             ELSE
 				SET @id_call = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
 				SELECT * FROM vw_usr_cli WHERE id_user=@id_call;

@@ -203,7 +203,8 @@
             params.id_cliente = id_cliente
         const myPromisse = queryDB(params,'CLI-2');
         myPromisse.then((resolve)=>{
-            setLog(`Acesso Concedido: ${pageData.nome}, email:${pageData.email} -> ID Cliente:${id_cliente}`)                
+            const json = JSON.parse(resolve)
+            setLog(`Acesso ${json[0].acesso == '0' ? 'REMOVIDO' : 'CONCEDIDO'}: ${pageData.nome}, email:${pageData.email} -> ID Cliente:${id_cliente}`)                
             pageFunc.fillCliUser()
         })
     }
