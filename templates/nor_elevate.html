@@ -115,8 +115,9 @@
             </div>
 
             <div class="graf">
-                <canvas id="perc_tot" width="200" height="200"></canvas>
                 <label for="perc_tot">Total de Tarefas Executadas</label>
+                <canvas id="perc_tot" width="200" height="200"></canvas>
+                <label id="exec_tot">0/0</label>
             </div>
 
         </div>
@@ -261,6 +262,7 @@
             }
 
             if(pageData.tarefa_tot > 0){
+                pageScreen.querySelector('#exec_tot').innerHTML = `${pageData.tarefa_exec}/${pageData.tarefa_tot}`
                 grafico(pageScreen.querySelector('#perc_tot'),(pageData.tarefa_exec/pageData.tarefa_tot * 100).toFixed(0))
             }else{
                 grafico(pageScreen.querySelector('#perc_tot'),(100).toFixed(0))
