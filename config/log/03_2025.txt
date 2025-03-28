@@ -259,3 +259,6 @@ seguranca.
 28/03/2025 14:42 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 16 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
 28/03/2025 14:48 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:5
 28/03/2025 14:48 tales@planet3.com.br : Acesso REMOVIDO: Developer, email:tales@planet3.com.br -> ID Cliente:6
+28/03/2025 20:01 tales@planet3.com.br : ELEVATE - id_cliente: 7, id_lei: 14 OK: 1 VALIDADE: 0000-00-00 00:00:00 OBS: 
+28/03/2025 20:03 tales@planet3.com.br : Menu Alterado (Legislacoes, nor_busca.html, pop-up, Legislacao)
+28/03/2025 20:03 tales@planet3.com.br : Menu Alterado (Cliente -Legislacoes, nor_cliente.html, pop-up, Norma / Cliente)

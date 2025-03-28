@@ -134,8 +134,8 @@
     }
 
     .check-tab{
-        background-color: #506060;
-        color: #FFFFFF;
+        background-color: var(--top-bar-hover);
+        color: var(--top-font-hover);
     }
 
     .btnAdd{
