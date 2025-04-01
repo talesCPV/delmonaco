@@ -1,0 +1,115 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        .legis{
+            display: none;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Empresa</legend>
+
+        <div class="inline">
+            <label for="edtNome">Nome *</label>
+            <input type="text" class="only-view" id="edtNome" onfocus="this.select();" maxlength="50" disabled>
+        </div>
+        <div class="inline">            
+            <label for="edtMes">Meses</label>
+            <input type="text" class="only-view" id="edtMes" onfocus="this.select();" onkeyup="valInt(this)" disabled>
+            <label for="edtVal">Valor R$</label>
+            <input type="text" class="only-view" id="edtVal" onfocus="this.select();" maxlength="10" onkeyup="valFloat(this)" style="width: 200px;" disabled>
+        </div>
+        <div class="inline">
+            <label for="edtTexto">Texto</label>
+            <textarea id="edtTexto" class="only-view" rows="5" maxlength="512" disabled></textarea>
+        </div>
+        <div class="line">
+            <button id="btnDel" class="only-view" disabled>Deletar</button>
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+    
+    const pageData = main_data.cred_view_planos.data
+    const pageFunc = main_data.cred_view_planos.func
+    const pageScreen = document.querySelector('#card-cred_view_planos')
+    const newPlan = Object.keys(pageData).length == 0
+
+    function startPage(){
+        if(newPlan){
+            openFields(1)
+            pageScreen.querySelector('#btnDel').disabled = 1
+            pageScreen.querySelector('#btnEdit').disabled = 1
+        }else{
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtMes').value = pageData.cred_mes
+            pageScreen.querySelector('#edtVal').value = pageData.valor
+            pageScreen.querySelector('#edtTexto').value = pageData.texto
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+    pageFunc.setPlan = (del=0)=>{
+        const params = new Object;
+            params.id = newPlan ? 0 : pageData.id
+            params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
+            params.cred_mes = pageScreen.querySelector('#edtMes').value
+            params.valor = pageScreen.querySelector('#edtVal').value
+            params.texto = pageScreen.querySelector('#edtTexto').value.trim()
+          
+        const myPromisse = queryDB(params,'PGT-3');
+        myPromisse.then((resolve)=>{
+            setLog(`Plano ${newPlan?'Cadastrado': del ? 'Deletado' : 'Editado'} ${ !newPlan ? pageData.nome :''} -> ${params.nome}`)
+            try{
+                main_data.cred_busca_planos.func.fillPlanos()
+            }catch{
+                console.error('Tela fechada pelo usuário!')
+            }
+            alert('Cadastrado efetuado!')
+            closeModal('cred_view_planos')
+        })
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setPlan()
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(confirm('Deseja realmente deletar este Plano?')){
+            pageFunc.setPlan(1)
+        }
+    })
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>

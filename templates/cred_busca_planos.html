@@ -1,0 +1,60 @@
+<template>
+    <style>
+        .resp-busca{
+            width: 100%;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+    <fieldset class="fds-busca">
+        <legend>Filtro</legend>
+        <div class="inline">
+            <label for="edtBusca">Nome:</label>
+            <input type="text" id="edtBusca" onkeypress="return getEnter(event, 'btnBusca')">
+            <button id="btnBusca" class="btn-round" ><span class="mdi mdi-magnify"></span></button>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>            
+        </div>
+
+    </fieldset>
+    <div class="resp-busca">
+        <table id="tblPlanos"></table>
+    </div>
+</template>
+<script>
+
+    const pageData = main_data.cred_busca_planos.data
+    const pageFunc = main_data.cred_busca_planos.func
+    const pageScreen = document.querySelector('#card-cred_busca_planos')
+
+    pageFunc.fillPlanos= ()=>{      
+        const tbl = pageScreen.querySelector('#tblPlanos')
+        tbl.innerHTML = ''
+        const params = new Object;
+            params.nome = pageScreen.querySelector('#edtBusca').value.trim()
+        const myPromisse = queryDB(params,'PGT-2');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            tbl.style.display = json.length > 0 ? 'inline-table' : 'none'
+            tbl.head('Plano,Meses,Valor')
+            for(let i=0; i<json.length;i++){
+                tbl.plot(json[i],'nome,cred_mes,valor','Upp,Upp,R$.')
+            }         
+        })
+    }
+
+    pageScreen.querySelector('#btnBusca').addEventListener('click',()=>{
+        pageFunc.fillPlanos()
+    })
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('cred_view_planos.html','pop-up','Novo Plano')
+    })
+
+    pageScreen.querySelector('#tblPlanos').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        openHTML('cred_view_planos.html','pop-up','Plano',data)
+    })
+
+</script>

@@ -1,27 +1,24 @@
 <template>
-    <style>
+    <style></style>
+    <div class="inline">
+        <select id="cmbEmpresa"></select>
+    </div>
 
+    <div class="inline">
+        <select id="cmbNorma"></select>
+    </div>
 
-    </style>
-
-        <div class="inline">
-            <select id="cmbEmpresa"></select>
-        </div>
-        <div class="inline">
-            <select id="cmbNorma"></select>
-        </div>
-
-        <div class="line">
-            <button id="btnOpen" disabled>Abrir</button>
-        </div>
+    <div class="line">
+        <button id="btnPgto" disabled>Gerar Pagamento</button>
+    </div>
 
 </template>
 <script>
 
-    const pageData = main_data.nor_open_elev.data
-    const pageFunc = main_data.nor_open_elev.func
-    const pageScreen = document.querySelector('#card-nor_open_elev')
-    const btnOpen = pageScreen.querySelector('#btnOpen')
+    const pageData = main_data.cred_open.data
+    const pageFunc = main_data.cred_open.func
+    const pageScreen = document.querySelector('#card-cred_open')
+    const btnPgto = pageScreen.querySelector('#btnPgto')
 
     function pageStart(){
         pageFunc.fillEmp()
@@ -30,7 +27,7 @@
     pageFunc.fillEmp = ()=>{
         const params = new Object;
             params.id = 0
-        const myPromisse = queryDB(params,'CLI-3');
+        const myPromisse = queryDB(params,'CLI-3')
         return myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
             const cmb = pageScreen.querySelector('#cmbEmpresa')
@@ -41,7 +38,7 @@
                 opt.innerHTML = json[i].cliente
                 opt.data = json[i]
                 cmb.appendChild(opt)
-            }         
+            }
         })
     }
 
@@ -65,7 +62,7 @@
 
     pageScreen.querySelector('#cmbEmpresa').addEventListener('change',()=>{
         const id_cliente = pageScreen.querySelector('#cmbEmpresa').value
-        btnOpen.disabled = 1
+        btnPgto.disabled = 1
         pageScreen.querySelector('#cmbNorma').innerHTML = '<option value="0" selected>Selecione uma Norma</option>'
         if(Number(id_cliente)){
             pageFunc.fillCliNorma(id_cliente)
@@ -73,17 +70,15 @@
     })
 
     pageScreen.querySelector('#cmbNorma').addEventListener('change',()=>{
-        btnOpen.disabled = pageScreen.querySelector('#cmbNorma').value=='0' ? 1 : 0
+        btnPgto.disabled = pageScreen.querySelector('#cmbNorma').value=='0' ? 1 : 0
     })
 
-    pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
-        const data = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].data
-        data.norma = pageScreen.querySelector('#cmbNorma').options[pageScreen.querySelector('#cmbNorma').selectedIndex].data
-        data.access = 'full'
-        openHTML('nor_elevate.html','pop-up',`${data.norma.nome} - ${data.cliente}`,data)
-//        closeModal('nor_open_elev')
+    btnPgto.addEventListener('click',()=>{
+        const data = new Object
+        data.id_cliente = pageScreen.querySelector('#cmbEmpresa').value
+        data.id_norma = pageScreen.querySelector('#cmbNorma').value
+        openHTML('cred_add.html','pop-up','Adicione Créditos de Acesso',data)
     })
-
 
     pageStart()
 

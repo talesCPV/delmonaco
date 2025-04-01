@@ -263,3 +263,12 @@ CREATE TABLE tb_pgto(
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS tb_pgto_plano;
+CREATE TABLE tb_pgto_plano(
+	id int(11) NOT NULL AUTO_INCREMENT,
+    nome varchar(50) NOT NULL,
+    cred_mes int NOT NULL,
+    valor double NOT NULL DEFAULT 0,
+    texto varchar(512) DEFAULT NULL,
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

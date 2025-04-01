@@ -3,3 +3,11 @@
 01/04/2025 16:09 tales@planet3.com.br : Cliente:Engeport - Legislacao:Meio Ambiente - Validade passa de 24/04/2025 para 31/03/2025
 01/04/2025 16:12 tales@planet3.com.br : Cliente:Engeport - Legislacao:Meio Ambiente - Validade passa de 31/03/2025 para 10/04/2025
 01/04/2025 16:46 tales@planet3.com.br : Acesso CONCEDIDO: Developer, email:tales@planet3.com.br -> ID Cliente:6
+01/04/2025 19:15 tales@planet3.com.br : Menu Incluido (Planos)
+01/04/2025 19:16 tales@planet3.com.br : Menu Alterado (Planos, cred_busca_planos.html, pop-up, Planos)
+01/04/2025 19:54 tales@planet3.com.br : Plano Cadastrado  -> Mensal
+01/04/2025 19:54 tales@planet3.com.br : Plano Editado Mensal -> Mensal
+01/04/2025 19:56 tales@planet3.com.br : Plano Cadastrado  -> Semestral
+01/04/2025 19:56 tales@planet3.com.br : Plano Cadastrado  -> Anual
+01/04/2025 20:05 tales@planet3.com.br : Menu Alterado (Creditos, cred_open.html, pop-up, Adicione Creditos)
+01/04/2025 20:06 tales@planet3.com.br : Menu Alterado (Creditos, cred_open.html, pop-up, Adicione Creditos)

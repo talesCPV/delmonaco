@@ -68,8 +68,12 @@
         "ELE-2"  => 'CALL sp_view_cli_leis(@access,@hash,x00,x01);', // id_cliente,id_norma
 
         /* PAGAMENTO */
-        "PGT-0" => 'CALL sp_set_pgto(@access,@hash,x00,x01,"x02",x03);', // id_norma,id_cliente,valor,meses
+        "PGT-0" => 'CALL sp_view_pgto(@access,@hash,x00,x01);', // id_norma, id_plano
+        "PGT-1" => 'CALL sp_set_pgto(@access,@hash,x00,x01,"x02",x03);', // id_norma,id_cliente,valor,meses
+        "PGT-2" => 'CALL sp_view_pgto_plano(@access,@hash,"x00");', // nome do plano
+        "PGT-3" => 'CALL sp_set_pgto_plano(@access,@hash,x00,"x01",x02,"x03","x04");', // id,nome,cred_mes,valor,texto
 
+        
 
     );
 

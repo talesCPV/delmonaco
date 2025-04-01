@@ -1043,6 +1043,24 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+/*  PAGAMENTOS  */
+
+ DROP PROCEDURE IF EXISTS sp_view_pgto;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_pgto(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_norma int(11),
+		IN Iid_cliente int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN            
+			SELECT * FROM tb_pgto WHERE id_norma=Iid_norma AND id_cliente=Iid_cliente;
+        END IF;
+	END $$
+DELIMITER ;
+
 
  DROP PROCEDURE IF EXISTS sp_set_pgto;
 DELIMITER $$
@@ -1071,6 +1089,51 @@ DELIMITER $$
 				INSERT INTO tb_pgto (id_norma,id_cliente,valor,mes,expira) 
 				VALUES (Iid_norma,Iid_cliente,Ivalor,Imes,@expira);
 			END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_pgto_plano;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_pgto_plano(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Inome varchar(50),
+		IN Icred_mes int,
+		IN Ivalor double,
+		IN Itexto varchar(512)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome="")THEN
+				DELETE FROM tb_pgto_plano WHERE id=Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_pgto_plano (id,nome,cred_mes,valor,texto) 
+					VALUES (Iid,Inome,Icred_mes,Ivalor,Itexto);
+				ELSE
+					UPDATE tb_pgto_plano 
+                    SET nome=Inome, cred_mes=Icred_mes, valor=Ivalor, texto=Itexto
+                    WHERE id=Iid;                
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_pgto_plano;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_pgto_plano(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Inome varchar(50)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN            
+			SELECT * FROM tb_pgto_plano WHERE nome COLLATE utf8_general_ci LIKE CONCAT("%",Inome,"%");
         END IF;
 	END $$
 DELIMITER ;
