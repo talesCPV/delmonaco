@@ -1,0 +1,75 @@
+<template>
+    <style></style>
+    <div class="inline">
+        <select id="cmbEmpresa"></select>
+    </div>
+
+    <div class="inline">
+        <select id="cmbNorma"></select>
+    </div>
+
+    <div class="line">
+        <button id="btnPgto" disabled>Gerar Pagamento</button>
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.cred_add.data
+    const pageFunc = main_data.cred_add.func
+    const pageScreen = document.querySelector('#card-cred_add')
+    const btnPgto = pageScreen.querySelector('#btnPgto')
+
+
+    function pageStart(){
+        pageFunc.fillEmp()
+    }
+
+    pageFunc.fillEmp = ()=>{
+        const params = new Object;
+            params.id = 0
+        const myPromisse = queryDB(params,'CLI-3')
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const cmb = pageScreen.querySelector('#cmbEmpresa')
+            cmb.innerHTML = '<option value="0" selected>Selecione uma Empresa</option>'
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_cliente
+                opt.innerHTML = json[i].cliente
+                opt.data = json[i]
+                cmb.appendChild(opt)
+            }
+        })
+    }
+
+    pageFunc.fillCliNorma = (id_cliente)=>{      
+        const params = new Object;
+            params.id = id_cliente
+            params.busca = 1
+        const myPromisse = queryDB(params,'NOR-5');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)           
+            const cmb = pageScreen.querySelector('#cmbNorma')
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_norma
+                opt.innerHTML = json[i].nome
+                opt.data = json[i]
+                cmb.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageScreen.querySelector('#cmbEmpresa').addEventListener('change',()=>{
+        const id_cliente = pageScreen.querySelector('#cmbEmpresa').value
+        btnPgto.disabled = 1
+        pageScreen.querySelector('#cmbNorma').innerHTML = '<option value="0" selected>Selecione uma Norma</option>'
+        if(Number(id_cliente)){
+            pageFunc.fillCliNorma(id_cliente)
+        }
+    })
+
+    pageStart()
+
+</script>

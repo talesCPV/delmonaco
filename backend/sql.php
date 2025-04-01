@@ -67,7 +67,9 @@
         "ELE-1"  => 'CALL sp_set_check_task(@access,@hash,x00,x01,x02,x03,"x04","x05");', // id_cliente,id_tarefa,ok,nao_aplica,obs,validade
         "ELE-2"  => 'CALL sp_view_cli_leis(@access,@hash,x00,x01);', // id_cliente,id_norma
 
-        
+        /* PAGAMENTO */
+        "PGT-0" => 'CALL sp_set_pgto(@access,@hash,x00,x01,"x02",x03);', // id_norma,id_cliente,valor,meses
+
 
     );
 

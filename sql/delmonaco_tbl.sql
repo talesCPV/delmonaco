@@ -250,4 +250,16 @@ INSERT INTO tb_check (id_cliente,id_tarefa,id_resp,ok) VALUES (2,3,1,1);
 -- ALTER TABLE tb_check ADD COLUMN nao_aplica BOOL DEFAULT 0;
 --  ALTER TABLE tb_check CHANGE COLUMN validade_timestamp BIGINT NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-INSERT INTO tb_check (id_cliente,id_lei,ok,obs)VALUES(6,3,1,"Teste!!!");
+DROP TABLE IF EXISTS tb_pgto;
+CREATE TABLE tb_pgto(
+	id int(11) NOT NULL AUTO_INCREMENT,
+    id_norma int(11) NOT NULL,
+    id_cliente int(11) NOT NULL,
+    valor double NOT NULL,
+    mes int DEFAULT 0,
+    expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+    FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+

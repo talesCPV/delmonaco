@@ -1043,3 +1043,34 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_pgto;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_pgto(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_norma int(11),
+		IN Iid_cliente int(11),
+		IN Ivalor double,
+		IN Imes int
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+
+			SET @has = (SELECT COUNT(*) FROM tb_norma_cli WHERE id_cliente=Iid_cliente AND id_norma=Iid_norma);
+			IF(@has)THEN
+				SET @expira = (SELECT IF(expira < CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL Imes MONTH),DATE_ADD(expira,INTERVAL Imes MONTH)) 
+								FROM tb_norma_cli 
+								WHERE id_cliente=Iid_cliente AND id_norma=Iid_norma);
+				
+				UPDATE tb_norma_cli 
+				SET expira=@expira
+				WHERE id_cliente=Iid_cliente AND id_norma=Iid_norma;
+
+				INSERT INTO tb_pgto (id_norma,id_cliente,valor,mes,expira) 
+				VALUES (Iid_norma,Iid_cliente,Ivalor,Imes,@expira);
+			END IF;
+        END IF;
+	END $$
+DELIMITER ;
