@@ -1,12 +1,9 @@
 <?php
     require_once('vendor/autoload.php');
-    require_once('../../access.php');
 
     if(isset($_POST['cust']) && isset($_POST['body'])){    
         $client = new \GuzzleHttp\Client();
-        $endpoint = asaas_api.'/customers//'.$_POST['cust'];
-
-        $response = $client->request('PUT', $endpoint, [
+        $response = $client->request('PUT', asaas_api.'/customers/'.$_POST['cust'], [
           'body' => $_POST['body'],
           'headers' => [
             'accept' => 'application/json',

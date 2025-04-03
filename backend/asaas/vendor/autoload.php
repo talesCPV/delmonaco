@@ -20,6 +20,15 @@ if (PHP_VERSION_ID < 50600) {
     );
 }
 
+
+// PRODUÇÂO
+//define("access_token", '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDA1MDU4NTQ6OiRhYWNoX2Q3MDcwYzQ0LWU2MDUtNDExYy05NWVmLTQ2OWQ0ZDEwNTVmNQ==');
+//define("asaas_api","https://api.asaas.com/v3");
+
+// SANDBOX
+define("access_token", '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwOTQzMDM6OiRhYWNoXzQzMTE0ZTc1LTM0NmQtNGM1YS05OGE4LWU0MTVjNTExMDIxMQ==');
+define("asaas_api","https://sandbox.asaas.com/api/v3");
+
 require_once __DIR__ . '/composer/autoload_real.php';
 
 return ComposerAutoloaderInit626416f99f0fb3e218d4b38c2cdba2d9::getLoader();

@@ -276,6 +276,11 @@
         valido ? pictab(laws) : alert('Favor entrar em contato com a GDM para aquisição de mais créditos.')
     })
 
+    pageScreen.querySelector('#btnPay').addEventListener('click',()=>{
+        pageData.norma.cnpj = pageData.cnpj
+        openHTML('cred_add.html','pop-up','Adicione Créditos de Acesso',pageData.norma,750)
+    })
+
     pageStart()
 
 </script>

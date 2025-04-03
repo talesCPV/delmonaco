@@ -257,7 +257,8 @@ CREATE TABLE tb_pgto(
     id_cliente int(11) NOT NULL,
     valor double NOT NULL,
     mes int DEFAULT 0,
-    expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expira datetime DEFAULT NULL,
+    efetuado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
     FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
     PRIMARY KEY (id)

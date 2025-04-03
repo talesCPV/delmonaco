@@ -1,32 +1,23 @@
 <?php
-    require_once('vendor/autoload.php');
-    require_once('../../access.php');
 
-    $client = new \GuzzleHttp\Client();
-    $endpoint = asaas_api.'/customers';
+    if (IsSet($_POST["cnpj"])){
 
-    $response = $client->request('GET', $endpoint, [
-        'headers' => [
-            'accept' => 'application/json',
-            'access_token' => access_token,
-        ],
-    ]);
+        require_once('vendor/autoload.php');
 
-    $out = '{"OK":0}';
+        $cnpj = $_POST["cnpj"];
+        $client = new \GuzzleHttp\Client();
+    
+        $response = $client->request('GET', asaas_api.'/customers?cpfCnpj='.$cnpj, [
+            'headers' => [
+                'accept' => 'application/json',
+                'access_token' => access_token,
+            ],
+        ]);
+    
+        print $response->getBody();
 
-    if($_POST['asaas_id']==''){
-        $out = $response->getBody();
-    }else{
-
-        $data = json_decode($response->getBody())->data;
-
-        for ($i=0; $i<count($data); $i++) {
-            if($data[$i]->id == $_POST['asaas_id']){
-                $out = $data[$i];
-            }
-        }
     }
 
-    print json_encode($out);
+
 
 ?>

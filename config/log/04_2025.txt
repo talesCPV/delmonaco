@@ -11,3 +11,9 @@
 01/04/2025 19:56 tales@planet3.com.br : Plano Cadastrado  -> Anual
 01/04/2025 20:05 tales@planet3.com.br : Menu Alterado (Creditos, cred_open.html, pop-up, Adicione Creditos)
 01/04/2025 20:06 tales@planet3.com.br : Menu Alterado (Creditos, cred_open.html, pop-up, Adicione Creditos)
+02/04/2025 20:19 tales@planet3.com.br : Plano Editado Mensal -> Mensal
+02/04/2025 21:28 tales@planet3.com.br : Menu Incluido (Asaas)
+02/04/2025 21:29 tales@planet3.com.br : Menu Alterado (Asaas, menu, pop-up, )
+02/04/2025 21:29 tales@planet3.com.br : Menu Incluido (Clientes)
+02/04/2025 21:30 tales@planet3.com.br : Menu Alterado (Clientes, asaas_busca_cli.html, pop-up, Clientes)
+02/04/2025 21:30 tales@planet3.com.br : Menu Alterado (Cobrancas, menu, pop-up, )

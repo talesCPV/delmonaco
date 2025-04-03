@@ -1,12 +1,10 @@
 <?php
     require_once('vendor/autoload.php');
-    require_once('../../access.php');
 
-    if(isset($_POST['body'])){      
+    if(isset($_POST['body'])){
+//echo $_POST['body'];
       $client = new \GuzzleHttp\Client();
-      $endpoint = asaas_api.'/payments';
-
-      $response = $client->request('POST', $endpoint, [
+      $response = $client->request('POST', asaas_api.'/payments', [
         'body' => $_POST['body'],
         'headers' => [
           'accept' => 'application/json',
@@ -17,5 +15,5 @@
 
       echo $response->getBody();
     }
-
+// {"customer":"cus_000006613338","value":"2400","dueDate":"2025-04-18","description":"Add Credito Semestral","daysAfterDueDateToRegistrationCancellation":15,"externalReference":"GDM-ELEVATE"}
 ?>  

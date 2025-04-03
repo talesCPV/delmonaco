@@ -1,12 +1,45 @@
 <template>
-    <style></style>
+    <style>
 
-    <fieldset>
-        <legend>Planos</legend>
-        <div class="pgtos"></div>
+        .pgto{
+            display: none;
+        }
 
+        .planos{
+            display: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 25px;
+        }
+
+        .plano{
+            display: flex;
+            padding: 10px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 323.6px;
+            border: solid 2px;
+            border-radius: 10px;
+            background-color: white;
+        }
+
+        .plano:hover{
+            border: solid 2px rgb(0, 82, 0);
+            cursor: pointer;
+            background-color: rgb(203, 243, 168);
+        }
+
+    </style>
+
+    <div class="planos"></div>
+
+    <fieldset class="pgto">
+        <legend>Pgtos</legend>
+        <table id="tblPgtos"></table>
     </fieldset>
-
 
 
 </template>
@@ -16,11 +49,94 @@
     const pageFunc = main_data.cred_add.func
     const pageScreen = document.querySelector('#card-cred_add')
 
-    console.log(pageData)
-
     function pageStart(){
-        pageFunc.fillPgto()
+//        pageFunc.fillPgto()
         pageFunc.fillPlanos()
+        pageFunc.asaasClient(pageData.cnpj)
+    }
+
+    function addPlano(data){
+        data.cliente = pageData
+
+        const plano = document.createElement('div')
+        plano.className = 'plano'
+        plano.data = data
+
+        const titulo = document.createElement('h2')
+        plano.appendChild(titulo)
+        titulo.className = 'title'
+        titulo.innerHTML = data.nome
+
+        const valor = document.createElement('h3')
+        plano.appendChild(valor)
+        valor.className = 'valor'
+        valor.innerHTML = data.valor.money()
+
+        const texto = document.createElement('div')
+        plano.appendChild(texto)
+        texto.className = 'sobre'
+        texto.innerHTML = data.texto
+
+        plano.addEventListener('click',()=>{
+            const cob = new Object
+            cob.billingType = 'UNDEFINED'
+            cob.customer = pageData.asaas_id
+            cob.value = data.valor
+            cob.dueDate = new Date().overday(15)
+            cob.description =  'Add Credito '+data.nome
+            cob.daysAfterDueDateToRegistrationCancellation = 15
+            cob.externalReference = 'GDM-ELEVATE'
+
+            newCob(cob)
+        })
+
+        return plano
+
+    }
+
+    pageFunc.asaasClient = (cnpj)=>{
+        buscaCli(cnpj).then((response)=>{
+            response.text().then((txt)=>{
+                const json = JSON.parse(txt)
+                if(!json.data.length){
+                    const cliente = new Object
+                    cliente.name = pageData.cliente
+                    cliente.cpfCnpj = pageData.cnpj
+
+                    newCli(cliente).then((response)=>{
+                        response.text().then((txt)=>{
+                            const json = JSON.parse(txt)
+                            pageData.asaas_id = json.id
+                            pageScreen.querySelector('.planos').style.display = 'flex'
+                            pageFunc.fillPgtos(pageData.asaas_id)
+                        })
+                    })
+                }else{
+                    pageData.asaas_id = json.data[0].id
+                    pageScreen.querySelector('.planos').style.display = 'flex'
+                    pageFunc.fillPgtos(pageData.asaas_id)
+//                    pageFunc.fillPgtos('cus_000006340136')
+                    
+                }
+
+            })
+        })
+
+    }
+
+    pageFunc.fillPgtos = (asaas_id)=>{
+        buscaCob(asaas_id).then((response)=>{
+            response.text().then((txt)=>{
+                const json = JSON.parse(txt)
+                const tbl = pageScreen.querySelector('#tblPgtos')
+                tbl.head('Emitido,Desc.,Valor|center-field,Vencimento|center-field,Status|center-field')
+                for(let i=0; i<json.data.length;i++){
+                    tbl.plot(json.data[i],'dateCreated,description,netValue|center-field,dueDate|center-field,status|center-field','dat,Upp,R$.,dat')
+                    pageScreen.querySelector('.pgto').style.display = 'block'
+                }
+            })
+        })
+
     }
 
     pageFunc.fillPlanos= ()=>{      
@@ -29,12 +145,14 @@
         const myPromisse = queryDB(params,'PGT-2');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
-            console.log(json)
+            pageScreen.querySelector('.planos').innerHTML = ''
             for(let i=0; i<json.length;i++){
+                pageScreen.querySelector('.planos').appendChild(addPlano(json[i]))
             }         
         })
     }
 
+/*    
     pageFunc.fillPgto = ()=>{
         const params = new Object;
             params.id_norma = pageData.id_norma
@@ -42,12 +160,20 @@
         const myPromisse = queryDB(params,'PGT-0');
         return myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
-            console.log(json)
+            const tbl = pageScreen.querySelector('#tblPgtos')
+            tbl.head('Efetuado dia,Qtd Meses|center-field,Valor|center-field,Expira em|center-field')
             for(let i=0; i<json.length;i++){
-
+                tbl.plot(json[i],'efetuado,mes|center-field,valor|center-field,expira|center-field','dat,Upp,R$.,dat')
+                pageScreen.querySelector('.pgto').style.display = 'block'
             }         
         })
     }
+*/
+    pageScreen.querySelector('#tblPgtos').addEventListener('click',(e)=>{
+        const data = e.target.parentNode.data
+        window.open(data.invoiceUrl, '_blank')
+        console.log(data)
+    })
 
 
     pageStart()

@@ -68,8 +68,8 @@ DROP VIEW IF EXISTS vw_tot_orc;
 SELECT * FROM vw_tot_orc;
 
 DROP VIEW IF EXISTS vw_usr_cli;
-CREATE VIEW vw_usr_cli AS
-	SELECT UCL.*,CLI.fantasia AS cliente,USR.nome 
+ CREATE VIEW vw_usr_cli AS
+	SELECT UCL.*,CLI.fantasia AS cliente,USR.nome, CLI.cnpj
 	FROM tb_user_cli AS UCL
 	INNER JOIN tb_usuario AS USR
 	INNER JOIN tb_cliente AS CLI

@@ -1,0 +1,30 @@
+<template>
+    <style></style>
+
+    <fieldset>
+        <legend>Mensagem Padrão</legend>
+        <div class="inline">
+            <label for="edtMsg">Texto</label>
+            <textarea id="edtMsg" rows="10"></textarea>
+        </div>
+        <div class="line">
+            <button id="btnSave">Salvar</button>
+        </div>
+    </fieldset>
+
+    <div class="legenda">
+
+    </div>
+
+</template>
+<script>
+
+    buscaCli().then((response)=>{
+        response.text().then((txt)=>{
+            const json = JSON.parse(txt).data
+			console.log(json)
+        })
+    })
+
+
+</script>

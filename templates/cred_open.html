@@ -74,10 +74,10 @@
     })
 
     btnPgto.addEventListener('click',()=>{
-        const data = new Object
+        const data = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].data
         data.id_cliente = pageScreen.querySelector('#cmbEmpresa').value
         data.id_norma = pageScreen.querySelector('#cmbNorma').value
-        openHTML('cred_add.html','pop-up','Adicione Créditos de Acesso',data)
+        openHTML('cred_add.html','pop-up','Adicione Créditos de Acesso',data,750)
     })
 
     pageStart()

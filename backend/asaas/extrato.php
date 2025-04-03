@@ -1,11 +1,8 @@
 <?php
     require_once('vendor/autoload.php');
-    require_once('../../access.php');
 
     $client = new \GuzzleHttp\Client();
-    $endpoint = asaas_api.'/financialTransactions';
-
-    $response = $client->request('GET', $endpoint, [
+    $response = $client->request('GET', asaas_api.'/financialTransactions', [
     'headers' => [
         'accept' => 'application/json',
         'access_token' => access_token
