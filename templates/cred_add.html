@@ -1,6 +1,24 @@
 <template>
     <style>
 
+        .PENDING{
+            text-align: center;
+            background-color: #fad7d7;
+            border-radius: 10px;
+        }
+
+        .RECEIVED{
+            text-align: center;
+            background-color: #d7fad7;
+            border-radius: 10px;
+        }
+
+        .EXPIRED{
+            text-align: center;
+            background-color: #d7e3fa;;
+            border-radius: 10px;
+        }
+
         .pgto{
             display: none;
         }
@@ -50,7 +68,6 @@
     const pageScreen = document.querySelector('#card-cred_add')
 
     function pageStart(){
-//        pageFunc.fillPgto()
         pageFunc.fillPlanos()
         pageFunc.asaasClient(pageData.cnpj)
     }
@@ -78,16 +95,21 @@
         texto.innerHTML = data.texto
 
         plano.addEventListener('click',()=>{
-            const cob = new Object
-            cob.billingType = 'UNDEFINED'
-            cob.customer = pageData.asaas_id
-            cob.value = data.valor
-            cob.dueDate = new Date().overday(15)
-            cob.description =  'Add Credito '+data.nome
-            cob.daysAfterDueDateToRegistrationCancellation = 15
-            cob.externalReference = 'GDM-ELEVATE'
+            if(confirm('Deseja Gerar esse Pagamento?')){
+                const cob = new Object
+                cob.billingType = 'UNDEFINED'
+                cob.customer = pageData.asaas_id
+                cob.value = data.valor
+                cob.dueDate = new Date().overday(15)
+                cob.description = pageData.legis+' +'+data.cred_mes+(Number(data.cred_mes) > 1 ? ' meses' : ' mes')
+                cob.daysAfterDueDateToRegistrationCancellation = 15
+                cob.externalReference = 'GDM-ELEVATE'
 
-            newCob(cob)
+                newCob(cob).then((response)=>{
+                    pageFunc.fillPgtos(pageData.asaas_id)
+                })
+
+            }
         })
 
         return plano
@@ -115,8 +137,6 @@
                     pageData.asaas_id = json.data[0].id
                     pageScreen.querySelector('.planos').style.display = 'flex'
                     pageFunc.fillPgtos(pageData.asaas_id)
-//                    pageFunc.fillPgtos('cus_000006340136')
-                    
                 }
 
             })
@@ -131,7 +151,8 @@
                 const tbl = pageScreen.querySelector('#tblPgtos')
                 tbl.head('Emitido,Desc.,Valor|center-field,Vencimento|center-field,Status|center-field')
                 for(let i=0; i<json.data.length;i++){
-                    tbl.plot(json.data[i],'dateCreated,description,netValue|center-field,dueDate|center-field,status|center-field','dat,Upp,R$.,dat')
+                    json.data[i].class = ((new Date(json.data[i].dueDate) < new Date()) && json.data[i].status == 'PENDING') ? 'EXPIRED' : json.data[i].status
+                    tbl.plot(json.data[i],`dateCreated,description,netValue|center-field,dueDate|center-field,class|${json.data[i].class}`,'dat,Upp,R$.,dat')
                     pageScreen.querySelector('.pgto').style.display = 'block'
                 }
             })
@@ -152,29 +173,14 @@
         })
     }
 
-/*    
-    pageFunc.fillPgto = ()=>{
-        const params = new Object;
-            params.id_norma = pageData.id_norma
-            params.id_cliente = pageData.id_cliente
-        const myPromisse = queryDB(params,'PGT-0');
-        return myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve)
-            const tbl = pageScreen.querySelector('#tblPgtos')
-            tbl.head('Efetuado dia,Qtd Meses|center-field,Valor|center-field,Expira em|center-field')
-            for(let i=0; i<json.length;i++){
-                tbl.plot(json[i],'efetuado,mes|center-field,valor|center-field,expira|center-field','dat,Upp,R$.,dat')
-                pageScreen.querySelector('.pgto').style.display = 'block'
-            }         
-        })
-    }
-*/
     pageScreen.querySelector('#tblPgtos').addEventListener('click',(e)=>{
         const data = e.target.parentNode.data
-        window.open(data.invoiceUrl, '_blank')
-        console.log(data)
+        if(data.class != 'EXPIRED'){
+            window.open(data.invoiceUrl, '_blank')
+        }else{
+            alert('Este título já expirou, favor gerar uma nova ordem de pgto clicanco em uma das opçoes acima')
+        }
     })
-
 
     pageStart()
 

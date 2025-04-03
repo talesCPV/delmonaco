@@ -79,6 +79,7 @@
     pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
         const data = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].data        
         data.norma = pageScreen.querySelector('#cmbNorma').options[pageScreen.querySelector('#cmbNorma').selectedIndex].data
+        data.legis = data.norma.nome
         data.access = 'full'
         openHTML('nor_elevate.html','pop-up',`${data.norma.nome} - ${data.cliente}`,data)
 //        closeModal('nor_open_elev')

@@ -278,6 +278,7 @@
 
     pageScreen.querySelector('#btnPay').addEventListener('click',()=>{
         pageData.norma.cnpj = pageData.cnpj
+        pageData.norma.legis = pageData.norma.nome
         openHTML('cred_add.html','pop-up','Adicione Créditos de Acesso',pageData.norma,750)
     })
 

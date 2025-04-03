@@ -75,8 +75,11 @@
 
     btnPgto.addEventListener('click',()=>{
         const data = pageScreen.querySelector('#cmbEmpresa').options[pageScreen.querySelector('#cmbEmpresa').selectedIndex].data
+        data.norma = pageScreen.querySelector('#cmbNorma').options[pageScreen.querySelector('#cmbNorma').selectedIndex].data
         data.id_cliente = pageScreen.querySelector('#cmbEmpresa').value
         data.id_norma = pageScreen.querySelector('#cmbNorma').value
+        data.legis = data.norma.nome
+        data.access = 'full'
         openHTML('cred_add.html','pop-up','Adicione Créditos de Acesso',data,750)
     })
 
