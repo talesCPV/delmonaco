@@ -98,6 +98,28 @@ DELIMITER $$
 	END $$
 DELIMITER ;
 
+ DROP PROCEDURE sp_updatePass;
+DELIMITER $$
+	CREATE PROCEDURE sp_updatePass(	
+		IN Ihash varchar(64),
+        IN Inome varchar(30),
+		IN Isenha varchar(30)
+    )
+	BEGIN    
+		SET @call_id = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+		IF(@call_id > 0)THEN
+			IF(Isenha="")THEN
+				UPDATE tb_usuario SET nome=Inome WHERE id=@call_id;
+            ELSE
+				UPDATE tb_usuario SET hash = SHA2(CONCAT(email, Isenha), 256), nome=Inome WHERE id=@call_id;
+            END IF;
+            SELECT 1 AS ok;
+		ELSE 
+			SELECT 0 AS ok;
+        END IF;
+	END $$
+DELIMITER ;
+
 /* PERMISSÂO */
 
  DROP PROCEDURE IF EXISTS sp_set_usr_perm_perf;
