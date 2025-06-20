@@ -1159,3 +1159,47 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ /* */
+ 
+  DROP PROCEDURE IF EXISTS sp_view_cli_prod;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_cli_prod(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_cli int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Iid_cli)THEN
+				SELECT * FROM vw_prod_cli WHERE id_cliente=Iid;
+            ELSE
+				SELECT * FROM vw_prod_cli WHERE id_prod=Iid;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_prod_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_prod_cli(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_prod int(11),
+		IN Iid_cliente int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @has = (SELECT COUNT(*) FROM tb_prod_cli WHERE id_prod=Iid_prod AND id_cliente=Iid_cliente);
+			IF(@has)THEN
+				DELETE FROM tb_prod_cli WHERE id_prod=Iid_prod AND id_cliente=Iid_cliente;
+            ELSE
+				INSERT INTO tb_prod_cli (id_prod,id_cliente,expira)
+				VALUES (Iid_prod,Iid_cliente,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 1 MONTH));
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

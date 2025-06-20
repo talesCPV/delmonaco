@@ -1,0 +1,144 @@
+<template>
+    <style>
+
+    .panel{
+        display: flex;
+        flex-direction: row;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    .panel fieldset{
+        width: 100%;
+        padding: 10px;
+    }
+
+    .middle{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .panel select{
+        margin: 0;
+        padding: 10px;
+    }
+
+    .line{
+        width: 100%;
+    }
+
+    </style>
+  
+    <div class="panel">
+        <fieldset>
+            <legend>Produtos</legend>
+            <select id="cmbProd" size="13"></select>
+        </fieldset>
+        <div class="middle">
+            <button id="btnAdd" class="btn-round"><span class="mdi mdi-arrow-right-bold"></span></button>
+            <button id="btnSub" class="btn-round"><span class="mdi mdi-arrow-left-bold"></span></button>
+        </div>
+        <fieldset>
+            <legend>Clientes</legend>
+            <select id="cmbEmp"></select>
+            <select id="cmbCliEmp" size="10"></select>
+        </fieldset>
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.prod_cliente.data
+    const pageFunc = main_data.prod_cliente.func
+    const pageScreen = document.querySelector('#card-prod_cliente')
+    const prod = pageScreen.querySelector('#cmbProd')
+    const cli = pageScreen.querySelector('#cmbEmp')
+    const prod_cli = pageScreen.querySelector('#cmbCliEmp')
+
+    function pageStart(){
+        pageFunc.fillEmp().then(()=>{
+            pageFunc.fillCliProd()
+        })
+        pageFunc.fillProd()
+    }
+
+    pageFunc.fillEmp = ()=>{
+
+        const params = new Object;
+            params.field = 'razao_social'
+            params.signal = 'LIKE'
+            params.value = "'%%'"
+        const myPromisse = queryDB(params,'CLI-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].fantasia
+                cli.appendChild(opt)
+            }         
+        })
+    }
+
+    pageFunc.fillProd = ()=>{      
+        const params = new Object;
+            params.nome = ''
+        const myPromisse = queryDB(params,'PROD-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].nome
+                prod.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.fillCliProd = ()=>{      
+        const params = new Object;
+            params.id = cli.value
+            params.busca = 1
+        const myPromisse = queryDB(params,'PROD-5');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            prod_cli.innerHTML = ''   
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_prod
+                opt.innerHTML = json[i].nome
+                prod_cli.appendChild(opt)
+            }         
+        })        
+    }
+
+    pageFunc.addProd = (id_prod)=>{      
+        const params = new Object;
+            params.id_prod = id_prod
+            params.id_cliente = cli.value
+        const myPromisse = queryDB(params,'PROD-6');
+        myPromisse.then((resolve)=>{
+            pageFunc.fillCliProd()
+        })
+    }
+
+    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+        if(prod.value.length){
+            pageFunc.addProd(prod.value)        
+        }
+    })
+
+    pageScreen.querySelector('#btnSub').addEventListener('click',()=>{
+        if(prod_cli.value.length){
+            pageFunc.addProd(prod_cli.value)        
+        }
+    })
+
+    cli.addEventListener('change',()=>{
+        pageFunc.fillCliProd()
+    })
+
+    pageStart()
+
+</script>

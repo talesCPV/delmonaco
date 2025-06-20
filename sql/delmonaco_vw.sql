@@ -131,6 +131,19 @@ DROP VIEW IF EXISTS vw_check_tarefa;
 		ORDER BY id_cliente, id_norma, id_lei;
 
 SELECT * FROM vw_check_tarefa;
+
+
+ DROP VIEW IF EXISTS vw_prod_cli;
+  CREATE VIEW vw_prod_cli AS
+	SELECT PCL.*,CLI.fantasia AS cliente,PROD.nome, PROD.sobre
+	FROM tb_prod_cli AS PCL
+	INNER JOIN tb_produto AS PROD
+	INNER JOIN tb_cliente AS CLI
+	ON PCL.id_prod=PROD.id
+	AND PCL.id_cliente = CLI.id;
+
+SELECT * FROM vw_prod_cli;
+
 /*
 DROP VIEW IF EXISTS vw_user_legis;
  CREATE VIEW vw_user_legis AS
@@ -146,3 +159,5 @@ SELECT * FROM vw_legis_lei;
 SELECT id_cliente,id_norma,id_lei,lei,esfera,assunto,resumo,aplicabilidade,link, COUNT(*) AS TOT, SUM(ok) AS ok, ROUND(SUM(ok)/COUNT(*) * 100,2) AS perc
 FROM vw_check_tarefa
 GROUP BY id_cliente,id_norma, id_lei;
+
+

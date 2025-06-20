@@ -273,3 +273,47 @@ CREATE TABLE tb_pgto_plano(
     texto varchar(512) DEFAULT NULL,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+-- Gestão de Processos
+
+-- Tarefas
+
+DROP TABLE IF EXISTS tb_tarefas;
+CREATE TABLE tb_tarefas(
+	id int(11) NOT NULL AUTO_INCREMENT,
+    id_produto int(11) NOT NULL,
+    nome varchar(50) NOT NULL,
+    descricao varchar(255) DEFAULT NULL,
+	FOREIGN KEY (id_produto) REFERENCES tb_produto(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_perguntas;
+CREATE TABLE tb_perguntas(
+	id int(11) NOT NULL AUTO_INCREMENT,
+    id_tarefa int(11) NOT NULL,
+    pergunta varchar(1500) NOT NULL,
+    relatorio boolean DEFAULT 1,
+	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_respostas;
+CREATE TABLE tb_respostas(
+	id int(11) NOT NULL AUTO_INCREMENT,
+    id_pergunta int(11) NOT NULL,
+    id_cliente int(11) NOT NULL,
+    resposta varchar(1500) NOT NULL,
+	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id),
+    PRIMARY KEY (id)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_prod_cli;
+CREATE TABLE tb_prod_cli(
+    id_prod int(11) NOT NULL,
+    id_cliente int(11) NOT NULL,
+    expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+    PRIMARY KEY (id_prod,id_cliente)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

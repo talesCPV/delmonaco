@@ -37,6 +37,8 @@
         "PROD-2"  => 'CALL sp_view_escopo(@access,@hash,x00);', // ID_PROD
         "PROD-3"  => 'CALL sp_set_escopo(@access,@hash,x00,x01,"x02","x03");', // id,id_prod,nome,texto
         "PROD-4"  => 'CALL sp_up_escopo(@access,@hash,x00,x01);', // id, id_prod
+        "PROD-5"  => 'CALL sp_view_cli_prod(@access,@hash,x00,x01);', // ID, ID=(0-id_prod 1-ID_cliente)
+        "PROD-6"  => 'CALL sp_set_prod_cli(@access,@hash,x00,x01);', // ID_PRODUTO, ID_CLIENTE
 
         /* ORÇAMENTOS */
         "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01");', // DT_INI, DT_FIN
