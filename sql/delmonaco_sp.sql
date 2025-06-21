@@ -1250,3 +1250,50 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_quest;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_quest(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SET @quer = CONCAT('SELECT * FROM tb_perguntas WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+            PREPARE stmt1 FROM @quer;
+ 			EXECUTE stmt1;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_quest;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_quest(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_tarefa int(11),
+		IN Ipergunta varchar(1500),
+		IN Irelat boolean
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Ipergunta = "")THEN
+                DELETE FROM tb_perguntas WHERE id = Iid;
+                DELETE FROM tb_respostas WHERE id_pergunta = Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_perguntas (id_tarefa,pergunta,relatorio) 
+					VALUES (Iid_tarefa,Ipergunta, Irelat);
+				ELSE 
+					UPDATE tb_perguntas SET pergunta=Ipergunta, relatorio=Irelat WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

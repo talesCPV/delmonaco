@@ -72,6 +72,8 @@
 
 
     pageFunc.viewTask = (id_prod)=>{
+        const tasks = pageScreen.querySelector('#cmbTasks')
+        tasks.innerHTML = ''
         const params = new Object
             params.field = 'id_produto'
             params.signal = '='
@@ -79,7 +81,7 @@
         const myPromisse = queryDB(params,'TASK-0');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
-            const tasks = pageScreen.querySelector('#cmbTasks')
+            
             for(let i=0; i<json.length; i++){
                 const opt = document.createElement('option')
                 opt.innerHTML = json[i].nome
@@ -95,7 +97,6 @@
     })
 
     prod.addEventListener('change',()=>{
-        pageScreen.querySelector('#cmbTasks').innerHTML = ''
         pageFunc.viewTask(prod.value)
     })
 

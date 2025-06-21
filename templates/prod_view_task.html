@@ -5,6 +5,13 @@
             padding: 10px;
         }
 
+        .quest{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         @media all and (max-width : 768px) {
             .frm input, .frm select{
                 width: 98% !important;
@@ -24,6 +31,14 @@
         <div class="inline">
             <label for="edtDesc">Descrição</label>
             <textarea class="only-view" id="edtDesc" rows="10" maxlength="255" disabled></textarea>
+        </div>
+        
+        <div class="inline" id="divQuest">
+            <label for="cmbQuest">Perguntas</label>
+            <div class="quest">
+                <select id="cmbQuest" size="13"></select>
+                <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>
+            </div>
         </div>
 
         <div class="line">
@@ -47,10 +62,13 @@
             openFields(1)
             pageScreen.querySelector('#btnDel').disabled = 1
             pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('#divQuest').style.display = 'none'
         }else{     
             pageScreen.querySelector('#edtNome').value = pageData.nome
             pageScreen.querySelector('#edtDesc').value = pageData.descricao
             pageScreen.querySelector('#btnEdit').disabled = 0
+            pageScreen.querySelector('#divQuest').style.display = 'flex'
+            pageFunc.viewQuest()
         }
     }
 
@@ -85,16 +103,44 @@
         })
     }
 
+    pageFunc.viewQuest = ()=>{
+        const quest = pageScreen.querySelector('#cmbQuest')
+        quest.innerHTML = ''
+        const params = new Object
+            params.field = 'id_tarefa'
+            params.signal = '='
+            params.value = pageData.id
+        const myPromisse = queryDB(params,'TASK-2');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length; i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].pergunta
+                opt.value = json[i].id
+                opt.data = json[i]
+                quest.appendChild(opt)
+            }
+        })
+    }
+
     pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
         pageFunc.setTask()
     })
 
     pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
-        if(confirm('Deseja realmente deletar este Produto?')){
+        if(confirm('Deseja realmente deletar esta tarefa?')){
             pageFunc.setTask(1)
         }
     })
 
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('prod_view_quest.html','pop-up','Nova Pergunta',{'id_tarefa':pageData.id})
+    })
+
+    pageScreen.querySelector('#cmbQuest').addEventListener('dblclick',()=>{
+        const quest = pageScreen.querySelector('#cmbQuest').selectedOptions[0];
+        openHTML('prod_view_quest.html','pop-up','Nova Pergunta',quest.data)
+    })
 
     pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
         if(pageScreen.querySelector('#btnSave').disabled){
