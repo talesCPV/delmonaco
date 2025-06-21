@@ -303,6 +303,7 @@ CREATE TABLE tb_respostas(
 	id int(11) NOT NULL AUTO_INCREMENT,
     id_pergunta int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
+    id_usuario int(11) NOT NULL,
     resposta varchar(1500) NOT NULL,
 	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id),
     PRIMARY KEY (id)

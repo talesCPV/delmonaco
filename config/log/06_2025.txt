@@ -7,3 +7,4 @@
 20/06/2025 23:43 tales@planet3.com.br : Menu Alterado (Tarefas, menu, pop-up, Tarefas)
 21/06/2025 00:01 tales@planet3.com.br : Menu Incluido (Cliente - Produto)
 21/06/2025 00:03 tales@planet3.com.br : Menu Alterado (Cliente - Produto, prod_cliente.html, pop-up, Produto / Cliente)
+21/06/2025 15:34 tales@planet3.com.br : Menu Alterado (Tarefas, prod_task.html, pop-up, Tarefas)

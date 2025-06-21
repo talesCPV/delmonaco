@@ -1203,3 +1203,50 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_task;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_task(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Ifield varchar(30),
+        IN Isignal varchar(4),
+		IN Ivalue varchar(50)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN   
+			SET @quer = CONCAT('SELECT * FROM tb_tarefas WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+            PREPARE stmt1 FROM @quer;
+ 			EXECUTE stmt1;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_task;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_task(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid int(11),
+		IN Iid_prod int(11),
+		IN Inome varchar(50),
+		IN Idesc varchar(255)
+    )
+	BEGIN    
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(Inome = "")THEN
+				DELETE FROM tb_tarefas WHERE id = Iid;
+                DELETE FROM tb_perguntas WHERE id_tarefa = Iid;
+            ELSE
+				IF(Iid=0)THEN
+					INSERT INTO tb_tarefas (id_produto,nome,descricao) 
+					VALUES (Iid_prod,Inome, Idesc);
+				ELSE 
+					UPDATE tb_tarefas SET nome=Inome, descricao=Idesc WHERE id=Iid;
+                END IF;
+            END IF;
+        END IF;
+	END $$
+DELIMITER ;

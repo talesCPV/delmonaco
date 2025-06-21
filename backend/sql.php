@@ -40,6 +40,11 @@
         "PROD-5"  => 'CALL sp_view_cli_prod(@access,@hash,x00,x01);', // ID, ID=(0-id_prod 1-ID_cliente)
         "PROD-6"  => 'CALL sp_set_prod_cli(@access,@hash,x00,x01);', // ID_PRODUTO, ID_CLIENTE
 
+        /* TAREFAS */
+        "TASK-0" => 'CALL sp_view_task(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
+        "TASK-1" => 'CALL sp_set_task(@access,@hash,x00,x01,"x02","x03");', // ID, ID_PROD, NOME, DESCRIÇÃO
+
+
         /* ORÇAMENTOS */
         "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01");', // DT_INI, DT_FIN
         "ORC-1"  => 'CALL sp_set_orc(@access,@hash,x00,x01,"x02","x03","x04");', // id,id_cli,capa,data,valor

@@ -1,0 +1,111 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Tarefa</legend>
+
+        <div class="inline">
+            <label for="edtNome">Nome *</label>
+            <input type="text" class="only-view" id="edtNome" onfocus="this.select();" maxlength="50" disabled>
+            </div>
+
+        <div class="inline">
+            <label for="edtDesc">Descrição</label>
+            <textarea class="only-view" id="edtDesc" rows="10" maxlength="255" disabled></textarea>
+        </div>
+
+        <div class="line">
+            <button id="btnDel" class="only-view" disabled>Deletar</button>
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+    
+    const pageData = main_data.prod_view_task.data
+    const pageFunc = main_data.prod_view_task.func
+    const pageScreen = document.querySelector('#card-prod_view_task')
+    const newTask = Object.keys(pageData).length == 1
+
+
+    function startPage(){
+        if(newTask){
+            openFields(1)
+            pageScreen.querySelector('#btnDel').disabled = 1
+            pageScreen.querySelector('#btnEdit').disabled = 1
+        }else{     
+            pageScreen.querySelector('#edtNome').value = pageData.nome
+            pageScreen.querySelector('#edtDesc').value = pageData.descricao
+            pageScreen.querySelector('#btnEdit').disabled = 0
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+    pageFunc.setTask = (del=0)=>{
+        const params = new Object;
+            params.id = newTask ? 0 : pageData.id
+            params.id_prod = pageData.id_produto
+            params.nome = del ? "" : pageScreen.querySelector('#edtNome').value.trim()
+            params.desc = pageScreen.querySelector('#edtDesc').value
+          
+        const myPromisse = queryDB(params,'TASK-1');
+        myPromisse.then((resolve)=>{
+            main_data.prod_task.func.viewTask(params.id_prod)
+/*            
+            setLog(`PRODUTO ${newTask?'Cadastrado': del ? 'Deletado' : 'Editado'} ${pageData.nome} -> ${params.nome}`)
+            try{
+                main_data.prod_busca.func.fillProdutos()
+            }catch{
+                console.error('Tela fechada pelo usuário!')
+            }
+*/                
+            alert('Cadastrado efetuado!')
+            closeModal('prod_view_task')
+            
+        })
+    }
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        pageFunc.setTask()
+    })
+
+    pageScreen.querySelector('#btnDel').addEventListener('click',()=>{
+        if(confirm('Deseja realmente deletar este Produto?')){
+            pageFunc.setTask(1)
+        }
+    })
+
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>

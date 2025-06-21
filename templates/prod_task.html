@@ -1,0 +1,110 @@
+<template>
+    <style>
+
+    .panel{
+        display: flex;
+        flex-direction: row;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    .panel fieldset{
+        width: 100%;
+        padding: 10px;
+    }
+
+    .middle{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .panel select{
+        margin: 0;
+        padding: 10px;
+    }
+
+    .line{
+        width: 100%;
+    }
+
+    </style>
+  
+    <div class="panel">
+        <fieldset>
+            <legend>Produtos</legend>
+            <select id="cmbProd" size="13"></select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Tarefas</legend>
+            <select id="cmbTasks" size="13"></select>
+            <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button> 
+        </fieldset>
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.prod_task.data
+    const pageFunc = main_data.prod_task.func
+    const pageScreen = document.querySelector('#card-prod_task')
+    const prod = pageScreen.querySelector('#cmbProd')
+
+    function pageStart(){
+        pageFunc.fillProd()
+    }
+
+    pageFunc.fillProd = ()=>{      
+        const params = new Object;
+            params.nome = ''
+        const myPromisse = queryDB(params,'PROD-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].nome
+                prod.appendChild(opt)
+            }         
+        })        
+    }
+
+
+    pageFunc.viewTask = (id_prod)=>{
+        const params = new Object
+            params.field = 'id_produto'
+            params.signal = '='
+            params.value = id_prod
+        const myPromisse = queryDB(params,'TASK-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const tasks = pageScreen.querySelector('#cmbTasks')
+            for(let i=0; i<json.length; i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].nome
+                opt.value = json[i].id
+                opt.data = json[i]
+                tasks.appendChild(opt)
+            }
+        })
+    }
+
+    pageScreen.querySelector('#btnNovo').addEventListener('click',()=>{
+        openHTML('prod_view_task.html','pop-up','Nova Tarefa',{'id_produto':prod.value})
+    })
+
+    prod.addEventListener('change',()=>{
+        pageScreen.querySelector('#cmbTasks').innerHTML = ''
+        pageFunc.viewTask(prod.value)
+    })
+
+    pageScreen.querySelector('#cmbTasks').addEventListener('dblclick',()=>{
+        const task = pageScreen.querySelector('#cmbTasks').selectedOptions[0];
+        openHTML('prod_view_task.html','pop-up','Nova Tarefa',task.data)
+    })
+
+
+    pageStart()
+
+</script>
