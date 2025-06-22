@@ -1,0 +1,39 @@
+<template>
+    <style></style>
+
+    <div class="tab-bar">
+        <div class="tab-item" id="tab-sobre" onclick="pictab(this)">Legislação</div>
+        <div class="tab-item" id="tab-laws" onclick="pictab(this)">Leis</div>
+    </div>
+    <div class="tab-screen">
+        <div id="sobre" class="tab">
+            normas
+
+        </div>
+        <div id="laws" class="tab" >
+
+            teste
+        </div>
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.cert_cliente.data
+    const pageFunc = main_data.cert_cliente.func
+    const pageScreen = document.querySelector('#card-cert_cliente')
+
+    function pageStart(){
+        pageScreen.classList.add('fullscreen')
+
+
+        pageScreen.querySelector('#tab-laws').click()
+
+        console.log(pageData)
+
+    }
+
+
+    
+    pageStart()
+</script>

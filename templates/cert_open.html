@@ -1,0 +1,102 @@
+<template>
+    <style>
+
+
+    </style>
+
+        <div class="inline">
+            <select id="cmbEmpresa"></select>
+        </div>
+        <div class="inline">
+            <select id="cmbProd"></select>
+        </div>
+
+        <div class="line">
+            <button id="btnOpen" disabled>Abrir</button>
+        </div>
+
+</template>
+<script>
+
+    const pageData = main_data.cert_open.data
+    const pageFunc = main_data.cert_open.func
+    const pageScreen = document.querySelector('#card-cert_open')
+    const btnOpen = pageScreen.querySelector('#btnOpen')
+
+    function pageStart(){
+        pageFunc.fillEmp()
+    }
+
+    pageFunc.fillEmp = ()=>{
+        const params = new Object;
+            params.id = 0
+        const myPromisse = queryDB(params,'CLI-3');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const cmb = pageScreen.querySelector('#cmbEmpresa')
+            cmb.innerHTML = ''
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_cliente
+                opt.innerHTML = json[i].cliente
+                opt.data = json[i]
+                cmb.appendChild(opt)                
+            }
+            if(json.length){
+                cmb.selectedIndex = 0
+                pageFunc.changeEmp()
+            }
+        })
+    }
+
+    pageFunc.fillCliProd = ()=>{      
+        const params = new Object;
+            params.id = pageScreen.querySelector('#cmbEmpresa').value
+            params.busca = 1
+        const myPromisse = queryDB(params,'PROD-5');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const cmb = pageScreen.querySelector('#cmbProd')
+            cmb.innerHTML = ''   
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id_prod
+                opt.innerHTML = json[i].nome
+                opt.data = json[i]
+                cmb.appendChild(opt)
+            }
+            if(json.length){
+                cmb.selectedIndex = 0
+                btnOpen.disabled = 0
+            }
+        })        
+    }
+
+    pageFunc.changeEmp = ()=>{
+        const id_cliente = pageScreen.querySelector('#cmbEmpresa').value
+        btnOpen.disabled = 1
+        pageScreen.querySelector('#cmbProd').innerHTML = ''
+        if(Number(id_cliente)){
+            pageFunc.fillCliProd(id_cliente)
+        }
+    }
+
+    pageScreen.querySelector('#cmbEmpresa').addEventListener('change',()=>{
+        pageFunc.changeEmp()
+    })
+
+    pageScreen.querySelector('#cmbProd').addEventListener('change',()=>{
+        btnOpen.disabled = pageScreen.querySelector('#cmbProd').value=='0' ? 1 : 0
+    })
+
+    pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
+        const data = pageScreen.querySelector('#cmbEmpresa').selectedOptions[0].data    
+        data.prod = pageScreen.querySelector('#cmbProd').selectedOptions[0].data      
+        openHTML('cert_cliente.html','pop-up',`${data.prod.nome} - ${data.cliente}`,data)
+        closeModal('cert_open')
+    })
+
+
+    pageStart()
+
+</script>

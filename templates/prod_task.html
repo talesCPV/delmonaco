@@ -28,6 +28,12 @@
         width: 100%;
     }
 
+    .fdsTarefas{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     </style>
   
     <div class="panel">
@@ -36,7 +42,7 @@
             <select id="cmbProd" size="13"></select>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="fdsTarefas">
             <legend>Tarefas</legend>
             <select id="cmbTasks" size="13"></select>
             <button id="btnNovo" class="btn-round"><span class="mdi mdi-plus-thick"></span></button> 

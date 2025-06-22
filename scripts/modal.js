@@ -244,7 +244,7 @@ function menuContext(tbl,e,float=1){
             mod_card.style.right = '2%'
         }
 
-        mod_card.style.overflow = 'auto'
+//        mod_card.style.overflow = 'auto'
 
     const mod_content = document.createElement('table')
         mod_content.classList = 'modal-text'
