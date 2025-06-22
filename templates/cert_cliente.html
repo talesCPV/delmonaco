@@ -1,19 +1,84 @@
 <template>
-    <style></style>
+    <style>
+        .capa{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 0;
+            font-weight: bold;
+            height: 80vh;
+        }
+
+        .capa label{
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .sobre{
+            text-align: center;
+            height: 100%;
+            background-color: unset;
+            border: none;
+            font-size: 1.1em;
+        }
+
+        .quest{
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px;
+        }
+
+        .quest textarea{
+            margin-left: 0;
+            width: 100%;
+            height: 200px;
+        }
+
+    </style>
 
     <div class="tab-bar">
-        <div class="tab-item" id="tab-sobre" onclick="pictab(this)">Legislação</div>
-        <div class="tab-item" id="tab-laws" onclick="pictab(this)">Leis</div>
+        <div class="tab-item" id="tab-sobre" onclick="pictab(this)">Sobre</div>
+        <div class="tab-item" id="tab-post" onclick="pictab(this)">Post</div>
     </div>
     <div class="tab-screen">
-        <div id="sobre" class="tab">
-            normas
-
+        <div id="sobre" class="tab capa">
+            <label id="sobre_nome"></label>
+            <textarea id="sobre_texto" class="sobre" disabled></textarea>
         </div>
-        <div id="laws" class="tab" >
-
-            teste
+  
+                    
+        <div id="post" class="tab post">
+            <div class="post-head">
+                <div class="post-head-left">
+                    <img class="post-head-img" src="assets/users/1/perfil.jpg" alt="">
+                    <div class="post-head-name">Tales C. Dantas</div>
+                </div>
+                <div class="post-head-rigth">
+<!--                    
+                    <div class="post-btn">Subscribe</div>
+                    <div class="btnMore">...</div>
+-->                    
+                </div>
+            </div>
+            <div class="post-text">
+                Lorem ipsum dolor sit amet. Id voluptas harum et ullam corrupti et doloremque rerum vel ipsa natus vel adipisci nisi. Et incidunt molestiae et ducimus incidunt in nostrum reiciendis ut veniam quia ea impedit perferendis in facere voluptatem 33 alias eaque. 
+            </div>
+            <div class="post-time">
+                00:00 PM Oct-10,2024
+            </div>
+            <div class="post-social">
+                <div class="post-social-chat">
+                    <span class="mdi mdi-chat-outline"></span>
+                    <p>50</p>
+                </div>
+                <div class="post-social-like">
+                    <span class="mdi mdi-thumb-up-outline"></span>
+                    <p>15</p>
+                </div>         
+            </div>
         </div>
+
+    
     </div>
 
 </template>
@@ -25,15 +90,213 @@
 
     function pageStart(){
         pageScreen.classList.add('fullscreen')
-
-
-        pageScreen.querySelector('#tab-laws').click()
-
-        console.log(pageData)
+        pageScreen.querySelector('#sobre_nome').innerHTML = pageData.prod.nome
+        pageScreen.querySelector('#sobre_texto').innerHTML = pageData.prod.sobre
+        pageScreen.querySelector('#tab-sobre').click()
+        pageFunc.fillTasks(pageData.prod.id_prod)
 
     }
 
+    pageFunc.fillTasks = (id_prod)=>{
+        const tab_bar = pageScreen.querySelector('.tab-bar')
+        const tab_screen = pageScreen.querySelector('.tab-screen')
+
+        function addTab(data){
+
+            function addQuest(quest){
+                quest = quest.split('|')
+                const obj = new Object
+                obj.id = quest[0]
+                obj.id_user = 0
+                obj.nome_usuario = 'Grupo DelMonaco'
+                obj.texto = quest[1]
+
+console.log(quest)
+
+/*
+                const ask = document.createElement('div')
+                ask.className = 'quest'
+
+                const label = document.createElement('label')
+                ask.appendChild(label)
+                label.for = `quest-${quest[0]}`
+                label.innerHTML = quest[1]
+
+                const answer = document.createElement('textarea')
+                ask.appendChild(answer)
+                answer.type = 'text'
+                answer.id = `quest-${quest[0]}`
+
+                return ask
+*/                
+
+                return makePost(obj)
+            }
+
+
+            const tab = document.createElement('div')
+            tab_bar.appendChild(tab)
+            tab.className = 'tab-item'
+            tab.id = `tab-p${data.id}`
+            tab.innerHTML = data.nome
+            tab.addEventListener('click',()=>{
+                pictab(tab)
+            })
+
+            const screen = document.createElement('div')
+            tab_screen.appendChild(screen)
+            screen.className = 'tab'
+            screen.id = 'p'+data.id
+
+            const about = document.createElement('textarea')
+            screen.appendChild(about)
+            about.disabled = 1
+            about.className = 'sobre'
+            about.innerHTML = data.descricao
+
+            if(data.quest != null){
+                const quests = data.quest.split('||')
+                for(let j=0; j<quests.length;j++){
+                    screen.appendChild(addQuest(quests[j]))
+                }
+            }
+
+
+        }
+
+        const params = new Object
+            params.field = 'id_produto'
+            params.signal = '='
+            params.value = id_prod
+   
+        const myPromisse = queryDB(params,'TASK-0');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length; i++){        
+                addTab(json[i])
+            }
+        })
+    }
+
+    function new_element(tipo,innerHTML='',cls=0,id=0){
+        const el = document.createElement(tipo)
+        el.innerHTML = innerHTML
+        if(cls){
+            el.className = cls
+        }
+        if(id){
+            el.id = id
+        }
+        return el
+    }
+
+    function makePost(obj){
+
+        const post = new_element('div','','post',`post-${obj.id}`)
+
+        const head = new_element('div','','post-head')
+
+        const head_left = new_element('div','','post-head-left')
+
+        const img = new_element('img','','post-head-img')
+
+        backFunc({'filename':`../assets/users/${obj.id_user}/perfil.jpg`},1)
+        .then((resp)=>{
+            const imgExist = JSON.parse(resp)    
+            img.src = imgExist ? `assets/users/${obj.id_user}/perfil.jpg` : 'assets/icons/icon.png'
+        })  
+
+        head_left.appendChild(img)
+/*
+        img.addEventListener('click',(e)=>{
+            
+            const tbl = []
+            const mail = new Object
+            mail.label = 'Ver Perfil'
+            mail.link = ()=>{
+                window.location.href = (window.location).toString()+'user-'+obj.id_user;
+            }
+            tbl.push(mail)
+            const user = new Object
+            user.label = 'Ver Treinos'
+            user.link = ()=>{
+                window.location.href = (window.location).toString()+'tracks-'+obj.id_user;
+            }
+            tbl.push(user)
+            menuContext(tbl,e)
+        })
+*/
+        const head_name = new_element('div',obj.nome_usuario,'post-head-name')
+        head_left.appendChild(head_name)
+        head.appendChild(head_left)
+
+        const head_rigth = new_element('div','','post-head-left')
+
+        if(localStorage.length){
+            const subs_btn = new_element('div','Subscribe','post-btn')
+            head_rigth.appendChild(subs_btn)
+            subs_btn.addEventListener('click',()=>{
+                follow_user(obj.id_user)
+            })
+
+            if(obj.owner=='1'){
+                const btn_more = new_element('div','...','btnMore')
+                btn_more.addEventListener('click',(e)=>{
+                    const tbl = []
+                    const mail = new Object
+                    mail.label = 'Editar'
+                    mail.link = ()=>{
+                        obj.action = 'EDT'
+                        openHTML('post_new.html','pop-up','Edição...',obj,800)
+                    }            
+                    tbl.push(mail)
+                    const user = new Object
+                    user.label = 'Deletar'
+                    user.link = ()=>{
+                        if(confirm('Deseja deletar este post?')){
+                            delPost(obj.id,post)
+                        }
+                    }            
+                    tbl.push(user)
+                    menuContext(tbl,e,0)
+                })
+                head_rigth.appendChild(btn_more)
+
+            }
+        }
+
+        head.appendChild(head_rigth)
+        post.appendChild(head)
+
+
+        const post_time = new_element('div','', 'post-time')
+//        post_time.innerHTML = `${obj.tipo == 'GPX'? obj.cadastro.viewXDate() : obj.cadastro.viewXDate()} - ${obj.VW} Views`
+        post.appendChild(post_time)
+
+        const post_social = new_element('div','', 'post-social')
+        post.appendChild(post_social)
+
+        const post_chat = new_element('div',`<span class="mdi mdi-chat-outline"></span><p>${obj.COMM}</p>`, 'post-social-chat')
+        post_chat.addEventListener('click',()=>{
+            commentPost(obj.id,post)
+        })
+        post_social.appendChild(post_chat)
+
+        const post_like = new_element('div',`<span class="mdi mdi-thumb-up-outline"></span><p>${obj.LK}</p>`, 'post-social-chat')
+        post_like.addEventListener('click',()=>{
+            likePost(obj.id,post_like)
+        })
+        post_social.appendChild(post_like)
+
+        const post_comm = new_element('div','', 'post-comm')
+        post.appendChild(post_comm)
+
+        return post
+    }
+
+
 
     
+
     pageStart()
 </script>

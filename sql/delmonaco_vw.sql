@@ -156,8 +156,8 @@ SELECT * FROM vw_user_legis;
 SELECT * FROM vw_legis_lei;
 */
 
-SELECT id_cliente,id_norma,id_lei,lei,esfera,assunto,resumo,aplicabilidade,link, COUNT(*) AS TOT, SUM(ok) AS ok, ROUND(SUM(ok)/COUNT(*) * 100,2) AS perc
-FROM vw_check_tarefa
-GROUP BY id_cliente,id_norma, id_lei;
+ DROP VIEW IF EXISTS vw_tasks;
+	CREATE VIEW vw_tasks AS
+	SELECT TASK.*,(SELECT GROUP_CONCAT(DISTINCT CONCAT(id,"|",pergunta) SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id) AS quest FROM tb_tarefas AS TASK;
 
 

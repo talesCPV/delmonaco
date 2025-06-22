@@ -1216,7 +1216,7 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN   
-			SET @quer = CONCAT('SELECT * FROM tb_tarefas WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
+			SET @quer = CONCAT('SELECT * FROM vw_tasks WHERE ',Ifield,' ',Isignal,' ',Ivalue,' ORDER BY ',Ifield,';');
             PREPARE stmt1 FROM @quer;
  			EXECUTE stmt1;
         END IF;

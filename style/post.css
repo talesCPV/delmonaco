@@ -1,0 +1,176 @@
+/* POSTS */        
+
+.post{
+/*    width: calc(100% - 120px);*/
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #f0f8ffd6;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    border: solid 1px #d7d7d7;
+}
+
+.post-head, .post-head-left, .post-head-rigth{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.post-head-img{
+    width: 40px;
+    height: 40px;
+    background-color: #fbfbfb00;;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.post-text{
+    text-align: justify;
+}
+
+.post-btn{
+    background-color: #000000bd;
+    color: #FFFFFF;
+    padding: 0 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    margin: auto;
+    width: 100px;
+    justify-content: center;
+}
+
+.post-btn:hover{
+    cursor: pointer;
+    background-color: #00000087;
+}
+
+.btnMore{
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.post-time{
+    display: flex;
+    justify-content: end;
+}
+
+.post-img{
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+.post-social, .post-social  div{
+    display: flex;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+.post-social  div:hover{
+    background-color: rgba(0, 0, 0, 0.274);
+    color: #FFFFFF;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.post-comm .post{
+    width: calc(100% + 8px);
+}
+
+.post-track{
+    pointer-events: auto;
+    border-radius: 15px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.post:has(.post-track:hover){
+    background-color: #9dc8eece;
+    opacity: 70%;
+}        
+
+.track-name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 1.3em;
+    padding-bottom: 20px;
+}
+
+.track-name p:nth-of-type(2){
+    font-size: 0.8em;
+}
+
+.track-data{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+.track-data .box-1{
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.track-data .box-2{
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+/*
+.track-data div p:nth-child(1){
+    font-size: 12px;
+}
+
+.track-data div p:nth-child(2){
+    font-size: 20px;
+}
+*/
+.track-seg{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.track-seg p:nth-child(1){
+    font-size: 2em;
+}
+
+.track-seg p:nth-child(2){
+    text-align: end;
+    width: 100%;
+    cursor: pointer;
+}
+
+.track-seg p:nth-child(2):hover{
+    color: blue;
+}
+
+.comments{
+    align-items: end;
+}
+
+@media all and (max-width : 768px) {
+
+    .content-screen{
+        align-items: center;
+    }
+    .post{
+        width: 90%;
+    }
+
+    .post-comm .post{
+        margin: 10px 0;
+    }
+}
