@@ -298,15 +298,27 @@ CREATE TABLE tb_perguntas(
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS tb_quest_cli;
+CREATE TABLE tb_quest_cli(
+    id_tarefa int(11) NOT NULL,
+    id_cliente int(11) NOT NULL,
+    ok boolean DEFAULT 0,
+	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+    PRIMARY KEY (id_tarefa,id_cliente)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS tb_respostas;
 CREATE TABLE tb_respostas(
-	id int(11) NOT NULL AUTO_INCREMENT,
     id_pergunta int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
     id_usuario int(11) NOT NULL,
-    resposta varchar(1500) NOT NULL,
+    resposta varchar(512) NOT NULL,
+    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id),
-    PRIMARY KEY (id)
+	FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+	FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id),
+    PRIMARY KEY (id_pergunta,id_cliente,id_usuario,data_hora)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_prod_cli;

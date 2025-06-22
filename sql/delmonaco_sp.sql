@@ -1297,3 +1297,49 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_view_answer;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_answer(	
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_pergunta int(11),
+        IN Iid_cliente int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_answer;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_answer(
+		IN Iallow varchar(80),
+        IN Ihash varchar(64),
+		IN Iid_pergunta int(11),
+		IN Iid_cliente int(11),
+		IN Iresposta varchar(512),
+		IN Idata_hora datetime
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+			IF(Iresposta = "")THEN
+                DELETE FROM tb_respostas WHERE id_usuario = @id_usuario AND data_hora=Idata_hora;
+            ELSE
+				SET @has = (SELECT COUNT(*) FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND id_usuario=@id_usuario AND data_hora=Idata_hora);
+				IF(@has)THEN
+					UPDATE tb_respostas SET resposta=Iresposta WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND id_usuario=@id_usuario AND data_hora=Idata_hora;
+				ELSE 
+					INSERT INTO tb_respostas (id_pergunta,id_cliente,id_usuario,resposta) 
+					VALUES (Iid_pergunta,Iid_cliente,@id_usuario,Iresposta);
+                END IF;
+            END IF;
+            SELECT * FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+        END IF;
+	END $$
+DELIMITER ;

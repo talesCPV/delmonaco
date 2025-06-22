@@ -160,4 +160,10 @@ SELECT * FROM vw_legis_lei;
 	CREATE VIEW vw_tasks AS
 	SELECT TASK.*,(SELECT GROUP_CONCAT(DISTINCT CONCAT(id,"|",pergunta) SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id) AS quest FROM tb_tarefas AS TASK;
 
+SELECT * FROM vw_tasks;
 
+SELECT RESP.* 
+FROM tb_respostas AS RESP;
+
+SELECT COUNT(*) AS respostas FROM tb_respostas WHERE id_pergunta=1 AND id_cliente=2;
+SELECT * FROM tb_respostas WHERE id_pergunta=1 AND id_cliente=2;

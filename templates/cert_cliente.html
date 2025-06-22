@@ -105,30 +105,13 @@
 
             function addQuest(quest){
                 quest = quest.split('|')
+
                 const obj = new Object
                 obj.id = quest[0]
                 obj.id_user = 0
                 obj.nome_usuario = 'Grupo DelMonaco'
-                obj.texto = quest[1]
-
-console.log(quest)
-
-/*
-                const ask = document.createElement('div')
-                ask.className = 'quest'
-
-                const label = document.createElement('label')
-                ask.appendChild(label)
-                label.for = `quest-${quest[0]}`
-                label.innerHTML = quest[1]
-
-                const answer = document.createElement('textarea')
-                ask.appendChild(answer)
-                answer.type = 'text'
-                answer.id = `quest-${quest[0]}`
-
-                return ask
-*/                
+                obj.resposta = quest[1]
+                obj.data_hora = '2025-05-22 19:35:00'
 
                 return makePost(obj)
             }
@@ -156,7 +139,7 @@ console.log(quest)
 
             if(data.quest != null){
                 const quests = data.quest.split('||')
-                for(let j=0; j<quests.length;j++){
+                for(let j=0; j<quests.length;j++){                
                     screen.appendChild(addQuest(quests[j]))
                 }
             }
@@ -178,6 +161,7 @@ console.log(quest)
         })
     }
 
+
     function new_element(tipo,innerHTML='',cls=0,id=0){
         const el = document.createElement(tipo)
         el.innerHTML = innerHTML
@@ -188,6 +172,60 @@ console.log(quest)
             el.id = id
         }
         return el
+    }
+
+    pageFunc.fillComm = (obj, postComm,postChat)=>{
+        console.log(obj,postComm)
+        
+        const params = new Object
+                params.id_pergunta = obj.id
+                params.id_cliente = pageData.id_cliente
+    
+            const myPromisse = queryDB(params,'TASK-4');
+            myPromisse.then((resolve)=>{
+                const json = JSON.parse(resolve)
+                postChat.querySelector('#count').innerHTML = json.length
+
+                for(let i=0; i<json.length; i++){
+console.log(json[i])                    
+                    postComm.appendChild(makePost(json[i]))         
+                }
+//                comments.appendChild(newComm(id_pergunta,div))    
+
+                postComm.appendChild(newComm(obj.id))
+            })
+               
+    }
+
+    function newComm(id,div){
+
+        const comm = document.createElement('div')
+        comm.className = 'comments post'
+
+        const ta = document.createElement('textarea')
+        ta.className = 'post-new-comm'
+        comm.appendChild(ta)
+
+        const btn = document.createElement('button')
+        btn.innerHTML = 'Postar'
+        comm.appendChild(btn)
+
+        btn.addEventListener('click',()=>{
+            const params = new Object;
+                params.id_pergunta = id
+                params.id_cliente = pageData.id_cliente
+                params.resposta = ta.value
+                params.data_hora = today.getFullDate()
+                
+            const myPromisse = queryDB(params,'TASK-5')
+            myPromisse.then((resolve)=>{
+                const json = JSON.parse(resolve)
+                console.log(json)
+            })    
+        })
+            
+        ta.focus()
+        return comm
     }
 
     function makePost(obj){
@@ -207,92 +245,39 @@ console.log(quest)
         })  
 
         head_left.appendChild(img)
-/*
-        img.addEventListener('click',(e)=>{
-            
-            const tbl = []
-            const mail = new Object
-            mail.label = 'Ver Perfil'
-            mail.link = ()=>{
-                window.location.href = (window.location).toString()+'user-'+obj.id_user;
-            }
-            tbl.push(mail)
-            const user = new Object
-            user.label = 'Ver Treinos'
-            user.link = ()=>{
-                window.location.href = (window.location).toString()+'tracks-'+obj.id_user;
-            }
-            tbl.push(user)
-            menuContext(tbl,e)
-        })
-*/
+
         const head_name = new_element('div',obj.nome_usuario,'post-head-name')
         head_left.appendChild(head_name)
         head.appendChild(head_left)
 
         const head_rigth = new_element('div','','post-head-left')
-/*
-        if(localStorage.length){
-            const subs_btn = new_element('div','Subscribe','post-btn')
-            head_rigth.appendChild(subs_btn)
-            subs_btn.addEventListener('click',()=>{
-                follow_user(obj.id_user)
-            })
 
-            if(obj.owner=='1'){
-                const btn_more = new_element('div','...','btnMore')
-                btn_more.addEventListener('click',(e)=>{
-                    const tbl = []
-                    const mail = new Object
-                    mail.label = 'Editar'
-                    mail.link = ()=>{
-                        obj.action = 'EDT'
-                        openHTML('post_new.html','pop-up','Edição...',obj,800)
-                    }            
-                    tbl.push(mail)
-                    const user = new Object
-                    user.label = 'Deletar'
-                    user.link = ()=>{
-                        if(confirm('Deseja deletar este post?')){
-                            delPost(obj.id,post)
-                        }
-                    }            
-                    tbl.push(user)
-                    menuContext(tbl,e,0)
-                })
-                head_rigth.appendChild(btn_more)
-
-            }
-        }
-*/
         head.appendChild(head_rigth)
         post.appendChild(head)
 
-
-        const post_text = new_element('div',obj.texto, 'post-text')
+        const post_text = new_element('div',obj.resposta, 'post-text')
         post.appendChild(post_text)
 
         const post_time = new_element('div','', 'post-time')
-//        post_time.innerHTML = `${obj.tipo == 'GPX'? obj.cadastro.viewXDate() : obj.cadastro.viewXDate()} - ${obj.VW} Views`
+        post_time.innerHTML =  obj.data_hora.viewXDate()
         post.appendChild(post_time)
 
         const post_social = new_element('div','', 'post-social')
         post.appendChild(post_social)
 
-        const post_chat = new_element('div',`<span class="mdi mdi-chat-outline"></span><p>${obj.COMM}</p>`, 'post-social-chat')
+        const post_chat = new_element('div',`<span class="mdi mdi-chat-outline"></span><p id ="count"></p>`, 'post-social-chat')
         post_chat.addEventListener('click',()=>{
-            commentPost(obj.id,post)
+            const status = post.querySelector('.post-comm')
+            status.style.display = status.style.display == 'block' ? 'none' : 'block'
         })
         post_social.appendChild(post_chat)
 
-        const post_like = new_element('div',`<span class="mdi mdi-thumb-up-outline"></span><p>${obj.LK}</p>`, 'post-social-chat')
-        post_like.addEventListener('click',()=>{
-            likePost(obj.id,post_like)
-        })
-        post_social.appendChild(post_like)
-
         const post_comm = new_element('div','', 'post-comm')
+        post_comm.style.display = 'none'
+        
         post.appendChild(post_comm)
+
+        pageFunc.fillComm(obj,post_comm,post_chat)
 
         return post
     }
