@@ -231,7 +231,7 @@ console.log(quest)
         head.appendChild(head_left)
 
         const head_rigth = new_element('div','','post-head-left')
-
+/*
         if(localStorage.length){
             const subs_btn = new_element('div','Subscribe','post-btn')
             head_rigth.appendChild(subs_btn)
@@ -264,10 +264,13 @@ console.log(quest)
 
             }
         }
-
+*/
         head.appendChild(head_rigth)
         post.appendChild(head)
 
+
+        const post_text = new_element('div',obj.texto, 'post-text')
+        post.appendChild(post_text)
 
         const post_time = new_element('div','', 'post-time')
 //        post_time.innerHTML = `${obj.tipo == 'GPX'? obj.cadastro.viewXDate() : obj.cadastro.viewXDate()} - ${obj.VW} Views`
