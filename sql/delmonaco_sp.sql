@@ -1339,7 +1339,31 @@ DELIMITER $$
 					VALUES (Iid_pergunta,Iid_cliente,@id_usuario,Iresposta);
                 END IF;
             END IF;
-            SELECT * FROM vw_answers WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+            SELECT * FROM sp_view_answer WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_like;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_like(
+		IN Iallow varchar(80),
+        IN Ihash varchar(64),
+		IN Iid_pergunta int(11),
+		IN Idata_hora datetime
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+            SET @has = (SELECT COUNT(*) FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora AND id_user_like=@id_usuario);
+			IF(@has)THEN
+                DELETE FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora AND id_user_like=@id_usuario;
+            ELSE
+				INSERT INTO tb_like (id_pergunta,data_hora,id_user_like) 
+				VALUES (Iid_pergunta,Idata_hora,@id_usuario);
+            END IF;
+            SELECT COUNT(*) AS LIKES FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora;
         END IF;
 	END $$
 DELIMITER ;

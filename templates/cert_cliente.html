@@ -74,7 +74,7 @@
                 <div class="post-social-like">
                     <span class="mdi mdi-thumb-up-outline"></span>
                     <p>15</p>
-                </div>         
+                </div>
             </div>
         </div>
 
@@ -174,7 +174,10 @@
         return el
     }
 
-    pageFunc.fillComm = (obj, postComm,postChat)=>{
+    pageFunc.fillComm = (obj, post)=>{
+
+        const postComm = post.querySelector('.post-comm')
+        const postChat = post.querySelector('.post-social-chat')
 
         const params = new Object
                 params.id_pergunta = obj.id
@@ -188,12 +191,15 @@
                 for(let i=0; i<json.length; i++){
                     postComm.appendChild(makePost(json[i]))         
                 }
-                postComm.appendChild(newComm(obj, postComm,postChat))
+                postComm.appendChild(newComm(obj, post))
             })
                
     }
 
-    function newComm(obj, postComm,postChat){
+    function newComm(obj, post){
+
+        const postComm = post.querySelector('.post-comm')
+        const postChat = post.querySelector('.post-social-chat')
 
         const comm = document.createElement('div')
         comm.className = 'comments post'
@@ -234,18 +240,17 @@
 
     function makePost(obj){
 
-        const post = new_element('div','','post',`post-${obj.id}`)
+        const quest = obj.hasOwnProperty('id')
 
+        const post = new_element('div','','post',`post-${quest ? obj.id : obj.id_pergunta}`)
         const head = new_element('div','','post-head')
-
         const head_left = new_element('div','','post-head-left')
-
         const img = new_element('img','','post-head-img')
 
         backFunc({'filename':`../assets/users/${obj.id_usuario}/perfil.jpg`},1)
         .then((resp)=>{
             const imgExist = JSON.parse(resp)    
-            img.src = imgExist ? `assets/users/${obj.id_usuario}/perfil.jpg` : 'assets/icons/icon.png'
+            img.src = imgExist ? `assets/users/${obj.id_usuario}/perfil.jpg` : `assets/icons/${quest ? 'icon.png' : 'user_default.png'}`
         })  
 
         head_left.appendChild(img)
@@ -265,14 +270,27 @@
         const post_time = new_element('div','', 'post-time')
         post_time.innerHTML =  obj.data_hora.viewXDate()
         post.appendChild(post_time)
-
+        
         const post_social = new_element('div','', 'post-social')
         post.appendChild(post_social)
 
-        const post_chat = new_element('div',`<span class="mdi mdi-chat-outline"></span><p id ="count"></p>`, 'post-social-chat')
+        const post_chat = new_element('div',`<span class="mdi ${quest ? 'mdi-chat-outline' : 'mdi-thumb-up-outline'}"></span><p id ="count"></p>`, 'post-social-chat')
         post_chat.addEventListener('click',()=>{
-            const status = post.querySelector('.post-comm')
-            status.style.display = status.style.display == 'block' ? 'none' : 'block'
+            if(quest){
+                const status = post.querySelector('.post-comm')
+                status.style.display = status.style.display == 'block' ? 'none' : 'block'
+            }else{
+                const params = new Object;
+                    params.id_pergunta = obj.id_pergunta
+                    params.data_hora =  obj.data_hora 
+
+                const myPromisse = queryDB(params,'TASK-6')
+                myPromisse.then((resolve)=>{
+                    const json = JSON.parse(resolve)
+                    console.log(json)
+
+                })           
+            }
         })
         post_social.appendChild(post_chat)
 
@@ -281,8 +299,8 @@
         
         post.appendChild(post_comm)
 
-        if(obj.hasOwnProperty('id')){
-            pageFunc.fillComm(obj,post_comm,post_chat)
+        if(quest){
+            pageFunc.fillComm(obj,post)
         }
 
         return post

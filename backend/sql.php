@@ -47,6 +47,7 @@
         "TASK-3" => 'CALL sp_set_quest(@access,@hash,x00,x01,"x02",x03);', // ID, ID_TAREFA, PERGUNTA, RELATORIO
         "TASK-4" => 'CALL sp_view_answer(@access,@hash,x00,x01);', // ID_PERGUNTA, ID_CLIENTE
         "TASK-5" => 'CALL sp_set_answer(@access,@hash,x00,x01,"x02","x03");', // ID_PERGUNTA, ID_CLIENTE, RESPOSTA,DATA_HORA
+        "TASK-6" => 'CALL sp_set_like(@access,@hash,x00,"x01");', // ID_PERGUNTA,DATA_HORA
 
         /* ORÇAMENTOS */
         "ORC-0"  => 'CALL sp_view_orc(@access,@hash,"x00","x01");', // DT_INI, DT_FIN

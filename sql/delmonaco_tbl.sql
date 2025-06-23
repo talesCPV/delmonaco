@@ -321,6 +321,16 @@ CREATE TABLE tb_respostas(
     PRIMARY KEY (id_pergunta,id_cliente,id_usuario,data_hora)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS tb_like;
+CREATE TABLE tb_like(
+    id_pergunta int(11) NOT NULL,
+    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_user_like int(11) NOT NULL,
+	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id),
+	FOREIGN KEY (id_user_like) REFERENCES tb_usuario(id),
+    PRIMARY KEY (id_pergunta,id_user_like,data_hora)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS tb_prod_cli;
 CREATE TABLE tb_prod_cli(
     id_prod int(11) NOT NULL,
