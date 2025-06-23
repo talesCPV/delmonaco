@@ -1339,7 +1339,7 @@ DELIMITER $$
 					VALUES (Iid_pergunta,Iid_cliente,@id_usuario,Iresposta);
                 END IF;
             END IF;
-            SELECT * FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+            SELECT * FROM vw_answers WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
         END IF;
 	END $$
 DELIMITER ;

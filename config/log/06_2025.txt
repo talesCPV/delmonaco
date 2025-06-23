@@ -23,3 +23,8 @@
 22/06/2025 01:35 tales@planet3.com.br : Menu Alterado (Certificacao, cert_cliente.html, pop-up, Certificacao)
 22/06/2025 01:50 tales@planet3.com.br : Menu Alterado (Certificacao, cert_open.html, pop-up, Certificacao)
 22/06/2025 02:07 tales@planet3.com.br : Menu Alterado (Certificacao, cert_open.html, web-window, Certificacao)
+23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Gerenciar, Acesso:[[0,1]])
+23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Sistema, Acesso:[[0,1]])
+23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Comercial, Acesso:[[0,1]])
+23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: GDM Elevate, Acesso:[[0,1,2]])
+23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Gestao de Processos, Acesso:[[0,1,2]])
