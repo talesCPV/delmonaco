@@ -1309,7 +1309,7 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-			SELECT * FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+			SELECT * FROM vw_answers WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
         END IF;
 	END $$
 DELIMITER ;

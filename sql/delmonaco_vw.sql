@@ -165,5 +165,11 @@ SELECT * FROM vw_tasks;
 SELECT RESP.* 
 FROM tb_respostas AS RESP;
 
-SELECT COUNT(*) AS respostas FROM tb_respostas WHERE id_pergunta=1 AND id_cliente=2;
-SELECT * FROM tb_respostas WHERE id_pergunta=1 AND id_cliente=2;
+ DROP VIEW IF EXISTS vw_answers;
+	CREATE VIEW vw_answers AS
+	SELECT RESP.*, USR.nome AS nome_usuario
+	FROM tb_respostas AS RESP
+	INNER JOIN tb_usuario AS USR
+	ON RESP.id_usuario = USR.id;
+
+SELECT * FROM vw_answers;

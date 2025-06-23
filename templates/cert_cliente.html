@@ -108,7 +108,7 @@
 
                 const obj = new Object
                 obj.id = quest[0]
-                obj.id_user = 0
+                obj.id_usuario = 0
                 obj.nome_usuario = 'Grupo DelMonaco'
                 obj.resposta = quest[1]
                 obj.data_hora = '2025-05-22 19:35:00'
@@ -175,29 +175,25 @@
     }
 
     pageFunc.fillComm = (obj, postComm,postChat)=>{
-        console.log(obj,postComm)
-        
+
         const params = new Object
                 params.id_pergunta = obj.id
                 params.id_cliente = pageData.id_cliente
-    
+
             const myPromisse = queryDB(params,'TASK-4');
             myPromisse.then((resolve)=>{
                 const json = JSON.parse(resolve)
                 postChat.querySelector('#count').innerHTML = json.length
 
                 for(let i=0; i<json.length; i++){
-console.log(json[i])                    
                     postComm.appendChild(makePost(json[i]))         
                 }
-//                comments.appendChild(newComm(id_pergunta,div))    
-
-                postComm.appendChild(newComm(obj.id))
+                postComm.appendChild(newComm(obj, postComm,postChat))
             })
                
     }
 
-    function newComm(id,div){
+    function newComm(obj, postComm,postChat){
 
         const comm = document.createElement('div')
         comm.className = 'comments post'
@@ -212,15 +208,23 @@ console.log(json[i])
 
         btn.addEventListener('click',()=>{
             const params = new Object;
-                params.id_pergunta = id
+                params.id_pergunta = obj.id
                 params.id_cliente = pageData.id_cliente
                 params.resposta = ta.value
-                params.data_hora = today.getFullDate()
+                params.data_hora =  obj.data_hora 
                 
             const myPromisse = queryDB(params,'TASK-5')
             myPromisse.then((resolve)=>{
                 const json = JSON.parse(resolve)
-                console.log(json)
+                ta.value = ''
+                ta.focus()
+                postComm.innerHTML = ''
+                for(let i=0; i<json.length; i++){
+                    postComm.appendChild(makePost(json[i]))         
+                }
+                postComm.appendChild(newComm(obj, postComm,postChat))
+                postChat.querySelector('#count').innerHTML = json.length
+
             })    
         })
             
@@ -238,10 +242,10 @@ console.log(json[i])
 
         const img = new_element('img','','post-head-img')
 
-        backFunc({'filename':`../assets/users/${obj.id_user}/perfil.jpg`},1)
+        backFunc({'filename':`../assets/users/${obj.id_usuario}/perfil.jpg`},1)
         .then((resp)=>{
             const imgExist = JSON.parse(resp)    
-            img.src = imgExist ? `assets/users/${obj.id_user}/perfil.jpg` : 'assets/icons/icon.png'
+            img.src = imgExist ? `assets/users/${obj.id_usuario}/perfil.jpg` : 'assets/icons/icon.png'
         })  
 
         head_left.appendChild(img)
@@ -277,7 +281,9 @@ console.log(json[i])
         
         post.appendChild(post_comm)
 
-        pageFunc.fillComm(obj,post_comm,post_chat)
+        if(obj.hasOwnProperty('id')){
+            pageFunc.fillComm(obj,post_comm,post_chat)
+        }
 
         return post
     }
