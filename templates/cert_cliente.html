@@ -312,7 +312,7 @@
         post.appendChild(post_text)
 
         const post_time = new_element('div','', 'post-time')
-        post_time.innerHTML =  obj.data_hora.viewXDate()
+        post_time.innerHTML =  !quest ? obj.data_hora.viewXDate() : ''
         post.appendChild(post_time)
         
         const post_social = new_element('div','', 'post-social')
