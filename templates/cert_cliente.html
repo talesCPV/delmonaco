@@ -34,6 +34,11 @@
             height: 200px;
         }
 
+        .edit-div{
+            display : flex;
+            align-items: center;
+        }
+
     </style>
 
     <div class="tab-bar">
@@ -211,7 +216,7 @@
             params.data_hora =  obj.data_hora 
          
         const myPromisse = queryDB(params,'TASK-5')
-        myPromisse.then((resolve)=>{
+        return myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
             obj.textarea.value = ''
             postComm.innerHTML = ''
@@ -255,7 +260,29 @@
                 const edit = new Object
                 edit.label = 'Editar'
                 edit.link = ()=>{
-                    console.log(post.parentNode.parentNode.querySelector('.post-social-chat').querySelector('#count'))
+
+                    const div = post.querySelector('.post-text')
+                    div.className = 'edit-div'
+
+                    const old_text = div.innerHTML
+                    div.innerHTML = ''              
+                    const ta = document.createElement('textarea')
+                    ta.value = old_text
+                    div.appendChild(ta)
+
+                    const btn = document.createElement('button')
+                    btn.className = 'btn-round'
+                    btn.innerHTML = '<span class="mdi mdi-content-save-outline"></span>'
+                    div.appendChild(btn)
+
+                    btn.addEventListener('click',()=>{
+                        obj.id = obj.id_pergunta
+                        obj.textarea = ta
+                        const old_text = ta.value
+                        pageFunc.setAnswer(obj,post).then((resolve)=>{
+                            div.innerHTML = old_text
+                        })
+                    })
                     
                 }            
                 tbl.push(edit)
