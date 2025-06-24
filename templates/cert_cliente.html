@@ -97,6 +97,28 @@
 
     }
 
+    function showUsers(div,arr){
+        div.innerHTML = ''
+        for(let i=0; i<arr.length; i++){
+            console.log(arr[i])
+
+            const img = new_element('img','','post-head-img')
+
+            backFunc({'filename':`../assets/users/${arr[i]}/perfil.jpg`},1)
+            .then((resp)=>{
+                const imgExist = JSON.parse(resp)    
+                img.src = imgExist ? `assets/users/${arr[i]}/perfil.jpg` : `assets/icons/user_default.png}`
+            })  
+
+            div.appendChild(img)
+
+
+        }
+
+
+
+    }
+
     pageFunc.fillTasks = (id_prod)=>{
         const tab_bar = pageScreen.querySelector('.tab-bar')
         const tab_screen = pageScreen.querySelector('.tab-screen')
@@ -189,7 +211,7 @@
                 postChat.querySelector('#count').innerHTML = json.length
 
                 for(let i=0; i<json.length; i++){
-                    postComm.appendChild(makePost(json[i]))         
+                    postComm.appendChild(makePost(json[i]))
                 }
                 postComm.appendChild(newComm(obj, post))
             })
@@ -301,6 +323,15 @@
 
         if(quest){
             pageFunc.fillComm(obj,post)
+        }else{
+//            console.log(obj)
+            const id_likes = obj.LIKES == null ? [] : obj.LIKES.split('|')
+//            console.log(id_likes)
+            const count = post_chat.querySelector('#count')
+//            count.innerHTML = id_likes.length
+//            console.log(count)
+            showUsers(post_chat.querySelector('#count'),id_likes)
+
         }
 
         return post
