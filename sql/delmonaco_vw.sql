@@ -168,9 +168,10 @@ FROM tb_respostas AS RESP;
  DROP VIEW IF EXISTS vw_answers;
  	CREATE VIEW vw_answers AS
 	SELECT RESP.*, USR.nome AS nome_usuario,
-    (SELECT GROUP_CONCAT(DISTINCT id_user_like SEPARATOR "|") FROM tb_like WHERE id_pergunta=RESP.id_pergunta AND data_hora=RESP.data_hora) AS LIKES
+    (SELECT GROUP_CONCAT(DISTINCT CONCAT(LK.id_user_like,",",USR.nome)   SEPARATOR "|") FROM tb_like AS LK INNER JOIN tb_usuario AS USR ON LK.id_user_like=USR.id WHERE id_pergunta=RESP.id_pergunta AND data_hora=RESP.data_hora) AS LIKES
 	FROM tb_respostas AS RESP
 	INNER JOIN tb_usuario AS USR
-	ON RESP.id_usuario = USR.id;
+	ON RESP.id_usuario = USR.id
+    ORDER BY data_hora;
 
 SELECT * FROM vw_answers;

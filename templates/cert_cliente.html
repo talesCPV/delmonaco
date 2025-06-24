@@ -38,7 +38,6 @@
 
     <div class="tab-bar">
         <div class="tab-item" id="tab-sobre" onclick="pictab(this)">Sobre</div>
-        <div class="tab-item" id="tab-post" onclick="pictab(this)">Post</div>
     </div>
     <div class="tab-screen">
         <div id="sobre" class="tab capa">
@@ -46,39 +45,7 @@
             <textarea id="sobre_texto" class="sobre" disabled></textarea>
         </div>
   
-                    
-        <div id="post" class="tab post">
-            <div class="post-head">
-                <div class="post-head-left">
-                    <img class="post-head-img" src="assets/users/1/perfil.jpg" alt="">
-                    <div class="post-head-name">Tales C. Dantas</div>
-                </div>
-                <div class="post-head-rigth">
-<!--                    
-                    <div class="post-btn">Subscribe</div>
-                    <div class="btnMore">...</div>
--->                    
-                </div>
-            </div>
-            <div class="post-text">
-                Lorem ipsum dolor sit amet. Id voluptas harum et ullam corrupti et doloremque rerum vel ipsa natus vel adipisci nisi. Et incidunt molestiae et ducimus incidunt in nostrum reiciendis ut veniam quia ea impedit perferendis in facere voluptatem 33 alias eaque. 
-            </div>
-            <div class="post-time">
-                00:00 PM Oct-10,2024
-            </div>
-            <div class="post-social">
-                <div class="post-social-chat">
-                    <span class="mdi mdi-chat-outline"></span>
-                    <p>50</p>
-                </div>
-                <div class="post-social-like">
-                    <span class="mdi mdi-thumb-up-outline"></span>
-                    <p>15</p>
-                </div>
-            </div>
-        </div>
 
-    
     </div>
 
 </template>
@@ -100,23 +67,16 @@
     function showUsers(div,arr){
         div.innerHTML = ''
         for(let i=0; i<arr.length; i++){
-            console.log(arr[i])
-
             const img = new_element('img','','post-head-img')
-
-            backFunc({'filename':`../assets/users/${arr[i]}/perfil.jpg`},1)
+            const id_user = arr[i].split(',')[0]
+            img.title = arr[i].split(',')[1]
+            backFunc({'filename':`../assets/users/${id_user}/perfil.jpg`},1)
             .then((resp)=>{
                 const imgExist = JSON.parse(resp)    
-                img.src = imgExist ? `assets/users/${arr[i]}/perfil.jpg` : `assets/icons/user_default.png}`
+                img.src = imgExist ? `assets/users/${id_user}/perfil.jpg` : `assets/icons/user_default.png`
             })  
-
             div.appendChild(img)
-
-
         }
-
-
-
     }
 
     pageFunc.fillTasks = (id_prod)=>{
@@ -220,9 +180,6 @@
 
     function newComm(obj, post){
 
-        const postComm = post.querySelector('.post-comm')
-        const postChat = post.querySelector('.post-social-chat')
-
         const comm = document.createElement('div')
         comm.className = 'comments post'
 
@@ -235,29 +192,35 @@
         comm.appendChild(btn)
 
         btn.addEventListener('click',()=>{
-            const params = new Object;
-                params.id_pergunta = obj.id
-                params.id_cliente = pageData.id_cliente
-                params.resposta = ta.value
-                params.data_hora =  obj.data_hora 
-                
-            const myPromisse = queryDB(params,'TASK-5')
-            myPromisse.then((resolve)=>{
-                const json = JSON.parse(resolve)
-                ta.value = ''
-                ta.focus()
-                postComm.innerHTML = ''
-                for(let i=0; i<json.length; i++){
-                    postComm.appendChild(makePost(json[i]))         
-                }
-                postComm.appendChild(newComm(obj, postComm,postChat))
-                postChat.querySelector('#count').innerHTML = json.length
-
-            })    
+            obj.textarea = ta
+            pageFunc.setAnswer(obj,post)
         })
             
         ta.focus()
         return comm
+    }
+
+    pageFunc.setAnswer = (obj,post,del=0)=>{
+        const postComm = post.querySelector('.post-comm')
+        const postChat = post.querySelector('.post-social-chat')
+
+        const params = new Object;
+            params.id_pergunta = obj.id
+            params.id_cliente = pageData.id_cliente
+            params.resposta = del? '' : obj.textarea.value
+            params.data_hora =  obj.data_hora 
+         
+        const myPromisse = queryDB(params,'TASK-5')
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            obj.textarea.value = ''
+            postComm.innerHTML = ''
+            for(let i=0; i<json.length; i++){
+                postComm.appendChild(makePost(json[i]))         
+            }
+            postComm.appendChild(newComm(obj,post))
+            postChat.querySelector('#count').innerHTML = json.length
+        })  
     }
 
     function makePost(obj){
@@ -283,6 +246,38 @@
 
         const head_rigth = new_element('div','','post-head-left')
 
+
+        if(!quest && obj.id_usuario==localStorage.id_user){
+        
+            const btn_more = new_element('div','...','btnMore')
+            btn_more.addEventListener('click',(e)=>{
+                const tbl = []
+                const edit = new Object
+                edit.label = 'Editar'
+                edit.link = ()=>{
+                    console.log(post.parentNode.parentNode.querySelector('.post-social-chat').querySelector('#count'))
+                    
+                }            
+                tbl.push(edit)
+                const del = new Object
+                del.label = 'Deletar'
+                del.link = ()=>{
+                    if(confirm('Deseja deletar este post?')){
+                        obj.id = obj.id_pergunta
+                        obj.textarea = new Object
+                        pageFunc.setAnswer(obj,post,1)
+                        const count =  post.parentNode.parentNode.querySelector('.post-social-chat').querySelector('#count')
+                        count.innerHTML = Number(count.innerHTML) - 1
+                        post.remove()
+                    }
+                }            
+                tbl.push(del)
+                menuContext(tbl,e,0)
+            })
+            head_rigth.appendChild(btn_more)
+        }
+        
+
         head.appendChild(head_rigth)
         post.appendChild(head)
 
@@ -307,10 +302,11 @@
                     params.data_hora =  obj.data_hora 
 
                 const myPromisse = queryDB(params,'TASK-6')
-                myPromisse.then((resolve)=>{
-                    const json = JSON.parse(resolve)
-                    console.log(json)
-
+                myPromisse.then((resolve)=>{                  
+                    let json = JSON.parse(resolve)[0].LIKES
+                    json =  json == null ? [] : json.split('|')
+                    const div = post_chat.querySelector('#count')
+                    showUsers(div,json)
                 })           
             }
         })
@@ -324,22 +320,12 @@
         if(quest){
             pageFunc.fillComm(obj,post)
         }else{
-//            console.log(obj)
             const id_likes = obj.LIKES == null ? [] : obj.LIKES.split('|')
-//            console.log(id_likes)
             const count = post_chat.querySelector('#count')
-//            count.innerHTML = id_likes.length
-//            console.log(count)
             showUsers(post_chat.querySelector('#count'),id_likes)
-
         }
-
         return post
     }
-
-
-
-    
 
     pageStart()
 </script>

@@ -31,8 +31,8 @@ CREATE TABLE tb_mail (
     id_to int(11) NOT NULL,
     message varchar(1000),
     looked boolean DEFAULT 0,
-    FOREIGN KEY (id_from) REFERENCES tb_usuario(id),
-    FOREIGN KEY (id_to) REFERENCES tb_usuario(id),
+    FOREIGN KEY (id_from) REFERENCES tb_usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_to) REFERENCES tb_usuario(id) ON DELETE CASCADE,
     PRIMARY KEY (data,id_from)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -72,8 +72,8 @@ CREATE TABLE tb_user_cli(
     id_user int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
     access int DEFAULT 1,
-    FOREIGN KEY (id_user) REFERENCES tb_usuario(id),
-    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+    FOREIGN KEY (id_user) REFERENCES tb_usuario(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
     PRIMARY KEY (id_user,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -125,7 +125,7 @@ CREATE TABLE tb_escopo(
     id_prod int(11) NOT NULL,
     nome varchar(30) NOT NULL,
     texto varchar(2048) NOT NULL DEFAULT "",
-	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
+	FOREIGN KEY (id_prod) REFERENCES tb_produto(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -139,8 +139,8 @@ CREATE TABLE tb_orcamento(
     capa boolean DEFAULT 0,
     data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     valor double NOT NULL DEFAULT 0,
-	FOREIGN KEY (id_cli) REFERENCES tb_cliente(id),
-    FOREIGN KEY (id_owner) REFERENCES tb_usuario(id),
+	FOREIGN KEY (id_cli) REFERENCES tb_cliente(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_owner) REFERENCES tb_usuario(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -158,8 +158,8 @@ CREATE TABLE tb_orc_prod(
     id_orc int(11) NOT NULL,
     id_prod int(11) NOT NULL,
     valor double NOT NULL DEFAULT 0,
-    FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id),
-    FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
+    FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_prod) REFERENCES tb_produto(id) ON DELETE CASCADE,
     PRIMARY KEY (id_orc,id_prod)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -168,8 +168,8 @@ CREATE TABLE tb_orc_texto(
     id_orc int(11) NOT NULL,
     id_texto int(11) NOT NULL,
     valor double NOT NULL DEFAULT 0,
-    FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id),
-    FOREIGN KEY (id_texto) REFERENCES tb_texto(id),
+    FOREIGN KEY (id_orc) REFERENCES tb_orcamento(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_texto) REFERENCES tb_texto(id) ON DELETE CASCADE,
     PRIMARY KEY (id_orc,id_texto)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -213,8 +213,8 @@ CREATE TABLE tb_norma_cli(
     id_norma int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
     expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
-    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+	FOREIGN KEY (id_norma) REFERENCES tb_normas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
     PRIMARY KEY (id_norma,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -224,8 +224,8 @@ DROP TABLE IF EXISTS tb_norma_lei;
 CREATE TABLE tb_norma_lei(
     id_norma int(11) NOT NULL,
     id_lei int(11) NOT NULL,
-	FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
-    FOREIGN KEY (id_lei) REFERENCES tb_leis(id),
+	FOREIGN KEY (id_norma) REFERENCES tb_normas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_lei) REFERENCES tb_leis(id) ON DELETE CASCADE,
     PRIMARY KEY (id_norma,id_lei)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -238,9 +238,9 @@ CREATE TABLE tb_check(
     nao_aplica BOOL DEFAULT 0,
     obs VARCHAR(512) DEFAULT NULL,
     validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
-    FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id),
-    FOREIGN KEY (id_resp) REFERENCES tb_usuario(id),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_resp) REFERENCES tb_usuario(id) ON DELETE CASCADE,
     PRIMARY KEY (id_cliente,id_tarefa)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -259,8 +259,8 @@ CREATE TABLE tb_pgto(
     mes int DEFAULT 0,
     expira datetime DEFAULT NULL,
     efetuado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
-    FOREIGN KEY (id_norma) REFERENCES tb_normas(id),
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_norma) REFERENCES tb_normas(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -284,7 +284,7 @@ CREATE TABLE tb_tarefas(
     id_produto int(11) NOT NULL,
     nome varchar(50) NOT NULL,
     descricao varchar(255) DEFAULT NULL,
-	FOREIGN KEY (id_produto) REFERENCES tb_produto(id),
+	FOREIGN KEY (id_produto) REFERENCES tb_produto(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -294,7 +294,7 @@ CREATE TABLE tb_perguntas(
     id_tarefa int(11) NOT NULL,
     pergunta varchar(1500) NOT NULL,
     relatorio boolean DEFAULT 1,
-	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id),
+	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -303,8 +303,8 @@ CREATE TABLE tb_quest_cli(
     id_tarefa int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
     ok boolean DEFAULT 0,
-	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id),
-    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
     PRIMARY KEY (id_tarefa,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -315,9 +315,9 @@ CREATE TABLE tb_respostas(
     id_usuario int(11) NOT NULL,
     resposta varchar(512) NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id),
-	FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
-	FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id),
+	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id) ON DELETE CASCADE,
     PRIMARY KEY (id_pergunta,id_cliente,id_usuario,data_hora)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -326,8 +326,8 @@ CREATE TABLE tb_like(
     id_pergunta int(11) NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_user_like int(11) NOT NULL,
-	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id),
-	FOREIGN KEY (id_user_like) REFERENCES tb_usuario(id),
+	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_user_like) REFERENCES tb_usuario(id) ON DELETE CASCADE,
     PRIMARY KEY (id_pergunta,id_user_like,data_hora)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -336,7 +336,7 @@ CREATE TABLE tb_prod_cli(
     id_prod int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
     expira TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	FOREIGN KEY (id_prod) REFERENCES tb_produto(id),
-    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id),
+	FOREIGN KEY (id_prod) REFERENCES tb_produto(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

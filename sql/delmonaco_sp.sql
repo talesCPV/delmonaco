@@ -1286,6 +1286,7 @@ DELIMITER $$
 			IF(Ipergunta = "")THEN
                 DELETE FROM tb_perguntas WHERE id = Iid;
                 DELETE FROM tb_respostas WHERE id_pergunta = Iid;
+                DELETE FROM tb_like WHERE id_pergunta = Iid;
             ELSE
 				IF(Iid=0)THEN
 					INSERT INTO tb_perguntas (id_tarefa,pergunta,relatorio) 
@@ -1309,7 +1310,10 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-			SELECT * FROM vw_answers WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+			SELECT * FROM vw_answers 
+            WHERE id_pergunta=Iid_pergunta 
+            AND id_cliente=Iid_cliente
+            ORDER BY data_hora;
         END IF;
 	END $$
 DELIMITER ;
@@ -1330,6 +1334,7 @@ DELIMITER $$
 			SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
 			IF(Iresposta = "")THEN
                 DELETE FROM tb_respostas WHERE id_usuario = @id_usuario AND data_hora=Idata_hora;
+                DELETE FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora;
             ELSE
 				SET @has = (SELECT COUNT(*) FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND id_usuario=@id_usuario AND data_hora=Idata_hora);
 				IF(@has)THEN
@@ -1339,7 +1344,10 @@ DELIMITER $$
 					VALUES (Iid_pergunta,Iid_cliente,@id_usuario,Iresposta);
                 END IF;
             END IF;
-            SELECT * FROM sp_view_answer WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente;
+            SELECT * FROM vw_answers 
+            WHERE id_pergunta=Iid_pergunta 
+            AND id_cliente=Iid_cliente
+            ORDER BY data_hora;
         END IF;
 	END $$
 DELIMITER ;
@@ -1363,7 +1371,12 @@ DELIMITER $$
 				INSERT INTO tb_like (id_pergunta,data_hora,id_user_like) 
 				VALUES (Iid_pergunta,Idata_hora,@id_usuario);
             END IF;
-            SELECT COUNT(*) AS LIKES FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora;
+			SELECT GROUP_CONCAT(DISTINCT CONCAT(LK.id_user_like,",",USR.nome)   SEPARATOR "|") AS LIKES
+				FROM tb_like AS LK 
+                INNER JOIN tb_usuario AS USR 
+                ON LK.id_user_like=USR.id 
+                WHERE id_pergunta=Iid_pergunta 
+                AND data_hora=Idata_hora;
         END IF;
 	END $$
 DELIMITER ;
