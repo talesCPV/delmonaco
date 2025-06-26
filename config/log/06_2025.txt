@@ -28,3 +28,4 @@
 23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Comercial, Acesso:[[0,1]])
 23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: GDM Elevate, Acesso:[[0,1,2]])
 23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Gestao de Processos, Acesso:[[0,1,2]])
+25/06/2025 21:16 tales@planet3.com.br : tales@planet3.com.br -> Senha alterada pelo usuario

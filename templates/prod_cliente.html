@@ -11,6 +11,10 @@
     .panel fieldset{
         width: 100%;
         padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .middle{
@@ -42,7 +46,8 @@
         <fieldset>
             <legend>Clientes</legend>
             <select id="cmbEmp"></select>
-            <select id="cmbCliEmp" size="10"></select>
+            <select id="cmbCliProd" size="10"></select>
+            <p>duplo clique sobre o produto para liberar tarefas</p>
         </fieldset>
     </div>
 
@@ -54,7 +59,7 @@
     const pageScreen = document.querySelector('#card-prod_cliente')
     const prod = pageScreen.querySelector('#cmbProd')
     const cli = pageScreen.querySelector('#cmbEmp')
-    const prod_cli = pageScreen.querySelector('#cmbCliEmp')
+    const prod_cli = pageScreen.querySelector('#cmbCliProd')
 
     function pageStart(){
         pageFunc.fillEmp().then(()=>{
@@ -76,6 +81,7 @@
                 const opt = document.createElement('option')
                 opt.value = json[i].id
                 opt.innerHTML = json[i].fantasia
+                opt.data = json[i]
                 cli.appendChild(opt)
             }         
         })
@@ -91,6 +97,7 @@
                 const opt = document.createElement('option')
                 opt.value = json[i].id
                 opt.innerHTML = json[i].nome
+                opt.data = json[i]
                 prod.appendChild(opt)
             }         
         })        
@@ -108,6 +115,7 @@
                 const opt = document.createElement('option')
                 opt.value = json[i].id_prod
                 opt.innerHTML = json[i].nome
+                opt.data = json[i]
                 prod_cli.appendChild(opt)
             }         
         })        
@@ -137,6 +145,11 @@
 
     cli.addEventListener('change',()=>{
         pageFunc.fillCliProd()
+    })
+
+    pageScreen.querySelector('#cmbCliProd').addEventListener('dblclick',()=>{
+        const prod = pageScreen.querySelector('#cmbCliProd').selectedOptions[0].data;
+        openHTML('prod_cli_task.html','pop-up',`${prod.cliente} - ${prod.nome} - Tarefas`,prod)
     })
 
     pageStart()

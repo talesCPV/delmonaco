@@ -1,0 +1,140 @@
+<template>
+    <style>
+
+    .panel{
+        display: flex;
+        flex-direction: row;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    .panel fieldset{
+        width: 100%;
+        padding: 10px;
+    }
+
+    .middle{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .panel select{
+        margin: 0;
+        padding: 10px;
+    }
+
+    .line{
+        width: 100%;
+    }
+
+    </style>
+  
+    <div class="panel">
+        <fieldset>
+            <legend>Tarefas</legend>
+            <select id="cmbTasks" size="13"></select>
+        </fieldset>
+        <div class="middle">
+            <button id="btnAdd" class="btn-round"><span class="mdi mdi-arrow-right-bold"></span></button>
+            <button id="btnSub" class="btn-round"><span class="mdi mdi-arrow-left-bold"></span></button>
+        </div>
+        <fieldset>
+            <legend>Liberadas</legend>
+            <select id="cmbCliTask" size="13"></select>
+        </fieldset>
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.prod_cli_task.data
+    const pageFunc = main_data.prod_cli_task.func
+    const pageScreen = document.querySelector('#card-prod_cli_task')
+
+
+    function pageStart(){
+        pageFunc.fillTask(pageData.id_prod)
+        pageFunc.fillTaskCli(pageData.id_prod)
+    }
+
+
+    pageFunc.fillTask = (id_prod)=>{
+        const tasks = pageScreen.querySelector('#cmbTasks')
+        tasks.innerHTML = ''
+        const params = new Object
+        
+            params.field = 'id_produto'
+            params.signal = '='
+            params.value = id_prod
+        const myPromisse = queryDB(params,'TASK-0');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            
+            for(let i=0; i<json.length; i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].nome
+                opt.value = json[i].id
+                opt.data = json[i]
+                tasks.appendChild(opt)
+            }
+        })
+    }
+
+    pageFunc.fillTaskCli = (id_prod)=>{
+        const tasks = pageScreen.querySelector('#cmbCliTask')
+        tasks.innerHTML = ''
+        const params = new Object
+            params.id_cli = pageData.id_cliente
+            params.id_prod = id_prod
+        const myPromisse = queryDB(params,'TASK-7');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            for(let i=0; i<json.length; i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].tarefa
+                opt.value = json[i].id
+                opt.data = json[i]
+                tasks.appendChild(opt)
+            }
+        })
+    }
+
+    pageFunc.setTaskCli = (id_task)=>{
+        const params = new Object
+            params.id_task = id_task
+            params.id_cli = pageData.id_cliente
+        const myPromisse = queryDB(params,'TASK-8');
+        return myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            const tasks = pageScreen.querySelector('#cmbCliTask')
+            tasks.innerHTML = ''            
+            for(let i=0; i<json.length; i++){
+                const opt = document.createElement('option')
+                opt.innerHTML = json[i].tarefa
+                opt.value = json[i].id_tarefa
+                opt.data = json[i]
+                tasks.appendChild(opt)
+            }         
+
+        })
+    }
+
+    pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
+        const task = pageScreen.querySelector('#cmbTasks').selectedOptions[0];
+        if(task!=undefined){
+           pageFunc.setTaskCli(task.data.id)
+        }
+    })
+
+    pageScreen.querySelector('#btnSub').addEventListener('click',()=>{
+        const task = pageScreen.querySelector('#cmbCliTask').selectedOptions[0];
+        if(task!=undefined){
+            pageFunc.setTaskCli(task.data.id_tarefa)
+        }
+    })
+
+
+    pageStart()
+
+</script>

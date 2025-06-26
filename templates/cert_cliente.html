@@ -89,7 +89,7 @@
         const tab_screen = pageScreen.querySelector('.tab-screen')
 
         function addTab(data){
-
+console.log(data)
             function addQuest(quest){
                 quest = quest.split('|')
 
@@ -107,8 +107,8 @@
             const tab = document.createElement('div')
             tab_bar.appendChild(tab)
             tab.className = 'tab-item'
-            tab.id = `tab-p${data.id}`
-            tab.innerHTML = data.nome
+            tab.id = `tab-p${data.id_tarefa}`
+            tab.innerHTML = data.tarefa
             tab.addEventListener('click',()=>{
                 pictab(tab)
             })
@@ -116,7 +116,7 @@
             const screen = document.createElement('div')
             tab_screen.appendChild(screen)
             screen.className = 'tab'
-            screen.id = 'p'+data.id
+            screen.id = 'p'+data.id_tarefa
 
             const about = document.createElement('textarea')
             screen.appendChild(about)
@@ -135,19 +135,16 @@
         }
 
         const params = new Object
-            params.field = 'id_produto'
-            params.signal = '='
-            params.value = id_prod
-   
-        const myPromisse = queryDB(params,'TASK-0');
+        params.id_cliente = pageData.id_cliente
+            params.id_produto = id_prod
+            const myPromisse = queryDB(params,'TASK-7');
         myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve)
+            const json = JSON.parse(resolve)          
             for(let i=0; i<json.length; i++){        
                 addTab(json[i])
             }
         })
     }
-
 
     function new_element(tipo,innerHTML='',cls=0,id=0){
         const el = document.createElement(tipo)
@@ -180,7 +177,6 @@
                 }
                 postComm.appendChild(newComm(obj, post))
             })
-               
     }
 
     function newComm(obj, post){

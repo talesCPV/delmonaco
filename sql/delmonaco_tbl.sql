@@ -298,8 +298,8 @@ CREATE TABLE tb_perguntas(
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS tb_quest_cli;
-CREATE TABLE tb_quest_cli(
+DROP TABLE IF EXISTS tb_task_cli;
+CREATE TABLE tb_task_cli(
     id_tarefa int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
     ok boolean DEFAULT 0,

@@ -1380,3 +1380,41 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+  DROP PROCEDURE IF EXISTS sp_view_task_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_task_cli(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_cli int(11),
+        IN Iid_prod int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM vw_cli_task WHERE id_cliente=Iid_cli AND id_produto=Iid_prod;
+        END IF;
+	END $$
+DELIMITER ;
+
+ DROP PROCEDURE IF EXISTS sp_set_task_cli;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_task_cli(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_task int(11),
+		IN Iid_cli int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+ 			SET @has = (SELECT COUNT(*) FROM tb_task_cli WHERE id_tarefa=Iid_task AND id_cliente=Iid_cli);
+			IF(@has)THEN
+				DELETE FROM tb_task_cli WHERE id_tarefa=Iid_task AND id_cliente=Iid_cli;
+            ELSE
+				INSERT INTO tb_task_cli (id_tarefa,id_cliente) VALUES (Iid_task,Iid_cli);
+            END IF;
+            SELECT * FROM vw_cli_task WHERE id_cliente=Iid_cli AND id_produto=(SELECT id_produto FROM tb_tarefas WHERE id=Iid_task);
+        END IF;
+	END $$
+DELIMITER ;
