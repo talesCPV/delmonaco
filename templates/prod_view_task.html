@@ -115,7 +115,7 @@
             const json = JSON.parse(resolve)
             for(let i=0; i<json.length; i++){
                 const opt = document.createElement('option')
-                opt.innerHTML = json[i].pergunta
+                opt.innerHTML = json[i].titulo
                 opt.value = json[i].id
                 opt.data = json[i]
                 quest.appendChild(opt)

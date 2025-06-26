@@ -1277,6 +1277,7 @@ DELIMITER $$
 		IN Ihash varchar(64),
         IN Iid int(11),
 		IN Iid_tarefa int(11),
+        IN Ititulo varchar(150),
 		IN Ipergunta varchar(1500),
 		IN Irelat boolean
     )
@@ -1289,10 +1290,10 @@ DELIMITER $$
                 DELETE FROM tb_like WHERE id_pergunta = Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_perguntas (id_tarefa,pergunta,relatorio) 
-					VALUES (Iid_tarefa,Ipergunta, Irelat);
+					INSERT INTO tb_perguntas (id_tarefa,titulo,pergunta,relatorio) 
+					VALUES (Iid_tarefa,Ititulo,Ipergunta, Irelat);
 				ELSE 
-					UPDATE tb_perguntas SET pergunta=Ipergunta, relatorio=Irelat WHERE id=Iid;
+					UPDATE tb_perguntas SET titulo=Ititulo, pergunta=Ipergunta, relatorio=Irelat WHERE id=Iid;
                 END IF;
             END IF;
         END IF;

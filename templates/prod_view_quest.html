@@ -24,7 +24,12 @@
         <legend>Pergunta</legend>
 
         <div class="inline">
-            <label for="edtQuest">Texto</label>
+            <label for="edtTitle">Título</label>
+            <input type="text" class="only-view" id="edtTitle" maxlength="150" disabled>
+        </div>
+
+        <div class="inline">
+            <label for="edtQuest">Pergunta</label>
             <textarea class="only-view" id="edtQuest" rows="10" maxlength="1500" disabled></textarea>
         </div>
         
@@ -56,6 +61,7 @@
             pageScreen.querySelector('#btnEdit').disabled = 1
 
         }else{ 
+            pageScreen.querySelector('#edtTitle').value = pageData.titulo
             pageScreen.querySelector('#edtQuest').value = pageData.pergunta
             pageScreen.querySelector('#ckbRel').checked = Number(pageData.relatorio)
             pageScreen.querySelector('#btnEdit').disabled = 0
@@ -73,6 +79,7 @@
         const params = new Object;
             params.id = newQuest ? 0 : pageData.id
             params.id_tarefa = pageData.id_tarefa
+            params.titulo = pageScreen.querySelector('#edtTitle').value.trim()
             params.pergunta = del ? "" : pageScreen.querySelector('#edtQuest').value.trim()
             params.relatorio = pageScreen.querySelector('#ckbRel').checked ? 1 : 0
           

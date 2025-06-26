@@ -292,11 +292,14 @@ DROP TABLE IF EXISTS tb_perguntas;
 CREATE TABLE tb_perguntas(
 	id int(11) NOT NULL AUTO_INCREMENT,
     id_tarefa int(11) NOT NULL,
+    titulo varchar(150) DEFAULT NULL,
     pergunta varchar(1500) NOT NULL,
     relatorio boolean DEFAULT 1,
 	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+Alter Table tb_perguntas ADD COLUMN titulo varchar(150) DEFAULT NULL;
 
 DROP TABLE IF EXISTS tb_task_cli;
 CREATE TABLE tb_task_cli(
