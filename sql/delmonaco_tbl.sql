@@ -299,8 +299,6 @@ CREATE TABLE tb_perguntas(
     PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-Alter Table tb_perguntas ADD COLUMN titulo varchar(150) DEFAULT NULL;
-
 DROP TABLE IF EXISTS tb_task_cli;
 CREATE TABLE tb_task_cli(
     id_tarefa int(11) NOT NULL,

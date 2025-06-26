@@ -33,6 +33,13 @@
     }
 
     pageScreen.querySelector('#btnUpload').addEventListener('click',()=>{
+
+        if(pageData.hasOwnProperty('callback')){
+            pageData.callback(pageScreen.querySelector('#up_file'))
+        }
+        closeModal('tool_upload_file')
+
+/*        
         const up = uploadImage('up_file',`files/${pageData.path}`,pageScreen.querySelector('#up_file').files[0].name)
         up.then((resp)=>{
             setLog(`Arquivo Adicionado -> : ${pageData.nome}`)
@@ -41,6 +48,7 @@
             }
             closeModal('tool_upload_file')
         })
+*/
     })
 
     pageScreen.querySelector('#up_file').addEventListener('change',()=>{        

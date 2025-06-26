@@ -89,7 +89,7 @@
         const tab_screen = pageScreen.querySelector('.tab-screen')
 
         function addTab(data){
-console.log(data)
+
             function addQuest(quest){
                 quest = quest.split('|')
 
@@ -188,15 +188,42 @@ console.log(data)
         ta.className = 'post-new-comm'
         comm.appendChild(ta)
 
+        const botoes = document.createElement('div')
+        comm.appendChild(botoes)
+
         const btn = document.createElement('button')
         btn.innerHTML = 'Postar'
-        comm.appendChild(btn)
+        botoes.appendChild(btn)
 
         btn.addEventListener('click',()=>{
             obj.textarea = ta
             pageFunc.setAnswer(obj,post)
         })
             
+        const anexo = document.createElement('button')
+        anexo.innerHTML = 'Anexar'
+        botoes.appendChild(anexo)
+
+        anexo.addEventListener('click',()=>{
+
+            const callback = (file)=>{
+            const up = uploadFile(file.files[0],`files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${obj.id}/`,'')
+        up.then((resp)=>{
+/*
+            setLog(`Arquivo Adicionado -> : ${pageData.nome}`)
+            if(main_data.hasOwnProperty(pageData.org)){
+                main_data[pageData.org].func.fillAnexo()
+            }
+            closeModal('tool_upload_file')
+*/
+        })
+
+                console.log(file.files[0].name)
+            }
+
+            openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',{'callback':callback})
+        })
+
         ta.focus()
         return comm
     }
