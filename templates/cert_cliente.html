@@ -84,6 +84,22 @@
         }
     }
 
+    function showFiles(id_pergunta){
+        const files = document.createElement('div')
+        listFiles(`files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${id_pergunta}/`,ext='*.*').then((resolve)=>{
+            const json = JSON.parse(resolve)
+            if(json){
+                console.log(json)
+                for(let i=2; i<json.length; i++){
+                    const p = document.createElement('p')
+                    p.innerHTML = json[i]
+                    files.appendChild(p)
+                }
+            }
+        })
+        return files
+    }
+
     pageFunc.fillTasks = (id_prod)=>{
         const tab_bar = pageScreen.querySelector('.tab-bar')
         const tab_screen = pageScreen.querySelector('.tab-screen')
@@ -175,6 +191,11 @@
                 for(let i=0; i<json.length; i++){
                     postComm.appendChild(makePost(json[i]))
                 }
+
+                
+
+                postComm.appendChild(showFiles(obj.id))
+
                 postComm.appendChild(newComm(obj, post))
             })
     }
@@ -189,10 +210,37 @@
         comm.appendChild(ta)
 
         const botoes = document.createElement('div')
+        botoes.style.display = 'flex'
         comm.appendChild(botoes)
 
+        const anexo = document.createElement('button')
+        anexo.innerHTML = '<span class="mdi mdi-paperclip"></span>'
+        anexo.className = 'btn-round'
+        botoes.appendChild(anexo)
+
+        anexo.addEventListener('click',()=>{
+
+            const callback = (file)=>{
+            const up = uploadFile(file.files[0],`files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${obj.id}/`,'')
+            up.then((resp)=>{
+    /*
+                setLog(`Arquivo Adicionado -> : ${pageData.nome}`)
+                if(main_data.hasOwnProperty(pageData.org)){
+                    main_data[pageData.org].func.fillAnexo()
+                }
+                closeModal('tool_upload_file')
+    */
+            })
+
+                console.log(file.files[0].name)
+            }
+
+            openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',{'callback':callback})
+        })        
+
         const btn = document.createElement('button')
-        btn.innerHTML = 'Postar'
+        btn.innerHTML = '<span class="mdi mdi-comment-account-outline"></span>'
+        btn.className = 'btn-round'
         botoes.appendChild(btn)
 
         btn.addEventListener('click',()=>{
@@ -200,30 +248,6 @@
             pageFunc.setAnswer(obj,post)
         })
             
-        const anexo = document.createElement('button')
-        anexo.innerHTML = 'Anexar'
-        botoes.appendChild(anexo)
-
-        anexo.addEventListener('click',()=>{
-
-            const callback = (file)=>{
-            const up = uploadFile(file.files[0],`files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${obj.id}/`,'')
-        up.then((resp)=>{
-/*
-            setLog(`Arquivo Adicionado -> : ${pageData.nome}`)
-            if(main_data.hasOwnProperty(pageData.org)){
-                main_data[pageData.org].func.fillAnexo()
-            }
-            closeModal('tool_upload_file')
-*/
-        })
-
-                console.log(file.files[0].name)
-            }
-
-            openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',{'callback':callback})
-        })
-
         ta.focus()
         return comm
     }
