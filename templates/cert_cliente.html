@@ -39,6 +39,17 @@
             align-items: center;
         }
 
+        .file_line{
+            display: flex;
+            justify-content: end;
+            padding: 0 10px;
+        }
+
+        .file_line:hover{
+            cursor: pointer;
+            background-color: #dae7e8;
+        }
+
     </style>
 
     <div class="tab-bar">
@@ -84,20 +95,50 @@
         }
     }
 
-    function showFiles(id_pergunta){
-        const files = document.createElement('div')
-        listFiles(`files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${id_pergunta}/`,ext='*.*').then((resolve)=>{
+    function showFiles(post){
+        const files = post.querySelector('.files')
+        files.innerHTML = ''
+        const path = `../files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${post.obj.id}/`     
+        listFiles(path,ext='*.*').then((resolve)=>{
             const json = JSON.parse(resolve)
             if(json){
-                console.log(json)
                 for(let i=2; i<json.length; i++){
-                    const p = document.createElement('p')
-                    p.innerHTML = json[i]
-                    files.appendChild(p)
+                    if(i==2){
+                        files.innerHTML = '<span class="mdi mdi-file-document" style="text-align: center;font-size: 1.5em;">Arquivos</span>'
+                    }
+
+                    const line = new_element('div','','file_line')
+                    line.appendChild(new_element('p',json[i]))
+                    files.appendChild(line)
+
+                    line.addEventListener('click',(e)=>{
+                        const tbl = []
+                        const open = new Object
+                        open.label = 'Abrir'
+                        open.link = ()=>{
+                            window.location.href
+                            window.open(window.location.href+'../'+path+json[i], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');                        
+                        }            
+                        tbl.push(open)
+
+                        const del = new Object
+                        del.label = 'Deletar'
+                        del.link = ()=>{
+                            if(confirm('Deseja deletar este arquivo defintivamente?')){
+                                delFile('/../'+path+json[i]).then((resolve)=>{
+                                    showFiles(post)
+                                    setLog(`Arquivo Deletado ${path+json[i]}`)
+                                })
+                            }
+                        }            
+                        tbl.push(del)
+                        menuContext(tbl,e,0)
+                    })
+
                 }
             }
         })
-        return files
+
     }
 
     pageFunc.fillTasks = (id_prod)=>{
@@ -174,13 +215,12 @@
         return el
     }
 
-    pageFunc.fillComm = (obj, post)=>{
-
+    pageFunc.fillComm = (post)=>{
         const postComm = post.querySelector('.post-comm')
         const postChat = post.querySelector('.post-social-chat')
 
         const params = new Object
-                params.id_pergunta = obj.id
+                params.id_pergunta = post.obj.id
                 params.id_cliente = pageData.id_cliente
 
             const myPromisse = queryDB(params,'TASK-4');
@@ -191,16 +231,13 @@
                 for(let i=0; i<json.length; i++){
                     postComm.appendChild(makePost(json[i]))
                 }
-
-                
-
-                postComm.appendChild(showFiles(obj.id))
-
-                postComm.appendChild(newComm(obj, post))
+                postComm.appendChild(new_element('div','','post files'))
+                showFiles(post)
+                postComm.appendChild(newComm(post))
             })
     }
 
-    function newComm(obj, post){
+    function newComm(post){
 
         const comm = document.createElement('div')
         comm.className = 'comments post'
@@ -221,15 +258,10 @@
         anexo.addEventListener('click',()=>{
 
             const callback = (file)=>{
-            const up = uploadFile(file.files[0],`files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${obj.id}/`,'')
-            up.then((resp)=>{
-    /*
-                setLog(`Arquivo Adicionado -> : ${pageData.nome}`)
-                if(main_data.hasOwnProperty(pageData.org)){
-                    main_data[pageData.org].func.fillAnexo()
-                }
-                closeModal('tool_upload_file')
-    */
+            const up = uploadFile(file.files[0],`../files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${post.obj.id}/`,'')
+            up.then((resp)=>{     
+                setLog(`Arquivo Anexado ${pageData.cliente}/${pageData.prod.nome}/${post.obj.id}/${file.files[0].name}`)           
+                showFiles(post)
             })
 
                 console.log(file.files[0].name)
@@ -242,35 +274,39 @@
         btn.innerHTML = '<span class="mdi mdi-comment-account-outline"></span>'
         btn.className = 'btn-round'
         botoes.appendChild(btn)
-
         btn.addEventListener('click',()=>{
-            obj.textarea = ta
-            pageFunc.setAnswer(obj,post)
+            post.obj.textarea = ta
+            pageFunc.setAnswer(post).then((resolve)=>{
+                setLog(`Post: ${pageData.cliente}/${pageData.prod.nome}/${post.obj.resposta}/${post.obj.textarea.value}`)           
+
+            })
         })
             
         ta.focus()
         return comm
     }
 
-    pageFunc.setAnswer = (obj,post,del=0)=>{
+    pageFunc.setAnswer = (post,del=0)=>{
         const postComm = post.querySelector('.post-comm')
         const postChat = post.querySelector('.post-social-chat')
 
         const params = new Object;
-            params.id_pergunta = obj.id
+            params.id_pergunta = post.obj.id
             params.id_cliente = pageData.id_cliente
-            params.resposta = del? '' : obj.textarea.value
-            params.data_hora =  obj.data_hora 
+            params.resposta = del? '' : post.obj.textarea.value
+            params.data_hora =  post.obj.data_hora 
          
         const myPromisse = queryDB(params,'TASK-5')
         return myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
-            obj.textarea.value = ''
+            post.obj.textarea.value = ''
             postComm.innerHTML = ''
             for(let i=0; i<json.length; i++){
                 postComm.appendChild(makePost(json[i]))         
             }
-            postComm.appendChild(newComm(obj,post))
+            postComm.appendChild(new_element('div','','post files'))
+            showFiles(post)
+            postComm.appendChild(newComm(post))
             postChat.querySelector('#count').innerHTML = json.length
         })  
     }
@@ -280,6 +316,7 @@
         const quest = obj.hasOwnProperty('id')
 
         const post = new_element('div','','post',`post-${quest ? obj.id : obj.id_pergunta}`)
+        post.obj = obj
         const head = new_element('div','','post-head')
         const head_left = new_element('div','','post-head-left')
         const img = new_element('img','','post-head-img')
@@ -326,7 +363,7 @@
                         obj.id = obj.id_pergunta
                         obj.textarea = ta
                         const old_text = ta.value
-                        pageFunc.setAnswer(obj,post).then((resolve)=>{
+                        pageFunc.setAnswer(post).then((resolve)=>{
                             div.innerHTML = old_text
                         })
                     })
@@ -339,7 +376,7 @@
                     if(confirm('Deseja deletar este post?')){
                         obj.id = obj.id_pergunta
                         obj.textarea = new Object
-                        pageFunc.setAnswer(obj,post,1)
+                        pageFunc.setAnswer(post,1)
                         const count =  post.parentNode.parentNode.querySelector('.post-social-chat').querySelector('#count')
                         count.innerHTML = Number(count.innerHTML) - 1
                         post.remove()
@@ -392,7 +429,7 @@
         post.appendChild(post_comm)
 
         if(quest){
-            pageFunc.fillComm(obj,post)
+            pageFunc.fillComm(post)
         }else{
             const id_likes = obj.LIKES == null ? [] : obj.LIKES.split('|')
             const count = post_chat.querySelector('#count')

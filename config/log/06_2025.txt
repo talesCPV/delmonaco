@@ -29,3 +29,9 @@
 23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: GDM Elevate, Acesso:[[0,1,2]])
 23/06/2025 19:02 tales@planet3.com.br : Permissao alterada, Modulo: Gestao de Processos, Acesso:[[0,1,2]])
 25/06/2025 21:16 tales@planet3.com.br : tales@planet3.com.br -> Senha alterada pelo usuario
+27/06/2025 20:19 tales@planet3.com.br : Arquivo Deletado ../files/anexos/3/1/1/Pia Banheiro Suite.pdf
+27/06/2025 20:19 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Descreva o Objetivo da Tarefa/
+27/06/2025 20:26 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Descreva o Objetivo da Tarefa/
+27/06/2025 20:38 tales@planet3.com.br : Arquivo Anexado Vitoria do Vale/Implantacao ISO 9001:2015/2/sanfona.png
+27/06/2025 20:38 tales@planet3.com.br : Arquivo Deletado ../files/anexos/3/1/2/sanfona.png
+27/06/2025 20:39 tales@planet3.com.br : Arquivo Anexado Vitoria do Vale/Implantacao ISO 9001:2015/1/teste.xlsx

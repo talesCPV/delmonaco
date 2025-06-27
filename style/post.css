@@ -50,6 +50,10 @@
     background-color: #00000087;
 }
 
+.post:empty{
+    display: none;
+}
+
 .btnMore{
     font-weight: bold;
     cursor: pointer;

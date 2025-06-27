@@ -7,6 +7,8 @@
     $filename = $_POST["filename"]=="" ? $_FILES["up_file"]["name"] : $_POST["filename"];//.'.'.strtolower($ext=='jpeg'?'jpg':$ext);
     $path = getcwd().'/../'.$_POST["path"];    
 
+//    echo $path;
+
     if (!is_dir($path)){
       mkdir($path, 0777, true);
     }
