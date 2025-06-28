@@ -39,6 +39,11 @@
             align-items: center;
         }
 
+        .anexo{
+            display: flex;
+            justify-content: center;            
+        }
+
         .file_line{
             display: flex;
             justify-content: end;
@@ -95,17 +100,15 @@
         }
     }
 
-    function showFiles(post){
+    function showFiles(post){     
         const files = post.querySelector('.files')
         files.innerHTML = ''
-        const path = `../files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${post.obj.id}/`     
+  
+        const path = `../files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${post.data.id_tarefa}`
         listFiles(path,ext='*.*').then((resolve)=>{
             const json = JSON.parse(resolve)
             if(json){
                 for(let i=2; i<json.length; i++){
-                    if(i==2){
-                        files.innerHTML = '<span class="mdi mdi-file-document" style="text-align: center;font-size: 1.5em;">Arquivos</span>'
-                    }
 
                     const line = new_element('div','','file_line')
                     line.appendChild(new_element('p',json[i]))
@@ -117,7 +120,7 @@
                         open.label = 'Abrir'
                         open.link = ()=>{
                             window.location.href
-                            window.open(window.location.href+'../'+path+json[i], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');                        
+                            window.open(window.location.href+path+'/'+json[i], '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');                        
                         }            
                         tbl.push(open)
 
@@ -125,9 +128,11 @@
                         del.label = 'Deletar'
                         del.link = ()=>{
                             if(confirm('Deseja deletar este arquivo defintivamente?')){
-                                delFile('/../'+path+json[i]).then((resolve)=>{
+                                delFile('/../'+path+'/'+json[i]).then((resolve)=>{
                                     showFiles(post)
-                                    setLog(`Arquivo Deletado ${path+json[i]}`)
+
+                                    setLog(`Arquivo Deletado ${pageData.cliente}/${pageData.prod.nome}/${post.data.tarefa}/${json[i]}`)           
+
                                 })
                             }
                         }            
@@ -174,12 +179,40 @@
             tab_screen.appendChild(screen)
             screen.className = 'tab'
             screen.id = 'p'+data.id_tarefa
+            screen.data = data
 
             const about = document.createElement('textarea')
             screen.appendChild(about)
             about.disabled = 1
             about.className = 'sobre'
             about.innerHTML = data.descricao
+            
+            const files = new_element('div','','post')
+            const title = new_element('div','<span class="mdi mdi-file-document" style="font-size: 1.4em;display: flex;align-items: center;">Anexos</span>','anexo')
+            files.appendChild(title)
+
+            screen.appendChild(files)
+            const anexo = document.createElement('button')
+                anexo.innerHTML = '<span class="mdi mdi-paperclip"></span>'
+                anexo.className = 'btn-round'
+            title.appendChild(anexo)
+
+            anexo.addEventListener('click',()=>{
+
+                const callback = (file)=>{
+                    const up = uploadFile(file.files[0],`../files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${data.id_tarefa}/`,'')
+                    up.then((resp)=>{     
+                        setLog(`Arquivo Anexado ${pageData.cliente}/${pageData.prod.nome}/${data.tarefa}/${file.files[0].name}`)           
+                        showFiles(screen)
+                    })
+                }
+
+                openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',{'callback':callback})
+            })   
+            const list = new_element('div','','files')
+            files.appendChild(list)
+
+            showFiles(screen)
 
             if(data.quest != null){
                 const quests = data.quest.split('||')
@@ -231,8 +264,7 @@
                 for(let i=0; i<json.length; i++){
                     postComm.appendChild(makePost(json[i]))
                 }
-                postComm.appendChild(new_element('div','','post files'))
-                showFiles(post)
+
                 postComm.appendChild(newComm(post))
             })
     }
@@ -249,26 +281,6 @@
         const botoes = document.createElement('div')
         botoes.style.display = 'flex'
         comm.appendChild(botoes)
-
-        const anexo = document.createElement('button')
-        anexo.innerHTML = '<span class="mdi mdi-paperclip"></span>'
-        anexo.className = 'btn-round'
-        botoes.appendChild(anexo)
-
-        anexo.addEventListener('click',()=>{
-
-            const callback = (file)=>{
-            const up = uploadFile(file.files[0],`../files/anexos/${pageData.id_cliente}/${pageData.prod.id_prod}/${post.obj.id}/`,'')
-            up.then((resp)=>{     
-                setLog(`Arquivo Anexado ${pageData.cliente}/${pageData.prod.nome}/${post.obj.id}/${file.files[0].name}`)           
-                showFiles(post)
-            })
-
-                console.log(file.files[0].name)
-            }
-
-            openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',{'callback':callback})
-        })        
 
         const btn = document.createElement('button')
         btn.innerHTML = '<span class="mdi mdi-comment-account-outline"></span>'
@@ -304,8 +316,6 @@
             for(let i=0; i<json.length; i++){
                 postComm.appendChild(makePost(json[i]))         
             }
-            postComm.appendChild(new_element('div','','post files'))
-            showFiles(post)
             postComm.appendChild(newComm(post))
             postChat.querySelector('#count').innerHTML = json.length
         })  
@@ -427,6 +437,7 @@
         post_comm.style.display = 'none'
         
         post.appendChild(post_comm)
+
 
         if(quest){
             pageFunc.fillComm(post)
