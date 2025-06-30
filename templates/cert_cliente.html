@@ -152,15 +152,14 @@
 
         function addTab(data){
 
-            function addQuest(quest){
-                quest = quest.split('|')
-
+            function addQuest(id,title,quest){
                 const obj = new Object
-                obj.id = quest[0]
+                obj.id = id
                 obj.id_usuario = 0
                 obj.nome_usuario = 'Grupo DelMonaco'
-                obj.resposta = quest[1]
-                obj.data_hora = '2025-05-22 19:35:00'
+                obj.titulo = title 
+                obj.resposta = quest
+                obj.data_hora = ''
 
                 return makePost(obj)
             }
@@ -215,13 +214,21 @@
             showFiles(screen)
 
             if(data.quest != null){
-                const quests = data.quest.split('||')
-                for(let j=0; j<quests.length;j++){                
-                    screen.appendChild(addQuest(quests[j]))
-                }
+                const params = new Object
+                    params.field = 'id_tarefa'
+                    params.signal = '='
+                    params.value = data.id_tarefa
+                const myPromisse = queryDB(params,'TASK-2');
+                myPromisse.then((resolve)=>{
+                    const json = JSON.parse(resolve)
+                    for(let i=0; i<json.length; i++){
+                        const id = json[i].id
+                        const title = `${(i+1).toString().padStart(2,0)} - ${json[i].titulo}` 
+                        const quest = json[i].pergunta
+                        screen.appendChild(addQuest(id,title,quest))
+                    }
+                })     
             }
-
-
         }
 
         const params = new Object
@@ -230,7 +237,7 @@
             const myPromisse = queryDB(params,'TASK-7');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)          
-            for(let i=0; i<json.length; i++){        
+            for(let i=0; i<json.length; i++){
                 addTab(json[i])
             }
         })
@@ -401,6 +408,9 @@
 
         head.appendChild(head_rigth)
         post.appendChild(head)
+
+        const post_titulo = new_element('div',obj.titulo, 'post-titulo')
+        post.appendChild(post_titulo)
 
         const post_text = new_element('div',obj.resposta, 'post-text')
         post.appendChild(post_text)

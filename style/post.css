@@ -28,6 +28,12 @@
     cursor: pointer;
 }
 
+.post-titulo{
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #000dd2;
+}
+
 .post-text{
     text-align: justify;
 }

@@ -166,7 +166,7 @@ SELECT RESP.*
 FROM tb_respostas AS RESP;
 
  DROP VIEW IF EXISTS vw_answers;
- 	CREATE VIEW vw_answers AS
+  	CREATE VIEW vw_answers AS
 	SELECT RESP.*, USR.nome AS nome_usuario,
     (SELECT GROUP_CONCAT(DISTINCT CONCAT(LK.id_user_like,",",USR.nome)   SEPARATOR "|") FROM tb_like AS LK INNER JOIN tb_usuario AS USR ON LK.id_user_like=USR.id WHERE id_pergunta=RESP.id_pergunta AND data_hora=RESP.data_hora) AS LIKES
 	FROM tb_respostas AS RESP
@@ -180,7 +180,7 @@ SELECT * FROM vw_answers;
  DROP VIEW IF EXISTS vw_cli_task;
  	CREATE VIEW vw_cli_task AS
 	SELECT PROD.id AS id_produto,TC.*, CL.fantasia AS cliente, PROD.nome AS produto,TASK.nome AS tarefa, TASK.descricao,
-    (SELECT GROUP_CONCAT(DISTINCT CONCAT(id,"|",pergunta) SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id) AS quest
+    (SELECT GROUP_CONCAT(DISTINCT pergunta SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id ORDER BY id) AS quest    
 	FROM tb_task_cli AS TC
 	INNER JOIN tb_cliente AS CL
 	INNER JOIN tb_tarefas AS TASK
@@ -190,5 +190,12 @@ SELECT * FROM vw_answers;
     AND TASK.id_produto = PROD.id;
     
 SELECT * FROM vw_cli_task;
+
 SELECT TASK.*,(SELECT GROUP_CONCAT(DISTINCT CONCAT(id,"|",pergunta) SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id) AS quest 
 FROM tb_tarefas AS TASK;
+
+SELECT * FROM tb_perguntas WHERE id_tarefa=1;
+
+/*
+'Cite quaisquer outros documentos relacionados a esta IT.||Descreva de forma clara o propósito da instrução de trabalho.||Descreva o passo a passo completo do procedimento a ser seguido.||Indique onde e por quem a IT deve ser aplicada (setores, áreas, perfis).||Informe quais registros devem ser gerados, seus códigos e onde serão armazenados'
+*/

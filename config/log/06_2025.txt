@@ -67,3 +67,7 @@
 30/06/2025 19:40 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Engeport Engenharia LTDA
 30/06/2025 19:45 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Engeport Engenharia LTDA
 30/06/2025 19:58 tales@planet3.com.br :  Logotipo Alterado -> Empresa: STN COMERCIO DE UNIFORMES E BRINDES LTDA
+30/06/2025 19:59 tales@planet3.com.br : Cliente:Engeport - Legislacao:Meio Ambiente - Validade passa de 08/10/2025 para 08/10/2025
+30/06/2025 20:00 tales@planet3.com.br : Cliente:Neopack Embalagens - Legislacao:Seguranca do Trabalho - Validade passa de 24/03/2025 para 02/07/2025
+30/06/2025 20:00 tales@planet3.com.br : Cliente:STN UNIFORMES - Legislacao:Seguranca do Trabalho - Validade passa de 24/03/2025 para 24/05/2025
+30/06/2025 20:01 tales@planet3.com.br : Cliente:Vitoria do Vale - Legislacao:SGI - Meio Ambiente e SST - Validade passa de 20/07/2025 para 17/07/2025
