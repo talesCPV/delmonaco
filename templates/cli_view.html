@@ -9,36 +9,88 @@
             display: none;
         }
 
+        .line-img{
+            display: flex;
+        }
+
+        .rigth-img{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .left-img{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 30%;
+        }
+
+        .left-img canvas{
+            margin: 10px;
+            border-radius: 15px;
+            max-height: 200px;
+            max-width: 200px;
+        }
+
         @media all and (max-width : 768px) {
             .frm input, .frm select{
                 width: 98% !important;
             }
+
+            .line-img{
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .left-img{
+                width: unset;
+            }
+
         }
+
 
     </style>
   
     <fieldset class="frm" >
         <legend>Empresa</legend>
 
-        <div class="inline">
-            <label for="edtRazSoc">Razão Social *</label>
-            <input type="text" class="only-view" id="edtRazSoc" onfocus="this.select();" maxlength="80" disabled>
+        <div class="line-img">
+            <fieldset class="pic left-img">
+                <legend>Logo</legend>
+                <canvas id="cnvImg"></canvas>
+                <input  name="up_file" id="up_file" type="file" accept=".jpg,.jpeg" class="only-view">            
+            </fieldset>
+            <div class="rigth-img">
+
+                <div class="inline">
+                    <label for="edtRazSoc">Razão Social *</label>
+                    <input type="text" class="only-view" id="edtRazSoc" onfocus="this.select();" maxlength="80" disabled>
+                </div>
+                <div class="inline">
+                    <label for="edtFant">Fantasia</label>
+                    <input type="text" class="only-view" id="edtFant" onfocus="this.select();" maxlength="40" disabled>
+                </div>
+                <div class="inline">
+                    <label for="edtCNPJ">CNPJ</label>
+                    <input type="text" class="only-view" id="edtCNPJ" onfocus="this.select();" inputmode="decimal" maxlength="18" onkeyup="valCNPJ(this)" disabled>
+                </div>
+                <div class="inline">
+                    <label for="edtRamo">Ramo</label>
+                    <input type="text" class="only-view" id="edtRamo" onfocus="this.select();" maxlength="80" disabled>
+                </div>
+        
+            </div>            
         </div>
+
+
         <div class="inline">
-        <label for="edtFant">Nome Fantasia</label>
-        <input type="text" class="only-view" id="edtFant" onfocus="this.select();" maxlength="40" disabled>
-        </div>
-        <div class="inline">
-            <label for="edtCNPJ">CNPJ</label>
-            <input type="text" class="only-view" id="edtCNPJ" onfocus="this.select();" inputmode="decimal" maxlength="18" onkeyup="valCNPJ(this)" disabled>
             <label for="edtIncEst">Insc.Est.</label>
             <input type="text" class="only-view" id="edtIncEst" onfocus="this.select();" inputmode="decimal" maxlength="16" onkeyup="valIE(this)" disabled>            
             <label for="edtInscMun">Insc.Mun.</label>
             <input type="text" class="only-view" id="edtInscMun" onfocus="this.select();" inputmode="decimal" maxlength="14" disabled>     
-        </div>
-        <div class="inline">
-            <label for="edtRamo">Ramo</label>
-            <input type="text" class="only-view" id="edtRamo" onfocus="this.select();" maxlength="80" disabled>
         </div>
         <div class="inline">
             <label for="edtEnd">Endereço</label>
@@ -122,6 +174,7 @@
             pageScreen.querySelector('#btnCNPJ').disabled = 1
             pageScreen.querySelector('#btnDel').disabled = 1
             pageScreen.querySelector('#btnEdit').disabled = 1
+            pageScreen.querySelector('.left-img').style.display = 'none'
         }else{
             pageScreen.querySelector('#edtRazSoc').value = pageData.razao_social
             pageScreen.querySelector('#edtFant').value = pageData.fantasia
@@ -140,6 +193,13 @@
             pageScreen.querySelector('#edtMail').value = pageData.email
             pageScreen.querySelector('#btnEdit').disabled = 0
             pageFunc.fillLegis()
+
+            const back = backFunc({'filename':`../../files/logos/${pageData.id}.jpg`},1)
+            back.then((resp)=>{
+                const imgExist = JSON.parse(resp)
+                loadImg( imgExist ? `../files/logos/${pageData.id}.jpg` : 'assets/icons/noimage.jpg')
+            })  
+
         }
     }
 
@@ -241,6 +301,13 @@
         openHTML('tool_date.html','pop-up','Expira dia:',data,300)
     })
 
+    pageScreen.querySelector('#up_file').addEventListener('change',()=>{        
+        showFile()
+        const up = uploadImage('up_file','../files/logos/',`${pageData.id}.jpg`)
+        up.then((resp)=>{
+            setLog(` Logotipo Alterado -> Empresa: ${pageData.razao_social}`)
+        })
+    })
 
     startPage()
 

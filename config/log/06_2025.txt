@@ -60,3 +60,10 @@
 28/06/2025 16:10 tales@planet3.com.br : Arquivo Anexado Engeport/Auditoria Financeira/tarefa Teste 1/bike.png
 28/06/2025 16:11 tales@planet3.com.br : Arquivo Deletado Engeport/Auditoria Financeira/Tarefa teste 02/ida0.jpeg
 28/06/2025 16:12 tales@planet3.com.br : Arquivo Anexado Vitoria do Vale/Implantacao ISO 9001:2015/Instrucoes de Trabalho/db.demo.sql
+30/06/2025 13:20 tales@planet3.com.br : Arquivo Deletado Vitoria do Vale/Implantacao ISO 9001:2015/Instrucoes de Trabalho/teste.xlsx
+30/06/2025 13:20 tales@planet3.com.br : Arquivo Deletado Vitoria do Vale/Implantacao ISO 9001:2015/Instrucoes de Trabalho/Pia Banheiro Social.pdf
+30/06/2025 19:35 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Engeport Engenharia LTDA
+30/06/2025 19:38 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Engeport Engenharia LTDA
+30/06/2025 19:40 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Engeport Engenharia LTDA
+30/06/2025 19:45 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Engeport Engenharia LTDA
+30/06/2025 19:58 tales@planet3.com.br :  Logotipo Alterado -> Empresa: STN COMERCIO DE UNIFORMES E BRINDES LTDA
