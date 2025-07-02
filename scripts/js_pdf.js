@@ -53,7 +53,7 @@ function clearTxt(y=10,x=10,dim=[90,80]){
 }
 
 function frame(margin=5){
-    doc.rect(margin,margin,txt.dim[0]-margin*2,txt.dim[1]-margin*2)
+    doc.rect(margin,margin,doc.internal.pageSize.getWidth()-margin*2,doc.internal.pageSize.getHeight()-margin*2)
 }
 
 function line(p, direct='h',margin=5, end=margin){

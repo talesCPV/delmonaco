@@ -226,11 +226,10 @@
                     params.id_tarefa = data.id_tarefa
                 const myPromisse = queryDB(params,'TASK-9');
                 myPromisse.then((resolve)=>{
-                    const json = JSON.parse(resolve)
-                    print_relatorio(json)
+                    data.perguntas = JSON.parse(resolve)
+                    print_relatorio(data)
                 })
             })
-
 
             const files = new_element('div','','post')
             const title = new_element('div','<span class="mdi mdi-file-document" style="font-size: 1.4em;display: flex;align-items: center;">Anexos</span>','anexo')
@@ -315,7 +314,6 @@
                 for(let i=0; i<json.length; i++){
                     postComm.appendChild(makePost(json[i]))
                 }
-
                 postComm.appendChild(newComm(post))
             })
     }
