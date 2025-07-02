@@ -191,11 +191,18 @@ SELECT * FROM vw_answers;
     
 SELECT * FROM vw_cli_task;
 
-SELECT TASK.*,(SELECT GROUP_CONCAT(DISTINCT CONCAT(id,"|",pergunta) SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id) AS quest 
-FROM tb_tarefas AS TASK;
+ DROP VIEW IF EXISTS vw_main_answer;
+  	CREATE VIEW vw_main_answer AS
+	SELECT PER.id_tarefa,PER.id AS id_perunta,IFNULL(RESP.id_cliente,0) AS id_cliente,
+    IFNULL(RESP.id_usuario,0) AS id_usuario, PER.relatorio, PER.titulo,PER.pergunta,IFNULL(RESP.resposta,"") AS resposta
+	FROM tb_perguntas AS PER
+	LEFT JOIN tb_respostas AS RESP
+	ON PER.id = RESP.id_pergunta
+	GROUP BY PER.id;
 
-SELECT * FROM tb_perguntas WHERE id_tarefa=1;
 
-/*
-'Cite quaisquer outros documentos relacionados a esta IT.||Descreva de forma clara o propósito da instrução de trabalho.||Descreva o passo a passo completo do procedimento a ser seguido.||Indique onde e por quem a IT deve ser aplicada (setores, áreas, perfis).||Informe quais registros devem ser gerados, seus códigos e onde serão armazenados'
-*/
+SELECT * FROM tb_perguntas ;
+SELECT * FROM tb_respostas ;
+
+ SELECT * FROM vw_main_answer;
+

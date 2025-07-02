@@ -222,7 +222,13 @@
             const print = new_element('button','<span class="mdi mdi-printer-outline"></span> Relatório')
             div_print.appendChild(print)
             print.addEventListener('click',()=>{
-                console.log(data)
+                const params = new Object
+                    params.id_tarefa = data.id_tarefa
+                const myPromisse = queryDB(params,'TASK-9');
+                myPromisse.then((resolve)=>{
+                    const json = JSON.parse(resolve)
+                    print_relatorio(json)
+                })
             })
 
 

@@ -1419,3 +1419,18 @@ DELIMITER $$
         END IF;
 	END $$
 DELIMITER ;
+
+  DROP PROCEDURE IF EXISTS sp_view_main_answer;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_main_answer(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_tarefa int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM vw_main_answer WHERE id_tarefa=Iid_tarefa ORDER BY id_pergunta;
+        END IF;
+	END $$
+DELIMITER ;

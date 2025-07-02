@@ -114,3 +114,7 @@ function print_orc(orc){
     }
 
 }
+
+function print_relatorio(obj){
+    console.log(obj)
+}
