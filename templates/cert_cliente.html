@@ -34,11 +34,18 @@
             height: 200px;
         }
 
-        .post-comm .post:first-child{
+        .post-comm{
+            width: calc(100% - 30px);
+        }
+
+        .post-answer div{
             background-color: #3a4d46;
             color: rgb(209, 216, 223);
         }
 
+        .post-answer:empty{
+            display: none;
+        }
 
         .edit-div{
             display : flex;
@@ -299,6 +306,8 @@
     }
 
     pageFunc.fillComm = (post)=>{
+
+        const postAns = post.querySelector('.post-answer')
         const postComm = post.querySelector('.post-comm')
         const postChat = post.querySelector('.post-social-chat')
 
@@ -312,7 +321,8 @@
                 postChat.querySelector('#count').innerHTML = json.length
 
                 for(let i=0; i<json.length; i++){
-                    postComm.appendChild(makePost(json[i]))
+                    json[i].indice = i
+                    i==0 ? postAns.appendChild(makePost(json[i])) : postComm.appendChild(makePost(json[i]))
                 }
                 postComm.appendChild(newComm(post))
             })
@@ -340,6 +350,20 @@
             pageFunc.setAnswer(post).then((resolve)=>{
                 setLog(`Post: ${pageData.cliente}/${pageData.prod.nome}/${post.obj.resposta}/${post.obj.textarea.value}`)           
 
+                const json = JSON.parse(resolve)
+                const postAns = post.querySelector('.post-answer')
+                postAns.innerHTML = ''
+                const postComm = post.querySelector('.post-comm')
+                postComm.innerHTML = ''
+                const postChat = post.querySelector('.post-social-chat')
+
+                post.obj.textarea.value = ''
+                for(let i=0; i<json.length; i++){
+                    json[i].indice = i
+                    i==0 ? postAns.appendChild(makePost(json[i])) : postComm.appendChild(makePost(json[i]))
+                }
+                postComm.appendChild(newComm(post))
+                postChat.querySelector('#count').innerHTML = json.length
             })
         })
             
@@ -348,26 +372,14 @@
     }
 
     pageFunc.setAnswer = (post,del=0)=>{
-        const postComm = post.querySelector('.post-comm')
-        const postChat = post.querySelector('.post-social-chat')
-
         const params = new Object;
             params.id_pergunta = post.obj.id
             params.id_cliente = pageData.id_cliente
             params.resposta = del? '' : post.obj.textarea.value
             params.data_hora =  post.obj.data_hora 
          
-        const myPromisse = queryDB(params,'TASK-5')
-        return myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve)
-            post.obj.textarea.value = ''
-            postComm.innerHTML = ''
-            for(let i=0; i<json.length; i++){
-                postComm.appendChild(makePost(json[i]))         
-            }
-            postComm.appendChild(newComm(post))
-            postChat.querySelector('#count').innerHTML = json.length
-        })  
+            return queryDB(params,'TASK-5')
+
     }
 
     function makePost(obj){
@@ -395,7 +407,7 @@
         const head_rigth = new_element('div','','post-head-left')
 
 
-        if(!quest && obj.id_usuario==localStorage.id_user){
+        if(!quest && (obj.id_usuario==localStorage.id_user || obj.indice == 0)){
         
             const btn_more = new_element('div','...','btnMore')
             btn_more.addEventListener('click',(e)=>{
@@ -405,7 +417,7 @@
                 edit.link = ()=>{
 
                     const div = post.querySelector('.post-text')
-                    div.className = 'edit-div'
+                    div.className = 'edit-div post-text'
 
                     const old_text = div.innerHTML
                     div.innerHTML = ''              
@@ -419,8 +431,8 @@
                     div.appendChild(btn)
 
                     btn.addEventListener('click',()=>{
-                        obj.id = obj.id_pergunta
-                        obj.textarea = ta
+                        post.obj.id = obj.id_pergunta
+                        post.obj.textarea = ta
                         const old_text = ta.value
                         pageFunc.setAnswer(post).then((resolve)=>{
                             div.innerHTML = old_text
@@ -434,20 +446,19 @@
                 del.link = ()=>{
                     if(confirm('Deseja deletar este post?')){
                         obj.id = obj.id_pergunta
-                        obj.textarea = new Object
+                        obj.textarea = new Object            
                         pageFunc.setAnswer(post,1)
                         const count =  post.parentNode.parentNode.querySelector('.post-social-chat').querySelector('#count')
                         count.innerHTML = Number(count.innerHTML) - 1
                         post.remove()
                     }
                 }            
-                tbl.push(del)
+                obj.indice ? tbl.push(del) : null
                 menuContext(tbl,e,0)
             })
             head_rigth.appendChild(btn_more)
         }
         
-
         head.appendChild(head_rigth)
         post.appendChild(head)
 
@@ -485,13 +496,14 @@
         })
         post_social.appendChild(post_chat)
 
-        const post_comm = new_element('div','', 'post-comm')
-        post_comm.style.display = 'none'
-        
-        post.appendChild(post_comm)
-
+        const post_answer = new_element('div','', 'post-answer')
+//        post_answer.style.display = 'none'      
+        post.appendChild(post_answer)
 
         if(quest){
+            const post_comm = new_element('div','', 'post-comm')
+            post_comm.style.display = 'none'
+            post.appendChild(post_comm)
             pageFunc.fillComm(post)
         }else{
             const id_likes = obj.LIKES == null ? [] : obj.LIKES.split('|')

@@ -1337,9 +1337,9 @@ DELIMITER $$
                 DELETE FROM tb_respostas WHERE id_usuario = @id_usuario AND data_hora=Idata_hora;
                 DELETE FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora;
             ELSE
-				SET @has = (SELECT COUNT(*) FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND id_usuario=@id_usuario AND data_hora=Idata_hora);
+				SET @has = (SELECT COUNT(*) FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND data_hora=Idata_hora);
 				IF(@has)THEN
-					UPDATE tb_respostas SET resposta=Iresposta WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND id_usuario=@id_usuario AND data_hora=Idata_hora;
+					UPDATE tb_respostas SET resposta=Iresposta WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND data_hora=Idata_hora;
 				ELSE 
 					INSERT INTO tb_respostas (id_pergunta,id_cliente,id_usuario,resposta) 
 					VALUES (Iid_pergunta,Iid_cliente,@id_usuario,Iresposta);

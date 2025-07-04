@@ -36,6 +36,7 @@
 
 .post-text{
     text-align: justify;
+    white-space: pre;
 }
 
 .post-btn{
