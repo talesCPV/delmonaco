@@ -1306,14 +1306,14 @@ DELIMITER $$
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
 		IN Iid_pergunta int(11),
-        IN Iid_cliente int(11)
+        IN Iid_task_cli int(11)
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			SELECT * FROM vw_answers 
             WHERE id_pergunta=Iid_pergunta 
-            AND id_cliente=Iid_cliente
+            AND id_task_cli=Iid_task_cli
             ORDER BY data_hora;
         END IF;
 	END $$
@@ -1325,7 +1325,7 @@ DELIMITER $$
 		IN Iallow varchar(80),
         IN Ihash varchar(64),
 		IN Iid_pergunta int(11),
-		IN Iid_cliente int(11),
+		IN Iid_task_cli int(11),
 		IN Iresposta varchar(512),
 		IN Idata_hora datetime
     )
@@ -1337,17 +1337,17 @@ DELIMITER $$
                 DELETE FROM tb_respostas WHERE id_usuario = @id_usuario AND data_hora=Idata_hora;
                 DELETE FROM tb_like WHERE id_pergunta=Iid_pergunta AND data_hora=Idata_hora;
             ELSE
-				SET @has = (SELECT COUNT(*) FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND data_hora=Idata_hora);
+				SET @has = (SELECT COUNT(*) FROM tb_respostas WHERE id_pergunta=Iid_pergunta AND id_task_cli=Iid_task_cli AND data_hora=Idata_hora);
 				IF(@has)THEN
-					UPDATE tb_respostas SET resposta=Iresposta WHERE id_pergunta=Iid_pergunta AND id_cliente=Iid_cliente AND data_hora=Idata_hora;
+					UPDATE tb_respostas SET resposta=Iresposta WHERE id_pergunta=Iid_pergunta AND id_task_cli=Iid_task_cli AND data_hora=Idata_hora;
 				ELSE 
-					INSERT INTO tb_respostas (id_pergunta,id_cliente,id_usuario,resposta) 
-					VALUES (Iid_pergunta,Iid_cliente,@id_usuario,Iresposta);
+					INSERT INTO tb_respostas (id_pergunta,id_task_cli,id_usuario,resposta) 
+					VALUES (Iid_pergunta,Iid_task_cli,@id_usuario,Iresposta);
                 END IF;
             END IF;
             SELECT * FROM vw_answers 
             WHERE id_pergunta=Iid_pergunta 
-            AND id_cliente=Iid_cliente
+            AND id_task_cli=Iid_task_cli
             ORDER BY data_hora;
         END IF;
 	END $$
@@ -1403,17 +1403,25 @@ DELIMITER $$
 	CREATE PROCEDURE sp_set_task_cli(
 		IN Iallow varchar(80),
 		IN Ihash varchar(64),
+        IN Iid int(11),
         IN Iid_task int(11),
-		IN Iid_cli int(11)
+		IN Iid_cli int(11),
+        IN Ititulo varchar(30),
+		IN Icod varchar(10)
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
- 			SET @has = (SELECT COUNT(*) FROM tb_task_cli WHERE id_tarefa=Iid_task AND id_cliente=Iid_cli);
-			IF(@has)THEN
-				DELETE FROM tb_task_cli WHERE id_tarefa=Iid_task AND id_cliente=Iid_cli;
-            ELSE
-				INSERT INTO tb_task_cli (id_tarefa,id_cliente) VALUES (Iid_task,Iid_cli);
+			IF(Iid=0) THEN
+				INSERT INTO tb_task_cli (id_tarefa,id_cliente,titulo,cod) 
+				VALUES (Iid_task,Iid_cli,Ititulo,Icod);
+			ELSE
+				IF(Ititulo = "") THEN
+					SET @id_prod = (SELECT id_tarefa FROM tb_tarefas WHERE id=Iid_task);
+					DELETE FROM tb_task_cli WHERE id=Iid;
+				ELSE
+					UPDATE tb_task_cli SET titulo=Ititulo, cod=Icod WHERE id=Iid;
+				END IF;
             END IF;
             SELECT * FROM vw_cli_task WHERE id_cliente=Iid_cli AND id_produto=(SELECT id_produto FROM tb_tarefas WHERE id=Iid_task);
         END IF;

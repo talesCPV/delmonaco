@@ -301,25 +301,28 @@ CREATE TABLE tb_perguntas(
 
 DROP TABLE IF EXISTS tb_task_cli;
 CREATE TABLE tb_task_cli(
+	id int(11) NOT NULL AUTO_INCREMENT,
     id_tarefa int(11) NOT NULL,
     id_cliente int(11) NOT NULL,
+    titulo varchar(30) NOT NULL,
+    cod varchar(10) DEFAULT NULL,
     ok boolean DEFAULT 0,
 	FOREIGN KEY (id_tarefa) REFERENCES tb_tarefas(id) ON DELETE CASCADE,
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
-    PRIMARY KEY (id_tarefa,id_cliente)
+    PRIMARY KEY (id)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_respostas;
 CREATE TABLE tb_respostas(
     id_pergunta int(11) NOT NULL,
-    id_cliente int(11) NOT NULL,
+    id_task_cli int(11) NOT NULL,
     id_usuario int(11) NOT NULL,
     resposta varchar(512) NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id) ON DELETE CASCADE,
-	FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_task_cli) REFERENCES tb_task_cli(id) ON DELETE CASCADE,
 	FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id) ON DELETE CASCADE,
-    PRIMARY KEY (id_pergunta,id_cliente,id_usuario,data_hora)
+    PRIMARY KEY (id_pergunta,id_task_cli,id_usuario,data_hora)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS tb_like;

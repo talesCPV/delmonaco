@@ -180,7 +180,7 @@ SELECT * FROM vw_answers;
  DROP VIEW IF EXISTS vw_cli_task;
  	CREATE VIEW vw_cli_task AS
 	SELECT PROD.id AS id_produto,TC.*, CL.fantasia AS cliente, PROD.nome AS produto,TASK.nome AS tarefa, TASK.descricao
---    ,(SELECT GROUP_CONCAT(DISTINCT pergunta SEPARATOR "||") FROM tb_perguntas WHERE id_tarefa=TASK.id ORDER BY id) AS quest    
+    ,CONCAT(TASK.nome," - ",TC.titulo) AS nome    
 	FROM tb_task_cli AS TC
 	INNER JOIN tb_cliente AS CL
 	INNER JOIN tb_tarefas AS TASK
@@ -191,9 +191,11 @@ SELECT * FROM vw_answers;
     
 SELECT * FROM vw_cli_task;
 
+SELECT * FROM tb_task_cli;
+
  DROP VIEW IF EXISTS vw_main_answer;
   	CREATE VIEW vw_main_answer AS
-	SELECT PER.id_tarefa,PER.id AS id_perunta,IFNULL(RESP.id_cliente,0) AS id_cliente,
+	SELECT PER.id_tarefa,PER.id AS id_perunta,IFNULL(RESP.id_task_cli,0) AS id_task_cli,
     IFNULL(RESP.id_usuario,0) AS id_usuario, PER.relatorio, PER.titulo,PER.pergunta,IFNULL(RESP.resposta,"") AS resposta
 	FROM tb_perguntas AS PER
 	LEFT JOIN tb_respostas AS RESP

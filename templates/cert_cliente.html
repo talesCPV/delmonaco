@@ -189,11 +189,10 @@
         const tab_screen = pageScreen.querySelector('.tab-screen')
 
         function addTab(data){
-
             function addQuest(id,title,quest){
                 const obj = new Object
                 obj.id = id
-                obj.id_usuario = 0
+                obj.id_task_cli = data.id
                 obj.nome_usuario = 'Grupo DelMonaco'
                 obj.titulo = title 
                 obj.resposta = quest
@@ -206,8 +205,8 @@
             const tab = document.createElement('div')
             tab_bar.appendChild(tab)
             tab.className = 'tab-item'
-            tab.id = `tab-p${data.id_tarefa}`
-            tab.innerHTML = data.tarefa
+            tab.id = `tab-p${data.id}`
+            tab.innerHTML = data.cod+' - '+data.titulo
             tab.addEventListener('click',()=>{
                 pictab(tab)
             })
@@ -215,7 +214,7 @@
             const screen = document.createElement('div')
             tab_screen.appendChild(screen)
             screen.className = 'tab'
-            screen.id = 'p'+data.id_tarefa
+            screen.id = 'p'+data.id
             screen.data = data
 
             const about = document.createElement('textarea')
@@ -313,7 +312,7 @@
 
         const params = new Object
                 params.id_pergunta = post.obj.id
-                params.id_cliente = pageData.id_cliente
+                params.id_task_cli = post.obj.id_task_cli
 
             const myPromisse = queryDB(params,'TASK-4');
             myPromisse.then((resolve)=>{
@@ -372,9 +371,10 @@
     }
 
     pageFunc.setAnswer = (post,del=0)=>{
+        
         const params = new Object;
             params.id_pergunta = post.obj.id
-            params.id_cliente = pageData.id_cliente
+            params.id_task_cli = post.obj.id_task_cli 
             params.resposta = del? '' : post.obj.textarea.value
             params.data_hora =  post.obj.data_hora 
          

@@ -1,0 +1,98 @@
+
+<template>
+    <style>
+        .frm{
+            padding: 10px;
+        }
+
+        .quest{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media all and (max-width : 768px) {
+            .frm input, .frm select{
+                width: 98% !important;
+            }
+        }
+
+    </style>
+  
+    <fieldset class="frm" >
+        <legend>Tarefa</legend>
+
+        <div class="inline">
+            <label for="edtTitle">Titulo *</label>
+            <input type="text" class="only-view" id="edtTitle" onfocus="this.select();" maxlength="30" disabled>
+            </div>
+
+        <div class="inline">
+            <label for="edtCod">Código</label>
+            <input type="text" class="only-view" id="edtCod" onfocus="this.select();" maxlength="10" disabled>
+        </div>
+        
+        <div class="line">
+            <button id="btnEdit">Editar</button>
+            <button id="btnSave" class="only-view" disabled>Salvar</button>
+            <button id="btnCancel" >Cancelar</button>
+        </div>
+    </fieldset>
+
+</template>
+<script>
+    
+    const pageData = main_data.prod_view_cli_task.data
+    const pageFunc = main_data.prod_view_cli_task.func
+    const pageScreen = document.querySelector('#card-prod_view_cli_task')
+    const newTask =  !pageData.hasOwnProperty('titulo')
+
+
+    function startPage(){
+        if(newTask){
+            openFields(1)
+            pageScreen.querySelector('#btnEdit').style.display = "none"
+        }else{     
+            pageScreen.querySelector('#edtTitle').value = pageData.titulo
+            pageScreen.querySelector('#edtCod').value = pageData.cod
+            pageScreen.querySelector('#btnEdit').disabled = 0
+        }
+    }
+
+    function openFields(open=1){
+        const view = pageScreen.querySelectorAll('.only-view')
+        for(let i=0; i<view.length; i++){
+            view[i].disabled = !open
+        }
+    }
+
+
+    pageScreen.querySelector('#btnSave').addEventListener('click',()=>{
+        if(pageData.hasOwnProperty('callback')){
+            const out = new Object
+                out.titulo = pageScreen.querySelector('#edtTitle').value.trim()
+                out.cod = pageScreen.querySelector('#edtCod').value.trim()
+            pageData.callback(out)
+        }
+        closeModal('prod_view_cli_task')
+    })
+
+    pageScreen.querySelector('#btnCancel').addEventListener('click',()=>{
+        closeModal('prod_view_cli_task')
+    })
+
+
+    pageScreen.querySelector('#btnEdit').addEventListener('click',()=>{
+        if(pageScreen.querySelector('#btnSave').disabled){
+            if(confirm('Abrir registro para edição?')){
+                openFields(1)
+            }
+        }else{
+            openFields(0)
+        }
+    })
+
+    startPage()
+
+</script>

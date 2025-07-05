@@ -92,7 +92,7 @@
             const json = JSON.parse(resolve)
             for(let i=0; i<json.length; i++){
                 const opt = document.createElement('option')
-                opt.innerHTML = json[i].tarefa
+                opt.innerHTML = json[i].nome
                 opt.value = json[i].id
                 opt.data = json[i]
                 tasks.appendChild(opt)
@@ -100,19 +100,22 @@
         })
     }
 
-    pageFunc.setTaskCli = (id_task)=>{
+    pageFunc.setTaskCli = (id,id_task=0,titulo='',obs='')=>{
         const params = new Object
+            params.id = id
             params.id_task = id_task
             params.id_cli = pageData.id_cliente
+            params.titulo = titulo
+            params.obs = obs
         const myPromisse = queryDB(params,'TASK-8');
         return myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve)
+            const json = JSON.parse(resolve)         
             const tasks = pageScreen.querySelector('#cmbCliTask')
             tasks.innerHTML = ''            
             for(let i=0; i<json.length; i++){
                 const opt = document.createElement('option')
-                opt.innerHTML = json[i].tarefa
-                opt.value = json[i].id_tarefa
+                opt.innerHTML = json[i].nome
+                opt.value = json[i].id
                 opt.data = json[i]
                 tasks.appendChild(opt)
             }         
@@ -123,14 +126,30 @@
     pageScreen.querySelector('#btnAdd').addEventListener('click',()=>{
         const task = pageScreen.querySelector('#cmbTasks').selectedOptions[0];
         if(task!=undefined){
-           pageFunc.setTaskCli(task.data.id)
+            task.data.callback = (response)=>{
+                pageFunc.setTaskCli(0,task.data.id,response.titulo,response.cod)
+            }
+            openHTML('prod_view_cli_task.html','pop-up','Adição de Tarefa',task.data)
         }
     })
 
     pageScreen.querySelector('#btnSub').addEventListener('click',()=>{
         const task = pageScreen.querySelector('#cmbCliTask').selectedOptions[0];
-        if(task!=undefined){
-            pageFunc.setTaskCli(task.data.id_tarefa)
+        if(task!=undefined){    
+            if(confirm('Deseja remover definitivamente esta tarefa deste cliente?\n Esta remoção implicará na perda permanete de dados.')){
+                pageFunc.setTaskCli(task.data.id,task.data.id_tarefa)
+            }
+        }
+    })
+
+    pageScreen.querySelector('#cmbCliTask').addEventListener('dblclick',()=>{
+
+        const task = pageScreen.querySelector('#cmbCliTask').selectedOptions[0];
+        if(task!=undefined){            
+            task.data.callback = (response)=>{
+                pageFunc.setTaskCli(task.data.id,task.data.id_tarefa,response.titulo,response.cod)
+            }
+            openHTML('prod_view_cli_task.html','pop-up','Adição de Tarefa',task.data)
         }
     })
 
