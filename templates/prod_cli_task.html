@@ -40,7 +40,7 @@
             <button id="btnSub" class="btn-round"><span class="mdi mdi-arrow-left-bold"></span></button>
         </div>
         <fieldset>
-            <legend>Liberadas</legend>
+            <legend>Adicionadas</legend>
             <select id="cmbCliTask" size="13"></select>
         </fieldset>
     </div>
@@ -129,7 +129,7 @@
             task.data.callback = (response)=>{
                 pageFunc.setTaskCli(0,task.data.id,response.titulo,response.cod)
             }
-            openHTML('prod_view_cli_task.html','pop-up','Adição de Tarefa',task.data)
+            openHTML('prod_view_cli_task.html','pop-up','Adição de Tarefa',task.data,500)
         }
     })
 
@@ -149,7 +149,7 @@
             task.data.callback = (response)=>{
                 pageFunc.setTaskCli(task.data.id,task.data.id_tarefa,response.titulo,response.cod)
             }
-            openHTML('prod_view_cli_task.html','pop-up','Adição de Tarefa',task.data)
+            openHTML('prod_view_cli_task.html','pop-up','Adição de Tarefa',task.data,500)
         }
     })
 
