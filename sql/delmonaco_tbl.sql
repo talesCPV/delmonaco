@@ -344,3 +344,15 @@ CREATE TABLE tb_prod_cli(
     FOREIGN KEY (id_cliente) REFERENCES tb_cliente(id) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,id_cliente)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_task_rev;
+CREATE TABLE tb_task_rev(
+    id_task_cli int(11) NOT NULL,
+    id_usuario int(11) NOT NULL,
+    revisao int NOT NULL DEFAULT 0,
+    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    historico varchar(50) NOT NULL,
+	FOREIGN KEY (id_task_cli) REFERENCES tb_task_cli(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id),
+    PRIMARY KEY (id_task_cli,revisao)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

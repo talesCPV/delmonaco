@@ -122,7 +122,7 @@ function openMenu(){
 
                 lbl.addEventListener('click',()=>{
                     main_data.dashboard.data.access = obj[i].access
-                    openHTML(obj[i].link,obj[i].janela,obj[i].label,{},obj[i].width)
+                    openHTML(obj[i].link,obj[i].janela,obj[i].label,obj[i].json,obj[i].width)
                     closeMenu()
                 })    
                 lbl.addEventListener('contextmenu',(e)=>{
@@ -139,6 +139,7 @@ function openMenu(){
                             shortcut.label = obj[i].label
                             shortcut.width = obj[i].width
                             shortcut.access = obj[i].access
+                            shortcut.json = obj[i].hasOwnProperty('json') ? obj[i].json : {}
                             shortcut.x = 100
                             shortcut.y = 100
                             json.push(shortcut)
@@ -171,6 +172,16 @@ function addShortcut(){
         }
 
         for(let i=0; i<json.length; i++){
+console.log(json[i],json[i].json)
+/*
+            try{
+                json[i].json = JSON.parse(json[i].json)
+            }
+            catch{
+                json[i].json = {}
+            }
+*/
+
             const div = document.createElement('div')
             const label = document.createElement('p')
             div.className = 'icone'
@@ -210,7 +221,7 @@ function addShortcut(){
                     /* icon click */
                     if(!move && e.button == 0){
                         main_data.dashboard.data.access = json[i].access 
-                        openHTML(json[i].link,json[i].janela,json[i].label,{},json[i].width)
+                        openHTML(json[i].link,json[i].janela,json[i].label,json[i].json,json[i].width)
                     }
 
                     document.onmouseup = null;

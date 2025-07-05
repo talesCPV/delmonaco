@@ -69,6 +69,7 @@
             summary.width = data[i].width
             summary.label = data[i].label
             summary.pg = data[i].pg
+            summary.json = data[i].hasOwnProperty('json') ? data[i].json : ''
             if(data[i].itens.length == 0){
                 summary.className = 'last'
             }
@@ -87,7 +88,7 @@
 
                 const conf = new Object
                 conf.label = 'Configurações'
-                conf.link = ()=>{
+                conf.link = ()=>{               
                     openHTML('sys_new_menu.html','pop-up',`Item de Menu - ${data[i].modulo}`,summary,600)
                 }            
                 tbl.push(conf)
@@ -173,6 +174,7 @@
         sum.janela = 'pop-up'
         sum.label = ''
         sum.width = 'auto'
+        sum.json = ''
         sum.addEventListener('contextmenu',(e)=>{
             e.preventDefault();
             openHTML('sys_new_menu.html','pop-up',`Novo Módulo Raíz`,sum,600)

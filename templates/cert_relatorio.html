@@ -1,0 +1,44 @@
+<template>
+    <style></style>
+
+    <fieldset>
+        <legend>Mensagem Padrão</legend>
+        <div class="inline">
+            <label for="edtMsg">Texto</label>
+            <textarea id="edtMsg" rows="10"></textarea>
+        </div>
+        <div class="line">
+            <button id="btnSave">Salvar</button>
+        </div>
+    </fieldset>
+
+    <div class="legenda">
+
+    </div>
+
+</template>
+<script>
+
+    const pageData = main_data.cert_relatorio.data
+    const pageFunc = main_data.cert_relatorio.func
+    const pageScreen = document.querySelector('#card-cert_relatorio')
+
+console.log(pageData)
+
+/*
+    const div_print = new_element('div','','div-print')
+        screen.appendChild(div_print)
+        const print = new_element('button','<span class="mdi mdi-printer-outline"></span> Relatório')
+        div_print.appendChild(print)
+        print.addEventListener('click',()=>{
+            const params = new Object
+                params.id_tarefa = data.id_tarefa
+            const myPromisse = queryDB(params,'TASK-9');
+            myPromisse.then((resolve)=>{
+                data.perguntas = JSON.parse(resolve)
+                print_relatorio(data)
+            })
+        })
+*/
+
+</script>

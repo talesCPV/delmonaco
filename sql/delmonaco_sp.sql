@@ -1417,7 +1417,6 @@ DELIMITER $$
 				VALUES (Iid_task,Iid_cli,Ititulo,Icod);
 			ELSE
 				IF(Ititulo = "") THEN
-					SET @id_prod = (SELECT id_tarefa FROM tb_tarefas WHERE id=Iid_task);
 					DELETE FROM tb_task_cli WHERE id=Iid;
 				ELSE
 					UPDATE tb_task_cli SET titulo=Ititulo, cod=Icod WHERE id=Iid;
@@ -1439,6 +1438,53 @@ DELIMITER $$
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
 			SELECT * FROM vw_main_answer WHERE id_tarefa=Iid_tarefa ORDER BY id_pergunta;
+        END IF;
+	END $$
+DELIMITER ;
+
+  DROP PROCEDURE IF EXISTS sp_view_task_rev;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_task_rev(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_task_cli int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli;
+        END IF;
+	END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_set_task_rev;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_task_rev(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_task_cli int(11),
+		IN Irevisao int,
+		IN Idata_hora datetime,
+		IN Ihistorico varchar(50)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+        SET @has = (SELECT COUNT(*) FROM tb_task_rev WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao);
+			IF(@has) THEN
+				IF(Ihistorico = "") THEN
+					DELETE FROM tb_task_rev WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao;
+				ELSE
+					UPDATE tb_task_rev 
+                    SET revisao=Irevisao, historico=Ihistorico
+                    WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao;
+				END IF;  
+			ELSE
+				SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
+				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,data_hora,historico) 
+				VALUES (Iid_task_cli,@id_usuario,Irevisao,Idata_hora,Ihistorico);
+            END IF;
+            SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli;
         END IF;
 	END $$
 DELIMITER ;

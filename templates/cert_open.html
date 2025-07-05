@@ -91,7 +91,10 @@
 
     pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
         const data = pageScreen.querySelector('#cmbEmpresa').selectedOptions[0].data    
-        data.prod = pageScreen.querySelector('#cmbProd').selectedOptions[0].data      
+        data.prod = pageScreen.querySelector('#cmbProd').selectedOptions[0].data
+
+        console.log(pageData)
+
         openHTML('cert_cliente.html','pop-up',`${data.prod.nome} - ${data.cliente}`,data)
         closeModal('cert_open')
     })

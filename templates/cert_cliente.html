@@ -223,20 +223,6 @@
             about.className = 'sobre'
             about.innerHTML = data.descricao
             
-            const div_print = new_element('div','','div-print')
-            screen.appendChild(div_print)
-            const print = new_element('button','<span class="mdi mdi-printer-outline"></span> Relatório')
-            div_print.appendChild(print)
-            print.addEventListener('click',()=>{
-                const params = new Object
-                    params.id_tarefa = data.id_tarefa
-                const myPromisse = queryDB(params,'TASK-9');
-                myPromisse.then((resolve)=>{
-                    data.perguntas = JSON.parse(resolve)
-                    print_relatorio(data)
-                })
-            })
-
             const files = new_element('div','','post')
             const title = new_element('div','<span class="mdi mdi-file-document" style="font-size: 1.4em;display: flex;align-items: center;">Anexos</span>','anexo')
             files.appendChild(title)

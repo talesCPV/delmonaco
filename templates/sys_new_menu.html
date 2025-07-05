@@ -43,6 +43,11 @@
             <input type="text" id="edtLargura" value="auto">
         </div>
 
+        <div class="inline">
+            <label for="edtJson">Dados(JSON)</label>
+            <textarea id="edtJson" rows="5"></textarea>
+        </div>
+
         <div class="line">
             <label for="ckbAss">Requer Assinatura</label>
             <input type="checkbox" id="ckbAss" checked>
@@ -65,17 +70,18 @@
     const link = pageData.link
 
 
-    function pageStart(){
+    function pageStart(){  
         pageScreen.querySelector('#edtMod').value = pageData.innerHTML
         pageScreen.querySelector('#edtLink').value = pageData.link
         pageScreen.querySelector('#edtLabel').value = pageData.label
         pageScreen.querySelector('#edtLargura').value = pageData.width 
+        pageScreen.querySelector('#edtJson').value = pageData.json
         pageScreen.querySelector('#edtIcon').value = pageData.icone 
         pageScreen.querySelector('#ckbAss').checked = pageData.pg
         pageScreen.querySelector('#cmbJanela').value = pageData.janela
     }
 
-    function saveMenu(){
+    function saveMenu(){       
         main_data.sys_perm.func.refreshMenu()
         main_data.sys_perm.func.setMenu(JSON.stringify(main_data.sys_perm.data.json))
         closeModal('sys_new_menu')
@@ -133,6 +139,7 @@
             const icone = pageScreen.querySelector('#edtIcon').value
             const ass = pageScreen.querySelector('#ckbAss').checked
             let width = pageScreen.querySelector('#edtLargura').value.trim()
+            const json = pageScreen.querySelector('#edtJson').value.trim()
 
             width = width != 'auto' ? parseInt(width) : 'auto'
             width = width == undefined ? 'auto' : width
@@ -150,6 +157,8 @@
             obj.icone = icone
             obj.pg = ass
             obj.width = width
+            obj.json = json
+          
             saveMenu()
             setLog(`Menu Alterado (${modulo}, ${link}, ${janela}, ${label})`)
         }
