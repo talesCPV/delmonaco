@@ -18,6 +18,10 @@ function addItem($access,$obj){
       $item->janela = $obj[$i]->janela;
       $item->label = $obj[$i]->label;
       $item->width = $obj[$i]->width;
+      $item->json = json_decode($obj[$i]->json) != null ? json_decode($obj[$i]->json) : new stdClass();
+      $item->pg = property_exists($obj[$i], 'pg') ? $obj[$i]->pg : 0;
+
+      /*      
       if($obj[$i]->id != ''){
         $item->id = $obj[$i]->id;
       }
@@ -27,6 +31,7 @@ function addItem($access,$obj){
       if($obj[$i]->href != ''){
         $item->href = $obj[$i]->href;
       }  
+*/    
 //      property_exists($obj[$i], 'id') ? $item->id = $obj[$i]->id : 0;
 //      property_exists($obj[$i], 'class') ? $item->class = $obj[$i]->class : 0;
       $item->access = crip(json_encode($obj[$i]->access));
@@ -72,6 +77,7 @@ function addItem($access,$obj){
           $resp = "";
           while (!feof ($fp)) {
               $resp = $resp . fgets($fp,4096);
+//echo $resp;              
           }
           fclose($fp);
           $json = json_decode($resp);

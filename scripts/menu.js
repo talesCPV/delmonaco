@@ -21,7 +21,7 @@ function openMenu(){
 
     const myPromisse = new Promise((resolve,reject) =>{
         fetch(myRequest)
-        .then(function (response){        
+        .then(function (response){                    
             if (response.status === 200) { 
               resolve(response.text())
             } else {
@@ -54,7 +54,6 @@ function openMenu(){
             li.className = 'side-item'
             const label = document.createElement('label')
 
-            
             if(obj[i].hasOwnProperty('class')){
                 li.classList.add(obj[i].class)
             }
@@ -139,7 +138,7 @@ function openMenu(){
                             shortcut.label = obj[i].label
                             shortcut.width = obj[i].width
                             shortcut.access = obj[i].access
-                            shortcut.json = obj[i].hasOwnProperty('json') ? obj[i].json : {}
+                            shortcut.json = obj[i].json
                             shortcut.x = 100
                             shortcut.y = 100
                             json.push(shortcut)
@@ -172,7 +171,7 @@ function addShortcut(){
         }
 
         for(let i=0; i<json.length; i++){
-console.log(json[i],json[i].json)
+//console.log(json[i],json[i].json)
 /*
             try{
                 json[i].json = JSON.parse(json[i].json)

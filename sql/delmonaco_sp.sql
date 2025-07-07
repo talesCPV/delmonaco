@@ -1464,7 +1464,6 @@ DELIMITER $$
 		IN Ihash varchar(64),
         IN Iid_task_cli int(11),
 		IN Irevisao int,
-		IN Idata_hora datetime,
 		IN Ihistorico varchar(50)
     )
 	BEGIN
@@ -1481,8 +1480,8 @@ DELIMITER $$
 				END IF;  
 			ELSE
 				SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
-				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,data_hora,historico) 
-				VALUES (Iid_task_cli,@id_usuario,Irevisao,Idata_hora,Ihistorico);
+				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,historico) 
+				VALUES (Iid_task_cli,@id_usuario,Irevisao,Ihistorico);
             END IF;
             SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli;
         END IF;

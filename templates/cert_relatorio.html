@@ -23,7 +23,24 @@
     const pageFunc = main_data.cert_relatorio.func
     const pageScreen = document.querySelector('#card-cert_relatorio')
 
-console.log(pageData)
+    console.log(pageData)
+
+    function pageStart(){
+        pageFunc.fillTaskCli()
+
+    }
+
+
+    pageFunc.fillTaskCli = ()=>{
+        const params = new Object
+        params.id_cliente = pageData.id_cliente
+            params.id_produto = pageData.prod.id_prod
+            const myPromisse = queryDB(params,'TASK-7');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)          
+            console.log(json)
+        })        
+    }
 
 /*
     const div_print = new_element('div','','div-print')
@@ -40,5 +57,7 @@ console.log(pageData)
             })
         })
 */
+
+    pageStart()
 
 </script>

@@ -1,6 +1,9 @@
 <template>
     <style>
 
+        .task{
+            display: none;
+        }
 
     </style>
 
@@ -10,7 +13,9 @@
         <div class="inline">
             <select id="cmbProd"></select>
         </div>
-
+        <div class="inline task">
+            <select id="cmbTask"></select>
+        </div>
         <div class="line">
             <button id="btnOpen" disabled>Abrir</button>
         </div>
@@ -24,6 +29,8 @@
     const btnOpen = pageScreen.querySelector('#btnOpen')
 
     function pageStart(){
+
+        pageScreen.querySelector('.task').style.display = pageData.link == 'cert_relatorio.html' ? 'block' : 'none'
         pageFunc.fillEmp()
     }
 
@@ -67,17 +74,45 @@
             }
             if(json.length){
                 cmb.selectedIndex = 0
-                btnOpen.disabled = 0
+                pageFunc.changeProd()
             }
+        })        
+    }
+
+    pageFunc.fillTaskCli = (id_prod)=>{
+        const params = new Object
+            params.id_cliente = pageData.id_cliente
+            params.id_produto = id_prod
+            const myPromisse = queryDB(params,'TASK-7');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)          
+            console.log(json)
         })        
     }
 
     pageFunc.changeEmp = ()=>{
         const id_cliente = pageScreen.querySelector('#cmbEmpresa').value
         btnOpen.disabled = 1
+        pageData.id_cliente = pageScreen.querySelector('#cmbEmpresa').selectedOptions[0].data.id_cliente
         pageScreen.querySelector('#cmbProd').innerHTML = ''
         if(Number(id_cliente)){
             pageFunc.fillCliProd(id_cliente)
+        }
+    }
+
+    pageFunc.changeProd = ()=>{
+        pageData.id_prod = pageScreen.querySelector('#cmbProd').value
+
+        if(pageData.link == 'cert_relatorio.html'){
+            const data = pageScreen.querySelector('#cmbProd').selectedOptions[0].data
+            console.log(data)
+            if(Number(pageData.id_prod)){
+                pageFunc.fillTaskCli(pageData.id_prod)
+            }
+
+
+        }else{
+            btnOpen.disabled = pageScreen.querySelector('#cmbProd').value=='0' ? 1 : 0
         }
     }
 
@@ -86,16 +121,18 @@
     })
 
     pageScreen.querySelector('#cmbProd').addEventListener('change',()=>{
-        btnOpen.disabled = pageScreen.querySelector('#cmbProd').value=='0' ? 1 : 0
+        pageFunc.changeProd()
+    })
+
+    pageScreen.querySelector('#cmbTask').addEventListener('change',()=>{
+        btnOpen.disabled = pageScreen.querySelector('#cmbTask').value=='0' ? 1 : 0        
     })
 
     pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
         const data = pageScreen.querySelector('#cmbEmpresa').selectedOptions[0].data    
         data.prod = pageScreen.querySelector('#cmbProd').selectedOptions[0].data
 
-        console.log(pageData)
-
-        openHTML('cert_cliente.html','pop-up',`${data.prod.nome} - ${data.cliente}`,data)
+        openHTML(pageData.link,'pop-up',`${data.prod.nome} - ${data.cliente}`,data)
         closeModal('cert_open')
     })
 
