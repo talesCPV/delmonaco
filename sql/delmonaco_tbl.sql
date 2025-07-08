@@ -352,7 +352,17 @@ CREATE TABLE tb_task_rev(
     revisao int NOT NULL DEFAULT 0,
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     historico varchar(50) NOT NULL,
+    elab varchar(30) DEFAULT NULL,
+    aprov varchar(30) DEFAULT NULL,
 	FOREIGN KEY (id_task_cli) REFERENCES tb_task_cli(id) ON DELETE CASCADE,
     FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id),
     PRIMARY KEY (id_task_cli,revisao)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS tb_task_setor;
+CREATE TABLE tb_task_setor(
+    id_task_cli int(11) NOT NULL,
+    setor varchar(20) NOT NULL,
+	FOREIGN KEY (id_task_cli) REFERENCES tb_task_cli(id) ON DELETE CASCADE,
+    PRIMARY KEY (id_task_cli,setor)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

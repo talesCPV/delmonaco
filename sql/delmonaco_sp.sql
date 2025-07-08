@@ -1464,7 +1464,9 @@ DELIMITER $$
 		IN Ihash varchar(64),
         IN Iid_task_cli int(11),
 		IN Irevisao int,
-		IN Ihistorico varchar(50)
+		IN Ihistorico varchar(50),
+        IN Ielab varchar(30),
+        IN Iaprov varchar(30)
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
@@ -1475,15 +1477,54 @@ DELIMITER $$
 					DELETE FROM tb_task_rev WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao;
 				ELSE
 					UPDATE tb_task_rev 
-                    SET revisao=Irevisao, historico=Ihistorico
+                    SET revisao=Irevisao, historico=Ihistorico, elab=Ielab, aprov=Iaprov
                     WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao;
 				END IF;  
 			ELSE
 				SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
-				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,historico) 
-				VALUES (Iid_task_cli,@id_usuario,Irevisao,Ihistorico);
+				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,historico,elab,aprov) 
+				VALUES (Iid_task_cli,@id_usuario,Irevisao,Ihistorico,Ielab,Iaprov);
             END IF;
             SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli;
+        END IF;
+	END $$
+DELIMITER ;
+
+  DROP PROCEDURE IF EXISTS sp_view_task_setor;
+DELIMITER $$
+	CREATE PROCEDURE sp_view_task_setor(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+		IN Iid_task_cli int(11)
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			SELECT * FROM tb_task_setor WHERE id_task_cli=Iid_task_cli;
+        END IF;
+	END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_set_task_setor;
+DELIMITER $$
+	CREATE PROCEDURE sp_set_task_setor(
+		IN Iallow varchar(80),
+		IN Ihash varchar(64),
+        IN Iid_task_cli int(11),
+        IN Isetor varchar(30),
+        IN del boolean
+    )
+	BEGIN
+		CALL sp_allow(Iallow,Ihash);
+		IF(@allow)THEN
+			IF(del) THEN
+				DELETE FROM tb_task_setor WHERE id_task_cli = Iid_task_cli AND setor COLLATE utf8_general_ci = Isetor COLLATE utf8_general_ci;
+			ELSE
+				INSERT INTO tb_task_setor (id_task_cli,setor) 
+				VALUES (Iid_task_cli,Isetor)
+				ON DUPLICATE KEY UPDATE setor=Isetor;
+			END IF;  
+            SELECT * FROM tb_task_setor WHERE id_task_cli=Iid_task_cli;
         END IF;
 	END $$
 DELIMITER ;

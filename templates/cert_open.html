@@ -86,7 +86,19 @@
             const myPromisse = queryDB(params,'TASK-7');
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)          
-            console.log(json)
+            const cmb = pageScreen.querySelector('#cmbTask')
+            cmb.innerHTML = ''   
+            for(let i=0; i<json.length;i++){
+                const opt = document.createElement('option')
+                opt.value = json[i].id
+                opt.innerHTML = json[i].cod+' - '+json[i].titulo
+                opt.data = json[i]
+                cmb.appendChild(opt)
+            }
+            if(json.length){
+                cmb.selectedIndex = 0
+                btnOpen.disabled = 0
+            }
         })        
     }
 
@@ -105,7 +117,6 @@
 
         if(pageData.link == 'cert_relatorio.html'){
             const data = pageScreen.querySelector('#cmbProd').selectedOptions[0].data
-            console.log(data)
             if(Number(pageData.id_prod)){
                 pageFunc.fillTaskCli(pageData.id_prod)
             }
@@ -131,6 +142,11 @@
     pageScreen.querySelector('#btnOpen').addEventListener('click',()=>{
         const data = pageScreen.querySelector('#cmbEmpresa').selectedOptions[0].data    
         data.prod = pageScreen.querySelector('#cmbProd').selectedOptions[0].data
+        try{
+            data.task = pageScreen.querySelector('#cmbTask').selectedOptions[0].data
+        }catch{
+            null
+        }
 
         openHTML(pageData.link,'pop-up',`${data.prod.nome} - ${data.cliente}`,data)
         closeModal('cert_open')

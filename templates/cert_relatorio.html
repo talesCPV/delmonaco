@@ -1,14 +1,43 @@
 <template>
-    <style></style>
+    <style>
+
+    </style>
 
     <fieldset>
-        <legend>Mensagem Padrão</legend>
+        <legend>Revisões</legend>
+        <table id="tblRev"></table>
         <div class="inline">
-            <label for="edtMsg">Texto</label>
-            <textarea id="edtMsg" rows="10"></textarea>
+            <label for="edtRev">Revisão</label>
+            <input type="text" class="only-view" id="edtRev" onfocus="this.select();" inputmode="decimal" onkeyup="valInt(this)" value="0" disabled>
         </div>
+        <div class="inline">
+            <label for="edtHist">Histórico</label>
+            <input type="text" id="edtHist" onfocus="this.select();" maxlength="50">
+        </div>
+        <div class="inline">
+            <label for="edtElab">Elaboração</label>
+            <input type="text" id="edtElab" onfocus="this.select();" maxlength="30">
+        </div>
+        <div class="inline">
+            <label for="edtAprov">Aprovação</label>
+            <input type="text" id="edtAprov" onfocus="this.select();" maxlength="30">
+        </div>
+
+        <fieldset>
+            <legend>Setores</legend>
+            <div class="inline">
+                <label for="estSetor">Nome</label>
+                <input type="text" id="edtSetor" onfocus="this.select();" maxlength="20">
+                <button id="btnSetor" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>
+            </div>
+            <select id="cmbSetor" size="5"></select>
+
+
+        </fieldset>
+
+
         <div class="line">
-            <button id="btnSave">Salvar</button>
+            <button id="btnMake">Gerar</button>
         </div>
     </fieldset>
 
@@ -23,24 +52,61 @@
     const pageFunc = main_data.cert_relatorio.func
     const pageScreen = document.querySelector('#card-cert_relatorio')
 
-    console.log(pageData)
-
     function pageStart(){
-        pageFunc.fillTaskCli()
+        console.log(pageData)
+        pageFunc.fillSetor()
 
     }
 
-
-    pageFunc.fillTaskCli = ()=>{
+    pageFunc.setSetor = (set=0)=>{
         const params = new Object
-        params.id_cliente = pageData.id_cliente
-            params.id_produto = pageData.prod.id_prod
-            const myPromisse = queryDB(params,'TASK-7');
-        myPromisse.then((resolve)=>{
-            const json = JSON.parse(resolve)          
-            console.log(json)
-        })        
+            params.id_taskcli= pageData.task.id
+            params.setor = set ? set : pageScreen.querySelector('#edtSetor').value.trim()
+            params.del = set ? 1 : 0
+        if(params.setor.length){
+            const myPromisse = queryDB(params,'TASK-13');
+            myPromisse.then((resolve)=>{
+                const json = JSON.parse(resolve)
+                pageFunc.fillSetor()
+                pageScreen.querySelector('#edtSetor').value = ''
+            })
+        }
     }
+
+    pageFunc.fillSetor = ()=>{
+        const params = new Object
+            params.id_taskcli= pageData.task.id
+            const myPromisse = queryDB(params,'TASK-12');
+            myPromisse.then((resolve)=>{
+                const json = JSON.parse(resolve)
+                const cmb = pageScreen.querySelector('#cmbSetor')
+                cmb.innerHTML = ''   
+                for(let i=0; i<json.length;i++){
+                    const opt = document.createElement('option')
+                    opt.value = json[i].setor
+                    opt.innerHTML = json[i].setor
+                    opt.data = json[i]
+                    cmb.appendChild(opt)
+                }
+                if(json.length){
+                    cmb.selectedIndex = 0
+                }
+            })
+    }
+
+
+
+    pageScreen.querySelector('#btnSetor').addEventListener('click',()=>{
+        pageFunc.setSetor()
+    })
+
+    pageScreen.querySelector('#cmbSetor').addEventListener('dblclick',()=>{
+        const setor = pageScreen.querySelector('#cmbSetor').value
+        if(confirm(`Deseja realmente deletar o setor ${setor}`)){
+            pageFunc.setSetor(setor)
+        }
+    })
+
 
 /*
     const div_print = new_element('div','','div-print')
