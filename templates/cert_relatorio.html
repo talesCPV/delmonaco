@@ -4,15 +4,14 @@
     </style>
 
     <fieldset>
-        <legend>Revisões</legend>
-        <table id="tblRev"></table>
+        <legend>Revisões</legend>        
         <div class="inline">
             <label for="edtRev">Revisão</label>
-            <input type="text" class="only-view" id="edtRev" onfocus="this.select();" inputmode="decimal" onkeyup="valInt(this)" value="0" disabled>
+            <input type="text" class="only-view" id="edtRev" onfocus="this.select();" inputmode="decimal" onkeyup="valFloat(this,0)" value="0" readonly>
         </div>
         <div class="inline">
             <label for="edtHist">Histórico</label>
-            <input type="text" id="edtHist" onfocus="this.select();" maxlength="50">
+            <input type="text" id="edtHist" onfocus="this.select();" maxlength="50" value="Emissão Inicial">
         </div>
         <div class="inline">
             <label for="edtElab">Elaboração</label>
@@ -23,27 +22,29 @@
             <input type="text" id="edtAprov" onfocus="this.select();" maxlength="30">
         </div>
 
-        <fieldset>
-            <legend>Setores</legend>
-            <div class="inline">
-                <label for="estSetor">Nome</label>
-                <input type="text" id="edtSetor" onfocus="this.select();" maxlength="20">
-                <button id="btnSetor" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>
-            </div>
-            <select id="cmbSetor" size="5"></select>
-
-
-        </fieldset>
-
-
+        <table id="tblRev"></table>
         <div class="line">
-            <button id="btnMake">Gerar</button>
+            <button id="btnRev">Adicionar Revisão</button>
         </div>
+
     </fieldset>
 
-    <div class="legenda">
+    <fieldset>
+        <legend>Setores</legend>
+        <div class="inline">
+            <label for="estSetor">Nome</label>
+            <input type="text" id="edtSetor" onfocus="this.select();" maxlength="20">
+            <button id="btnSetor" class="btn-round"><span class="mdi mdi-plus-thick"></span></button>
+        </div>
+        <select id="cmbSetor" size="5"></select>
 
+
+    </fieldset>
+
+    <div class="line">
+        <button id="btnRelat">Relatório</button>
     </div>
+
 
 </template>
 <script>
@@ -53,10 +54,10 @@
     const pageScreen = document.querySelector('#card-cert_relatorio')
 
     function pageStart(){
-        console.log(pageData)
         pageFunc.fillSetor()
-
-    }
+        pageFunc.getRev()
+//        pageFunc.fillAnswers()
+}
 
     pageFunc.setSetor = (set=0)=>{
         const params = new Object
@@ -78,23 +79,69 @@
             params.id_taskcli= pageData.task.id
             const myPromisse = queryDB(params,'TASK-12');
             myPromisse.then((resolve)=>{
-                const json = JSON.parse(resolve)
+                pageData.setores = JSON.parse(resolve)
                 const cmb = pageScreen.querySelector('#cmbSetor')
                 cmb.innerHTML = ''   
-                for(let i=0; i<json.length;i++){
+                for(let i=0; i<pageData.setores.length;i++){
                     const opt = document.createElement('option')
-                    opt.value = json[i].setor
-                    opt.innerHTML = json[i].setor
-                    opt.data = json[i]
+                    opt.value = pageData.setores[i].setor
+                    opt.innerHTML = pageData.setores[i].setor
+                    opt.data = pageData.setores[i]
                     cmb.appendChild(opt)
                 }
-                if(json.length){
+                if(pageData.setores.length){
                     cmb.selectedIndex = 0
                 }
             })
     }
 
+    pageFunc.fillAnswers = ()=>{
+        const params = new Object
+            params.id_tarefa = pageData.task.id
+        const myPromisse = queryDB(params,'TASK-9');
+        myPromisse.then((resolve)=>{
+            pageData.perguntas = JSON.parse(resolve)
+        })
+    }
 
+    pageFunc.setRev = (del=0)=>{
+        const params = new Object
+            params.id_taskcli= pageData.task.id
+            params.revisao = pageScreen.querySelector('#edtRev').value
+            params.historico = del ? '' : pageScreen.querySelector('#edtHist').value.trim()
+            params.elaboracao = pageScreen.querySelector('#edtElab').value.trim()
+            params.aprovacao = pageScreen.querySelector('#edtAprov').value.trim()
+
+        const myPromisse = queryDB(params,'TASK-11');
+        myPromisse.then((resolve)=>{
+            const json = JSON.parse(resolve)
+            pageFunc.fillRev(json)
+//                pageFunc.fillSetor()
+//                pageScreen.querySelector('#edtSetor').value = ''
+        })
+    }
+
+    pageFunc.getRev = ()=>{
+        const params = new Object
+            params.id_tarefa = pageData.task.id
+        const myPromisse = queryDB(params,'TASK-10');
+        myPromisse.then((resolve)=>{
+            pageData.rev = JSON.parse(resolve)
+            pageFunc.fillRev(pageData.rev)
+        })
+    }
+
+    pageFunc.fillRev = (json)=>{
+        const tbl = pageScreen.querySelector('#tblRev')
+        tbl.head('Revisão,Histórico,Data')
+        for(let i=0; i<json.length; i++){
+            tbl.plot(json[i],'revisao,historico,data_hora','int,Upp,dat')
+            pageScreen.querySelector('#edtRev').value = Number(json[i].revisao)
+            pageScreen.querySelector('#edtHist').value = json[i].historico
+            pageScreen.querySelector('#edtElab').value = json[i].elab
+            pageScreen.querySelector('#edtAprov').value = json[i].aprov
+        }
+    }
 
     pageScreen.querySelector('#btnSetor').addEventListener('click',()=>{
         pageFunc.setSetor()
@@ -107,6 +154,13 @@
         }
     })
 
+    pageScreen.querySelector('#btnRev').addEventListener('click',()=>{
+        pageFunc.setRev()
+    })
+
+    pageScreen.querySelector('#btnRelat').addEventListener('click',()=>{
+        console.log(pageData)
+    })
 
 /*
     const div_print = new_element('div','','div-print')

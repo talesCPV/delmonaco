@@ -191,19 +191,44 @@ SELECT * FROM vw_answers;
     
 SELECT * FROM vw_cli_task;
 
-SELECT * FROM tb_task_cli;
+ DROP VIEW IF EXISTS vw_perguntas;
+--  	CREATE VIEW vw_perguntas AS
+		SELECT PER.id AS id_pergunta,PER.id_tarefa,TASK.id AS id_task_cli,TASK.id_cliente,PER.titulo,PER.pergunta,TASK.titulo AS tarefa, TASK.cod
+		FROM tb_perguntas AS PER
+		LEFT JOIN tb_task_cli AS TASK
+        ON TASK.id_tarefa = PER.id_tarefa
+        WHERE PER.relatorio = 1
+		ORDER BY TASK.id,PER.id;
+
+SELECT * FROM vw_perguntas ;
 
  DROP VIEW IF EXISTS vw_main_answer;
-  	CREATE VIEW vw_main_answer AS
-	SELECT PER.id_tarefa,PER.id AS id_perunta,IFNULL(RESP.id_task_cli,0) AS id_task_cli,
-    IFNULL(RESP.id_usuario,0) AS id_usuario, PER.relatorio, PER.titulo,PER.pergunta,IFNULL(RESP.resposta,"") AS resposta
-	FROM tb_perguntas AS PER
+--  	CREATE VIEW vw_main_answer AS
+	SELECT PER.id_tarefa,PER.id_pergunta,IFNULL(RESP.id_task_cli,0) AS id_task_cli,
+    IFNULL(RESP.id_usuario,0) AS id_usuario, PER.titulo,PER.pergunta,RESP.data_hora,IFNULL(RESP.resposta,"") AS resposta
+	FROM vw_perguntas AS PER
 	LEFT JOIN tb_respostas AS RESP
-	ON PER.id = RESP.id_pergunta
-	GROUP BY PER.id;
+	ON PER.id_pergunta = RESP.id_pergunta;
+
+	SELECT PER.id_tarefa,PER.id_pergunta,IFNULL(RESP.id_task_cli,0) AS id_task_cli,
+    IFNULL(RESP.id_usuario,0) AS id_usuario, PER.titulo,PER.pergunta,IFNULL(RESP.resposta,"") AS resposta
+	FROM vw_perguntas AS PER
+    INNER JOIN tb_task_cli AS TASK
+	LEFT JOIN tb_respostas AS RESP
+	ON PER.id_tarefa = TASK.id_tarefa
+    AND PER.id_pergunta = RESP.id_pergunta
+    AND PER.id_task_cli = RESP.id_task_cli
+    GROUP BY PER.id_pergunta, PER.id_task_cli;
 
 
-SELECT * FROM tb_perguntas ;
+SELECT * FROM tb_task_cli
+WHERE id_tarefa = 1;
+SELECT PER.*, TASK.*
+FROM tb_perguntas AS PER
+LEFT JOIN tb_task_cli AS TASK
+ON TASK.id_tarefa = PER.id_tarefa;
+WHERE PER.id_tarefa=1 ;
+
 SELECT * FROM tb_respostas ;
 
  SELECT * FROM vw_main_answer;
