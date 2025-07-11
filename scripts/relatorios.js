@@ -114,26 +114,3 @@ function print_orc(orc){
     }
 
 }
-
-function print_relatorio(obj){
-    console.log(obj)
-    doc = new jsPDF({
-        orientation: 'portrait',
-        format: 'a4'
-    }) 
-
-    frame()
-    plotImg('assets/icons/icon.png',10,10,20,20)
-
-    txt.y = 20
-
-    doc.setFontSize(20);
-    doc.setFont(undefined, 'bold')
-    center_text(obj.tarefa)
-    addLine(2)
-
-
-//    const blob = doc.output('blob')
-    openPDF(doc,'relatorio')
-
-}
