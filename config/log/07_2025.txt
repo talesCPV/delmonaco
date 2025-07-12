@@ -46,3 +46,27 @@
 07/07/2025 15:44 tales@planet3.com.br : Permissao alterada, Modulo: Comercial, Acesso:[[0,1]])
 07/07/2025 15:44 tales@planet3.com.br : Permissao alterada, Modulo: GDM Elevate, Acesso:[[0,1,2]])
 07/07/2025 15:44 tales@planet3.com.br : Permissao alterada, Modulo: Gestao de Processos, Acesso:[[0,1,2]])
+12/07/2025 19:34 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Indique onde e por quem a IT deve ser aplicada (setores, areas, perfis)./Sala de corte manual.
+12/07/2025 19:35 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Liste e Defina siglas ou termos tecnicos mencionados no documento./IT â Instrucao de trabalho.
+12/07/2025 19:35 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Cite quaisquer outros documentos relacionados a esta IT./Ordem de Producao.
+12/07/2025 19:36 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Descreva o passo a passo completo do procedimento a ser seguido./5. DESCRICAO DO PROCEDIMENTO
+O corte dos tecidos da empresa Axon no setor de corte manual devera obedecer os
+seguintes requisitos minimos:
+1. Receber e organizar a ordem de producao via Trello;
+2. Colocar os dados do pedido na impressora para os moldes serem impressos nos
+tamanhos e nas camadas adequadas;
+3. Colocar o rolo do tecido escolhido na Enfestadeira para a organizacao das camadas;
+4. Distribuir o tecido com a Esfestadeira para alinhamento das camadas;
+5. Caso o processo de marcacao de molde precise ser feito de maneira manual, os
+tecidos sao marcados com os moldes de papelao e cortados com tesoura ou maquina de
+corte;
+6. Cortar o tecido com maquina de corte seguindo a impressao demarcada utilizando
+luva de seguranca;
+7. Separar tecidos para o corte das golas;
+8. Realizar marcacoes com o uso da regua e giz;
+9. Realizar os cortes das golas com a maquina de corte utilizando luva de seguranca;
+10. Separar e preparar as etiquetas, linha, fio e partes dos tecidos cortados para envio
+para as costureiras;
+11. Enviar para as costureiras.
+12/07/2025 19:36 tales@planet3.com.br : Post: Vitoria do Vale/Implantacao ISO 9001:2015/Informe quais registros devem ser gerados, seus codigos e onde serao armazenados./Relatorio de ocorrencias â FORM SGI 005
+12/07/2025 20:25 tales@planet3.com.br :  Logotipo Alterado -> Empresa: Vitoria do Vale Locacao de Equipamentos

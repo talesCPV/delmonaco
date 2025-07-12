@@ -31,10 +31,10 @@ function addPage(Y=76){
     txt.y = Y 
 }
 
-function addLine(N=1, botton=10, top=76){
+function addLine(N=1, botton=10, callback=0){
     txt.y += txt.lineHeigth * N
     if(txt.y >= doc.internal.pageSize.getHeight() - botton){
-        addPage()
+        callback ? callback() : addPage()
         return false
     }
     return true

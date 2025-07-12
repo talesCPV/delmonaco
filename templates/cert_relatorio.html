@@ -164,7 +164,9 @@
 
 
     function print_relatorio(obj){
-        console.log(obj)
+
+        let img = 'assets/icons/icon.png'
+
         doc = new jsPDF({
             orientation: 'portrait',
             format: 'a4'
@@ -172,7 +174,26 @@
 
         const rev = obj.rev[obj.rev.length-1]
 
+        function newPage(Y=55){
+            doc.addPage();
+            head()   
+            txt.y = Y 
+        }
+
+        function addLine(N=1, botton=0){
+            txt.y += txt.lineHeigth * N
+            if(txt.y >= doc.internal.pageSize.getHeight() - botton){
+                botton ? newPage() : null
+                return false
+            }
+            return true
+        }
+
+
         function head(){
+
+            plotImg(img,10,10,20,20)
+
             doc.rect(5,5,doc.internal.pageSize.getWidth()-10,30)
             doc.rect(35,5,130,30)
             doc.setFontSize(20);
@@ -191,7 +212,7 @@
             doc.line(110,40,110,120)
 
             doc.setFont(undefined, 'bold')
-            doc.setFontSize(12);
+            doc.setFontSize(12)
             doc.line(5,46,doc.internal.pageSize.getWidth()-5,46)
             doc.text('Elaboração',20,44.5)
             doc.text('Setores Aplicáveis',67,44.5)
@@ -242,43 +263,43 @@
                 doc.line(60,(136+6*i),60,(142+6*i))
                 doc.line(doc.internal.pageSize.getWidth()-5,(136+6*i),doc.internal.pageSize.getWidth()-5,(142+6*i))
             }
-
         }
+
+        function questoes(){
+            newPage()
+            for(let i=0; i<obj.perguntas.length; i++){
+                doc.setFont(undefined, 'bold')
+                doc.setFontSize(12)
+                doc.text((i+1).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
+                addLine(1)
+
+                doc.setFont(undefined, 'normal')
+                doc.setFontSize(10)
+                box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
+                addLine(3)
+//                const quebras = (obj.perguntas[i].resposta.match(/\r?\n/g) || []).length
+//                addLine(quebras,i+1<obj.perguntas.length)
+            }
+        }
+
 
 
         function print(){
-            const back = backFunc({'filename':`../../files/logos/${obj.id_cliente}.jpg`},1)
-            back.then((resp)=>{
-                const imgExist = JSON.parse(resp)
-                plotImg(imgExist ? `../files/logos/${obj.id_cliente}.jpg` : 'assets/icons/icon.png',10,10,20,20)
-                openPDF(doc,'relatorio')
-            })  
+
+            openPDF(doc,'relatorio')
         }
 
+        const back = backFunc({'filename':`../../files/logos/${obj.id_cliente}.jpg`},1)
+        back.then((resp)=>{
+            img = JSON.parse(resp) ? `../files/logos/${obj.id_cliente}.jpg` : 'assets/icons/icon.png'
+            head()
+            setores()
+            revisoes()
+            questoes()
+            print()
+        })  
 
-        head()
-        setores()
-        revisoes()
-
-        print()
-}
-
-
-/*
-    const div_print = new_element('div','','div-print')
-        screen.appendChild(div_print)
-        const print = new_element('button','<span class="mdi mdi-printer-outline"></span> Relatório')
-        div_print.appendChild(print)
-        print.addEventListener('click',()=>{
-            const params = new Object
-                params.id_tarefa = data.id_tarefa
-            const myPromisse = queryDB(params,'TASK-9');
-            myPromisse.then((resolve)=>{
-                data.perguntas = JSON.parse(resolve)
-                print_relatorio(data)
-            })
-        })
-*/
+    }
 
     pageStart()
 

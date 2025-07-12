@@ -317,7 +317,7 @@ CREATE TABLE tb_respostas(
     id_pergunta int(11) NOT NULL,
     id_task_cli int(11) NOT NULL,
     id_usuario int(11) NOT NULL,
-    resposta varchar(512) NOT NULL,
+    resposta varchar(1024) NOT NULL,
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (id_pergunta) REFERENCES tb_perguntas(id) ON DELETE CASCADE,
 	FOREIGN KEY (id_task_cli) REFERENCES tb_task_cli(id) ON DELETE CASCADE,
