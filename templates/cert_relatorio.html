@@ -116,8 +116,6 @@
         myPromisse.then((resolve)=>{
             const json = JSON.parse(resolve)
             pageFunc.fillRev(json)
-//                pageFunc.fillSetor()
-//                pageScreen.querySelector('#edtSetor').value = ''
         })
     }
 
@@ -136,6 +134,7 @@
         tbl.head('Revisão,Histórico,Data')
         for(let i=0; i<json.length; i++){
             tbl.plot(json[i],'revisao,historico,data_hora','int,Upp,dat')
+            json[i].revisao = i.toString()
             pageScreen.querySelector('#edtRev').value = Number(json[i].revisao)
             pageScreen.querySelector('#edtHist').value = json[i].historico
             pageScreen.querySelector('#edtElab').value = json[i].elab
@@ -162,6 +161,14 @@
         print_relatorio(pageData)
     })
 
+    pageScreen.querySelector('#tblRev').addEventListener('dblclick',(e)=>{
+        if(confirm('Deseja deletar esta revisão?')){
+            const data = e.target.parentNode.data
+            console.log(data)
+            pageScreen.querySelector('#edtRev').value = data.revisao
+            pageFunc.setRev(1)
+        }
+    })
 
     function print_relatorio(obj){
 
