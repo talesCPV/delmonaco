@@ -7,7 +7,7 @@
         <legend>Revisões</legend>        
         <div class="inline">
             <label for="edtRev">Revisão</label>
-            <input type="text" class="only-view" id="edtRev" onfocus="this.select();" inputmode="decimal" onkeyup="valFloat(this,0)" value="0" readonly>
+            <input type="text" class="only-view" id="edtRev" onfocus="this.select();" inputmode="decimal" onkeyup="valFloat(this,0)" value="0">
         </div>
         <div class="inline">
             <label for="edtHist">Histórico</label>
@@ -21,10 +21,13 @@
             <label for="edtAprov">Aprovação</label>
             <input type="text" id="edtAprov" onfocus="this.select();" maxlength="30">
         </div>
-
+        <div class="inline">
+            <label for="edtData">Data</label>
+            <input type="date" id="edtData" onfocus="this.select();">
+        </div>
         <table id="tblRev"></table>
         <div class="line">
-            <button id="btnRev">Adicionar Revisão</button>
+            <button id="btnRev">Salvar Revisão</button>
         </div>
 
     </fieldset>
@@ -57,7 +60,16 @@
         pageFunc.fillSetor()
         pageFunc.getRev()
         pageFunc.fillAnswers()
-}
+        pageScreen.querySelector('#edtData').value = today.getFormatDate()
+    }
+
+    function fieldRev(json){
+        pageScreen.querySelector('#edtRev').value = Number(json.revisao)
+        pageScreen.querySelector('#edtHist').value = json.historico
+        pageScreen.querySelector('#edtElab').value = json.elab
+        pageScreen.querySelector('#edtAprov').value = json.aprov
+        pageScreen.querySelector('#edtData').value = json.data_hora.substr(0,10)
+    }
 
     pageFunc.setSetor = (set=0)=>{
         const params = new Object
@@ -111,6 +123,7 @@
             params.historico = del ? '' : pageScreen.querySelector('#edtHist').value.trim()
             params.elaboracao = pageScreen.querySelector('#edtElab').value.trim()
             params.aprovacao = pageScreen.querySelector('#edtAprov').value.trim()
+            params.data = pageScreen.querySelector('#edtData').value + ' 00:00:00'
 
         const myPromisse = queryDB(params,'TASK-11');
         myPromisse.then((resolve)=>{
@@ -132,13 +145,9 @@
     pageFunc.fillRev = (json)=>{
         const tbl = pageScreen.querySelector('#tblRev')
         tbl.head('Revisão,Histórico,Data')
-        for(let i=0; i<json.length; i++){
+        for(let i=0; i<json.length; i++){         
             tbl.plot(json[i],'revisao,historico,data_hora','int,Upp,dat')
-            json[i].revisao = i.toString()
-            pageScreen.querySelector('#edtRev').value = Number(json[i].revisao)
-            pageScreen.querySelector('#edtHist').value = json[i].historico
-            pageScreen.querySelector('#edtElab').value = json[i].elab
-            pageScreen.querySelector('#edtAprov').value = json[i].aprov
+            fieldRev(json[i])
         }
     }
 
@@ -164,10 +173,14 @@
     pageScreen.querySelector('#tblRev').addEventListener('dblclick',(e)=>{
         if(confirm('Deseja deletar esta revisão?')){
             const data = e.target.parentNode.data
-            console.log(data)
             pageScreen.querySelector('#edtRev').value = data.revisao
             pageFunc.setRev(1)
         }
+    })
+
+    pageScreen.querySelector('#tblRev').addEventListener('click',(e)=>{
+            const data = e.target.parentNode.data
+            fieldRev(data)
     })
 
     function print_relatorio(obj){

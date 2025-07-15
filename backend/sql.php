@@ -52,7 +52,7 @@
         "TASK-8" => 'CALL sp_set_task_cli(@access,@hash,x00,x01,x02,"x03","x04");', // ID, ID_TASK, ID_CLIENTE, TITULO, COD
         "TASK-9" => 'CALL sp_view_main_answer(@access,@hash,x00);', // ID_TASK_CLI
         "TASK-10" => 'CALL sp_view_task_rev(@access,@hash,x00);', // ID_TASK_CLI
-        "TASK-11" => 'CALL sp_set_task_rev(@access,@hash,x00,x01,"x02","x03","x04");', // ID_TASK_CLI, REVISÃO, HISTORICO, ELABORAÇÃO, APROVAÇÃO
+        "TASK-11" => 'CALL sp_set_task_rev(@access,@hash,x00,x01,"x02","x03","x04","x05");', // ID_TASK_CLI, REVISÃO, HISTORICO, ELABORAÇÃO, APROVAÇÃO, DATA
         "TASK-12" => 'CALL sp_view_task_setor(@access,@hash,x00);', // ID_TASK_CLI
         "TASK-13" => 'CALL sp_set_task_setor(@access,@hash,x00,"x01",x02);', // ID_TASK_CLI, SETOR, DEL
         

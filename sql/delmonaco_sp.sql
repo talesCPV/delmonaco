@@ -1452,7 +1452,7 @@ DELIMITER $$
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
 		IF(@allow)THEN
-			SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli;
+			SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli ORDER BY id_task_cli,revisao;
         END IF;
 	END $$
 DELIMITER ;
@@ -1466,7 +1466,8 @@ DELIMITER $$
 		IN Irevisao int,
 		IN Ihistorico varchar(50),
         IN Ielab varchar(30),
-        IN Iaprov varchar(30)
+        IN Iaprov varchar(30),
+        IN Idata datetime
     )
 	BEGIN
 		CALL sp_allow(Iallow,Ihash);
@@ -1477,13 +1478,13 @@ DELIMITER $$
 					DELETE FROM tb_task_rev WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao;
 				ELSE
 					UPDATE tb_task_rev 
-                    SET revisao=Irevisao, historico=Ihistorico, elab=Ielab, aprov=Iaprov
+                    SET revisao=Irevisao, historico=Ihistorico, elab=Ielab, aprov=Iaprov, data_hora=Idata
                     WHERE id_task_cli=Iid_task_cli AND revisao=Irevisao;
 				END IF;  
 			ELSE
 				SET @id_usuario = (SELECT IFNULL(id,0) FROM tb_usuario WHERE hash COLLATE utf8_general_ci = Ihash COLLATE utf8_general_ci LIMIT 1);
-				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,historico,elab,aprov) 
-				VALUES (Iid_task_cli,@id_usuario,Irevisao,Ihistorico,Ielab,Iaprov);
+				INSERT INTO tb_task_rev (id_task_cli,id_usuario,revisao,historico,elab,aprov,data_hora) 
+				VALUES (Iid_task_cli,@id_usuario,Irevisao,Ihistorico,Ielab,Iaprov,Idata);
             END IF;
             SELECT * FROM tb_task_rev WHERE id_task_cli=Iid_task_cli;
         END IF;
