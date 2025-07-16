@@ -155,9 +155,15 @@ function print_relatorio(obj){
         doc.setFont(undefined, 'bold')
         center_text(obj.task.nome,[55,150])
         doc.setFontSize(10);
-        doc.text('Código: '+obj.task.cod,168,15)
-        doc.text('Data: '+rev.data_hora.viewDate(),168,20)
-        doc.text('Revisão: '+rev.revisao.padStart(2,0),168,25)
+        try{
+            doc.text('Código: '+obj.task.cod,168,15)
+            doc.text('Data: '+rev.data_hora.viewDate(),168,20)
+            doc.text('Revisão: '+rev.revisao.padStart(2,0),168,25)
+        }catch{
+            doc.text('Código: ',168,15)
+            doc.text('Data: ',168,20)
+            doc.text('Revisão: ',168,25)    
+        }
     }
 
     function setores(){
@@ -178,8 +184,13 @@ function print_relatorio(obj){
 
         doc.setFont(undefined, 'normal')
 
-        box(rev.elab,10,55,50)
-        box(rev.aprov,10,85,50)
+        try{
+            box(rev.elab,10,55,50)
+            box(rev.aprov,10,85,50)
+        }catch{
+            null
+        }
+
 
         txt.y = 53
         for(let i=0; i<obj.setores.length; i++){

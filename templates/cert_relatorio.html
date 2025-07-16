@@ -137,12 +137,12 @@
             params.id_tarefa = pageData.task.id
         const myPromisse = queryDB(params,'TASK-10');
         myPromisse.then((resolve)=>{
-            pageData.rev = JSON.parse(resolve)
-            pageFunc.fillRev(pageData.rev)
+            pageFunc.fillRev(JSON.parse(resolve))
         })
     }
 
     pageFunc.fillRev = (json)=>{
+        pageData.rev = json
         const tbl = pageScreen.querySelector('#tblRev')
         tbl.head('Revisão,Histórico,Data')
         for(let i=0; i<json.length; i++){         
@@ -167,7 +167,12 @@
     })
 
     pageScreen.querySelector('#btnRelat').addEventListener('click',()=>{
-        print_relatorio(pageData)
+        try{
+            print_relatorio(pageData)
+        }catch{
+            alert('Houve algum erro na geração do relatório, por favor saia e tente novamente.')
+            loading()
+        }
     })
 
     pageScreen.querySelector('#tblRev').addEventListener('dblclick',(e)=>{
