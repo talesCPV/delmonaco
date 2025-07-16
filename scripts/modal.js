@@ -266,3 +266,26 @@ function menuContext(tbl,e,float=1){
     mod_main.appendChild(backModal)
     mod_main.style.display = "block"
 }
+
+function loading(on=0){
+//    <img src="assets/icons/loading.gif" alt=""></img>
+    const mod_main = document.querySelector('#myModal')
+
+    if(on){
+        mod_main.style.display =  'flex'
+        const img = document.createElement('img')
+        img.src = "assets/icons/loading.gif"
+        img.className = 'load-img'
+        mod_main.appendChild(img)
+
+    }else{
+        mod_main.style.display = 'none'
+        mod_main.querySelector('.load-img').remove()
+    }
+
+
+
+
+
+
+}
