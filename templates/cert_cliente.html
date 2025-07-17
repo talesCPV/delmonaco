@@ -48,6 +48,10 @@
             display: none;
         }
 
+        .resp-image{
+            width: 100%;
+        }
+
         .edit-div{
             display : flex;
             align-items: center;
@@ -463,7 +467,12 @@
                     const callback = (file)=>{
                         const up = uploadFile(file.files[0],`../files/anexos/imagem/${post.obj.id_task_cli}/`,`${post.obj.id_pergunta}.jpg`)
                         up.then((resp)=>{     
-                            setLog(`Imagem Anexado  - ID da Pergunta: ${post.obj.id_pergunta}`)                            
+                            setLog(`Imagem Anexado  - ID da Pergunta: ${post.obj.id_pergunta}`)
+                            var image = post.querySelector('.post-text').querySelector('img')                        
+                            image = image==null ? new_element('img','','resp-image') : image
+                            image.src = `../../files/anexos/imagem/${post.obj.id_task_cli}/${post.obj.id_pergunta}.jpg?`+ new Date().getTime()
+                            post.querySelector('.post-text').appendChild(image)
+
                         })
                     }
                     openHTML('tool_upload_file.html','pop-up','Anexar Arquivos',{'callback':callback,'ext':'image/jpeg'})
@@ -501,8 +510,8 @@ if(!quest && !obj.indice){
     back.then((resp)=>{
         const hasImg = JSON.parse(resp)
         if(hasImg){
-            const image = new_element('img','','')
-            image.src = `../../files/anexos/imagem/${post.obj.id_task_cli}/${post.obj.id_pergunta}.jpg`
+            const image = new_element('img','','resp-image')
+            image.src = `../../files/anexos/imagem/${post.obj.id_task_cli}/${post.obj.id_pergunta}.jpg?`+new Date().getTime()
             post_text.appendChild(image)
 
             image.addEventListener('click',(e)=>{
