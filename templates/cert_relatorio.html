@@ -81,7 +81,6 @@
     pageFunc.fillRelat = ()=>{
         listFiles(`../files/relatorios/${pageData.task.id}/`).then((resolve)=>{
             const json = JSON.parse(resolve)
-            console.log(json)
             const cmb = pageScreen.querySelector('#cmbRelat')
             cmb.innerHTML = ''
             for(let i=2; i<json.length; i++){
@@ -190,12 +189,10 @@
     })
 
     pageScreen.querySelector('#btnRelat').addEventListener('click',()=>{
-//        try{
+        if(confirm(`Deseja gerar uma nova revisão ${pageData.rev[pageData.rev.length-1].revisao.padStart(2,0)} deste relatório?`)){
             print_relatorio(pageData)
-//        }catch{
-//            alert('Houve algum erro na geração do relatório, por favor saia e tente novamente.')
 //            loading()
-//        }
+        }
     })
 
     pageScreen.querySelector('#tblRev').addEventListener('dblclick',(e)=>{
@@ -338,7 +335,7 @@
                 doc.text((i+1).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
                 addLine(1,10,head)
                 try{
-
+/*
                     var ctx = document.createElement('canvas')
                     if (ctx.getContext) {
                         ctx = ctx.getContext('2d');
@@ -349,27 +346,27 @@
                             console.log(ar)             
                             ctx.canvas.width = ar[2]
                             ctx.canvas.height = ar[3]
-                            ctx.globalCompositeOperation = efect
                             ctx.drawImage(img, 0, 0,img.width,img.height,0,0,ar[2],ar[3])
                         }
                         img.src = `../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
                         addLine(img.height/10,10,head)
                     }    
-                    plotImg(`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`,10,txt.y,ctx.width)
 
+                    plotImg(`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`,10,txt.y,ctx.width)
+*/
 
                 }catch{
                     null
                 }
-/*
+
                 const back = backFunc({'filename':`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`},1)
                 back.then((resp)=>{
                     const imgExist = JSON.parse(resp)
                     if(imgExist){
-                        console.log(obj.perguntas[i])
+                        plotImg(`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`,10,txt.y,100)
                     }
                 })
-*/
+
                 doc.setFont(undefined, 'normal')
                 doc.setFontSize(10)
                 box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
