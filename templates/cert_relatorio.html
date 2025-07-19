@@ -331,11 +331,11 @@
 
         async function questoes(){
             newPage()
-            let images
+            let images = []
             await listFiles(`../files/anexos/imagem/${obj.task.id}/`).then((resolve)=>{
                 images = JSON.parse(resolve)
             })
-            
+          
             for(let i=0; i<obj.perguntas.length; i++){
                 doc.setFont(undefined, 'bold')
                 doc.setFontSize(12)
@@ -344,13 +344,15 @@
                 doc.setFont(undefined, 'normal')
                 doc.setFontSize(10)
                 box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
-                addLine(3,10,head)                
-                if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
-                    const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
-                    const img = await makeImg(url)
-                    txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
-                    plotImg(url,txt.x,txt.y)
-                    addLine(Math.round(px2mm(img.height)),10,head)
+                addLine(3,10,head)
+                if(images){
+                    if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
+                        const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
+                        const img = await makeImg(url)
+                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
+                        plotImg(url,txt.x,txt.y)
+                        addLine(Math.round(px2mm(img.height)),10,head)
+                    }
                 }
             }
         }
