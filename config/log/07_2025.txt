@@ -105,3 +105,4 @@ para as costureiras;
 18/07/2025 22:53 tales@planet3.com.br : CLIENTE Editado Empresa 3 -> Empresa 3
 18/07/2025 22:53 tales@planet3.com.br : CLIENTE Editado Empresa 4 -> Empresa 4
 19/07/2025 14:11 tales@planet3.com.br : Imagem Anexado  - ID da Pergunta: 2
+19/07/2025 21:33 tales@planet3.com.br : Imagem Anexado  - ID da Pergunta: 11

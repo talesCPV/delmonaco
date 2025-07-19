@@ -208,9 +208,11 @@
             fieldRev(data)
     })
 
-    pageScreen.querySelector('#cmbRelat').addEventListener('click',()=>{
+    pageScreen.querySelector('#cmbRelat').addEventListener('click',(e)=>{
         const filename =  pageScreen.querySelector('#cmbRelat').value
-        window.open(window.location.href+`../files/relatorios/${pageData.task.id}/`+filename, '_blank').focus();
+        if(pageScreen.querySelector('#cmbRelat').selectedIndex >=0){
+            window.open(window.location.href+`../files/relatorios/${pageData.task.id}/`+filename, '_blank').focus();
+        }
     })
 
     function print_relatorio(obj){
@@ -327,53 +329,50 @@
             }
         }
 
-        function questoes(){
+        async function questoes(){
             newPage()
-            for(let i=0; i<obj.perguntas.length; i++){
-                doc.setFont(undefined, 'bold')
-                doc.setFontSize(12)
-                doc.text((i+1).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
-                addLine(1,10,head)
-                try{
-/*
-                    var ctx = document.createElement('canvas')
-                    if (ctx.getContext) {
-                        ctx = ctx.getContext('2d');
-                        ctx.clearRect(0, 0, 0, 0);
-                        var img = new Image();
-                        img.onload = function () {
-                            ar = aspect_ratio(img,ctx.width,ctx.height)   
-                            console.log(ar)             
-                            ctx.canvas.width = ar[2]
-                            ctx.canvas.height = ar[3]
-                            ctx.drawImage(img, 0, 0,img.width,img.height,0,0,ar[2],ar[3])
-                        }
-                        img.src = `../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
-                        addLine(img.height/10,10,head)
-                    }    
+            let images
+            await listFiles(`../files/anexos/imagem/${obj.task.id}/`).then((resolve)=>{
+                images = JSON.parse(resolve)
+                let i=0
 
-                    plotImg(`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`,10,txt.y,ctx.width)
-*/
+                async function loadImage(url){
 
-                }catch{
-                    null
+                    return new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.onload = () => resolve(img);
+                        img.onerror = reject;
+                        img.src = src;
+                    });
+
+                    /*
+                    img.onload = ()=> {
+                        console.log(`Width: ${Math.round(px2mm(img.width))}, Height: ${Math.round(px2mm(img.height))}, Page W:${doc.internal.pageSize.getWidth()}, Page H:${doc.internal.pageSize.getHeight()}`);
+                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)  //66.5
+                    }
+                    img.src = url
+                    return img
+                    */
                 }
 
-                const back = backFunc({'filename':`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`},1)
-                back.then((resp)=>{
-                    const imgExist = JSON.parse(resp)
-                    if(imgExist){
-                        plotImg(`../../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`,10,txt.y,100)
+                for(const item of obj.perguntas){
+                    i++
+                    if(images.includes(`${item.id_pergunta}.jpg`)){
+//                        const img = await loadImage(`../files/anexos/imagem/${obj.task.id}/${item.id_pergunta}.jpg`)
+                       plotImg(`../files/anexos/imagem/${obj.task.id}/${item.id_pergunta}.jpg`,txt.x,txt.y)
                     }
-                })
 
-                doc.setFont(undefined, 'normal')
-                doc.setFontSize(10)
-                box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
-                addLine(3,10,head)
-        //                const quebras = (obj.perguntas[i].resposta.match(/\r?\n/g) || []).length
-        //                addLine(quebras,i+1<obj.perguntas.length)
-            }
+                    doc.setFont(undefined, 'bold')
+                    doc.setFontSize(12)
+                    doc.text((i).toString().padStart(2,0)+'   '+item.titulo,15,txt.y)
+                    addLine(1,10,head)
+                    doc.setFont(undefined, 'normal')
+                    doc.setFontSize(10)
+                    box(item.resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
+                    addLine(3,10,head)
+
+                }
+            })
         }
 
         function save(){
@@ -388,8 +387,9 @@
             head()
             setores()
             revisoes()
-            questoes()
-            save()
+            questoes().then(()=>{
+                save()
+            })
         })  
 
     }

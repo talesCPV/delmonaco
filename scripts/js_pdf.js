@@ -76,6 +76,10 @@ function plotImg(url,x,y,w){
     doc.addImage(foto, 'png', x,y,w,0);
 }
 
+function px2mm(px){
+    return px/96*25.4
+}
+
 function backLine(N=1){
     txt.y -= txt.lineHeigth * N
     return true
