@@ -188,3 +188,11 @@ function openPDF(doc,filename){
         loading()
     })
 }
+
+function savePDF(doc,path,filename){
+    const file = doc.output('blob')
+    uploadFile(file,path,filename).then(()=>{
+        window.open(window.location.href+path+filename, '_blank').focus();
+        loading()
+    })
+}

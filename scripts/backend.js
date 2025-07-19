@@ -249,7 +249,7 @@ function saveFile(file,path){
 }
 
 
-function uploadFile(file,path,filename){
+function uploadFile(file,path,filename=''){
 
     const up_data = new FormData()
     up_data.append("up_file", file);

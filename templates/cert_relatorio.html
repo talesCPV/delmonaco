@@ -44,9 +44,15 @@
 
     </fieldset>
 
-    <div class="line">
-        <button id="btnRelat">Relatório</button>
-    </div>
+    <fieldset>
+        <legend>Relatorios</legend>
+        <select id="cmbRelat" size="5"></select>
+        <div class="line">
+            <button id="btnRelat">Gerar Relatório</button>
+        </div>
+    </fieldset>
+
+
 
 
 </template>
@@ -60,6 +66,7 @@
         pageFunc.fillSetor()
         pageFunc.getRev()
         pageFunc.fillAnswers()
+        pageFunc.fillRelat()
         pageScreen.querySelector('#edtData').value = today.getFormatDate()
     }
 
@@ -69,6 +76,22 @@
         pageScreen.querySelector('#edtElab').value = json.elab
         pageScreen.querySelector('#edtAprov').value = json.aprov
         pageScreen.querySelector('#edtData').value = json.data_hora.substr(0,10)
+    }
+
+    pageFunc.fillRelat = ()=>{
+        listFiles(`../files/relatorios/${pageData.task.id}/`).then((resolve)=>{
+            const json = JSON.parse(resolve)
+            console.log(json)
+            const cmb = pageScreen.querySelector('#cmbRelat')
+            cmb.innerHTML = ''
+            for(let i=2; i<json.length; i++){
+                const opt = document.createElement('option')
+                opt.value = json[i]
+                opt.innerHTML = json[i]
+                opt.data =json[i]
+                cmb.appendChild(opt)
+            }
+        })
     }
 
     pageFunc.setSetor = (set=0)=>{
@@ -167,12 +190,12 @@
     })
 
     pageScreen.querySelector('#btnRelat').addEventListener('click',()=>{
-        try{
+//        try{
             print_relatorio(pageData)
-        }catch{
-            alert('Houve algum erro na geração do relatório, por favor saia e tente novamente.')
-            loading()
-        }
+//        }catch{
+//            alert('Houve algum erro na geração do relatório, por favor saia e tente novamente.')
+//            loading()
+//        }
     })
 
     pageScreen.querySelector('#tblRev').addEventListener('dblclick',(e)=>{
@@ -188,6 +211,10 @@
             fieldRev(data)
     })
 
+    pageScreen.querySelector('#cmbRelat').addEventListener('click',()=>{
+        const filename =  pageScreen.querySelector('#cmbRelat').value
+        window.open(window.location.href+`../files/relatorios/${pageData.task.id}/`+filename, '_blank').focus();
+    })
 
     function print_relatorio(obj){
 
@@ -352,8 +379,10 @@
             }
         }
 
-        function print(){
-            openPDF(doc,'relatorio')
+        function save(){
+            savePDF(doc,`../files/relatorios/${obj.task.id}/`,`${obj.task.cliente}-${obj.task.cod}-rev_${obj.rev[obj.rev.length-1].revisao}.pdf`).then(()=>{
+                main_data.cert_relatorio.func.fillRelat()
+            })
         }
 
         const back = backFunc({'filename':`../../files/logos/${obj.id_cliente}.jpg`},1)
@@ -363,7 +392,7 @@
             setores()
             revisoes()
             questoes()
-            print()            
+            save()
         })  
 
     }
