@@ -334,45 +334,28 @@
             let images
             await listFiles(`../files/anexos/imagem/${obj.task.id}/`).then((resolve)=>{
                 images = JSON.parse(resolve)
-                let i=0
-
-                async function loadImage(url){
-
-                    return new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.onload = () => resolve(img);
-                        img.onerror = reject;
-                        img.src = src;
-                    });
-
-                    /*
-                    img.onload = ()=> {
-                        console.log(`Width: ${Math.round(px2mm(img.width))}, Height: ${Math.round(px2mm(img.height))}, Page W:${doc.internal.pageSize.getWidth()}, Page H:${doc.internal.pageSize.getHeight()}`);
-                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)  //66.5
-                    }
-                    img.src = url
-                    return img
-                    */
-                }
-
-                for(const item of obj.perguntas){
-                    i++
-                    if(images.includes(`${item.id_pergunta}.jpg`)){
-//                        const img = await loadImage(`../files/anexos/imagem/${obj.task.id}/${item.id_pergunta}.jpg`)
-                       plotImg(`../files/anexos/imagem/${obj.task.id}/${item.id_pergunta}.jpg`,txt.x,txt.y)
-                    }
-
-                    doc.setFont(undefined, 'bold')
-                    doc.setFontSize(12)
-                    doc.text((i).toString().padStart(2,0)+'   '+item.titulo,15,txt.y)
-                    addLine(1,10,head)
-                    doc.setFont(undefined, 'normal')
-                    doc.setFontSize(10)
-                    box(item.resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
-                    addLine(3,10,head)
-
-                }
             })
+            
+            for(let i=0; i<obj.perguntas.length; i++){
+                if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
+                    const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
+                    const img = await makeImg(url)
+                    console.log(`W:${px2mm(img.width)} H:${px2mm(img.height)}`)
+                    txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
+                    plotImg(url,txt.x,txt.y)
+                    addLine(Math.round(px2mm(img.height)),10,head)
+                }
+console.log('depois')
+                doc.setFont(undefined, 'bold')
+                doc.setFontSize(12)
+                doc.text((i).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
+                addLine(1,10,head)
+                doc.setFont(undefined, 'normal')
+                doc.setFontSize(10)
+                box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
+                addLine(3,10,head)
+
+            }
         }
 
         function save(){

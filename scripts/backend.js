@@ -156,6 +156,15 @@ async function listFiles(path,ext='txt'){
     return await myPromisse.then((txt))
 }
 
+async function makeImg(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => resolve(img)
+        img.onerror = reject
+        img.src = url
+    })
+}
+
 function getFile(path){
     const data = new URLSearchParams();        
         data.append("path", path);
