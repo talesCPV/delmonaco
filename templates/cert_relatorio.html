@@ -349,11 +349,9 @@
                     const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
                     const img = await makeImg(url)
                     txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
-                    console.log(txt.x+` W:${px2mm(img.width)} H:${px2mm(img.height)}`)
                     plotImg(url,txt.x,txt.y)
                     addLine(Math.round(px2mm(img.height)),10,head)
                 }
-console.log('depois')
             }
         }
 
