@@ -107,6 +107,7 @@
         btnOpen.disabled = 1
         pageData.id_cliente = pageScreen.querySelector('#cmbEmpresa').selectedOptions[0].data.id_cliente
         pageScreen.querySelector('#cmbProd').innerHTML = ''
+        pageScreen.querySelector('#cmbTask').innerHTML = ''
         if(Number(id_cliente)){
             pageFunc.fillCliProd(id_cliente)
         }
@@ -114,14 +115,13 @@
 
     pageFunc.changeProd = ()=>{
         pageData.id_prod = pageScreen.querySelector('#cmbProd').value
-
+        pageScreen.querySelector('#cmbTask').innerHTML = ''
+        btnOpen.disabled = 1
         if(pageData.link == 'cert_relatorio.html'){
             const data = pageScreen.querySelector('#cmbProd').selectedOptions[0].data
             if(Number(pageData.id_prod)){
                 pageFunc.fillTaskCli(pageData.id_prod)
             }
-
-
         }else{
             btnOpen.disabled = pageScreen.querySelector('#cmbProd').value=='0' ? 1 : 0
         }
