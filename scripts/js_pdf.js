@@ -72,7 +72,7 @@ function logo(pos = [14,7,36,25]){
 
 function plotImg(url,x,y,w){
     var foto = new Image()
-    foto.src = url 
+    foto.src = url+'?'+ new Date().getTime()
     doc.addImage(foto, 'png', x,y,w,0);
 }
 

@@ -353,7 +353,7 @@
                 addLine(3,10,head)
                 if(images){
                     if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
-                        const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg`
+                        const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg?`+ new Date().getTime()
                         const img = await makeImg(url)
 //                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
                         plotImg(url,10,txt.y,doc.internal.pageSize.getWidth()-20)
