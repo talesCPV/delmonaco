@@ -37,6 +37,8 @@
 .post-text{
     text-align: justify;
     white-space: pre;
+    display: flex;
+    flex-direction: column;
 }
 
 .post-btn{

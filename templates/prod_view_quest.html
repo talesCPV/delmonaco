@@ -34,8 +34,10 @@
         </div>
         
         <div class="line">
-            <label for="ckbRel">sair no relatório</label>
+            <label for="ckbRel">Sair no relatório</label>
             <input type="checkbox" class="only-view" id="ckbRel" checked disabled>
+            <label for="ckbSub">Sub ítem da questão anterior</label>
+            <input type="checkbox" class="only-view" id="ckbSub" disabled>
         </div>
 
         <div class="line">
@@ -64,6 +66,7 @@
             pageScreen.querySelector('#edtTitle').value = pageData.titulo
             pageScreen.querySelector('#edtQuest').value = pageData.pergunta
             pageScreen.querySelector('#ckbRel').checked = Number(pageData.relatorio)
+            pageScreen.querySelector('#ckbSub').checked = Number(pageData.sub_item)
             pageScreen.querySelector('#btnEdit').disabled = 0
         }
     }
@@ -82,18 +85,12 @@
             params.titulo = pageScreen.querySelector('#edtTitle').value.trim()
             params.pergunta = del ? "" : pageScreen.querySelector('#edtQuest').value.trim()
             params.relatorio = pageScreen.querySelector('#ckbRel').checked ? 1 : 0
-          
+            params.sub_item = pageScreen.querySelector('#ckbSub').checked ? 1 : 0
+            
         const myPromisse = queryDB(params,'TASK-3');
         myPromisse.then((resolve)=>{
             main_data.prod_view_task.func.viewQuest()
-/*            
-            setLog(`PRODUTO ${newQuest?'Cadastrado': del ? 'Deletado' : 'Editado'} ${pageData.nome} -> ${params.nome}`)
-            try{
-                main_data.prod_busca.func.fillProdutos()
-            }catch{
-                console.error('Tela fechada pelo usuário!')
-            }
-*/                
+            setLog(`Questão ${newQuest?'Cadastrada': del ? 'Deletada' : 'Editada'} ${params.titulo} -> ${params.pergunta}`)
             alert('Cadastrado efetuado!')
             closeModal('prod_view_quest')
             

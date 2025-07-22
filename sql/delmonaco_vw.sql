@@ -192,8 +192,8 @@ SELECT * FROM vw_answers;
 SELECT * FROM vw_cli_task;
 
  DROP VIEW IF EXISTS vw_perguntas;
---  	CREATE VIEW vw_perguntas AS
-		SELECT PER.id AS id_pergunta,PER.id_tarefa,TASK.id AS id_task_cli,TASK.id_cliente,PER.titulo,PER.pergunta,TASK.titulo AS tarefa, TASK.cod
+  	CREATE VIEW vw_perguntas AS
+		SELECT PER.id AS id_pergunta,PER.id_tarefa,TASK.id AS id_task_cli,TASK.id_cliente,PER.sub_item,PER.titulo,PER.pergunta,TASK.titulo AS tarefa, TASK.cod
 		FROM tb_perguntas AS PER
 		LEFT JOIN tb_task_cli AS TASK
         ON TASK.id_tarefa = PER.id_tarefa
@@ -205,7 +205,7 @@ SELECT * FROM vw_perguntas;
  DROP VIEW IF EXISTS vw_main_answer;
   	CREATE VIEW vw_main_answer AS
 		SELECT PER.id_tarefa,PER.id_pergunta,IFNULL(PER.id_task_cli,0) AS id_task_cli,
-		IFNULL(RESP.id_usuario,0) AS id_usuario, PER.titulo,PER.pergunta,IFNULL(RESP.resposta,"") AS resposta
+		IFNULL(RESP.id_usuario,0) AS id_usuario,PER.sub_item, PER.titulo,PER.pergunta,IFNULL(RESP.resposta,"") AS resposta
 		FROM vw_perguntas AS PER
 		LEFT JOIN tb_respostas AS RESP
 		ON PER.id_pergunta = RESP.id_pergunta

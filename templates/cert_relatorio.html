@@ -15,11 +15,11 @@
         </div>
         <div class="inline">
             <label for="edtElab">Elaboração</label>
-            <input type="text" id="edtElab" onfocus="this.select();" maxlength="30">
+            <input type="text" id="edtElab" onfocus="this.select();" maxlength="50">
         </div>
         <div class="inline">
             <label for="edtAprov">Aprovação</label>
-            <input type="text" id="edtAprov" onfocus="this.select();" maxlength="30">
+            <input type="text" id="edtAprov" onfocus="this.select();" maxlength="50">
         </div>
         <div class="inline">
             <label for="edtData">Data</label>
@@ -258,7 +258,7 @@
             doc.setFontSize(20);
             txt.y = 22
             doc.setFont(undefined, 'bold')
-            center_text(obj.task.nome,[55,150])
+            center_text(obj.task.tarefa.toUpperCase()+' '+obj.task.titulo.toUpperCase(),[55,150])        
             doc.setFontSize(10);
             try{
                 doc.text('Código: '+obj.task.cod,168,15)
@@ -304,9 +304,15 @@
             }
 
             txt.y = 53
+            let sub_item = 0
             for(let i=0; i<obj.perguntas.length; i++){
-                doc.text((i+1)+' - '+obj.perguntas[i].titulo,115,txt.y)
-                addLine(1.5)
+                
+                if(!Number(obj.perguntas[i].sub_item)){
+                    doc.text((i+1-sub_item)+' - '+obj.perguntas[i].titulo,115,txt.y)
+                    addLine(1.5)
+                }else{
+                    sub_item++
+                }
             }
         }
 
@@ -341,11 +347,30 @@
             await listFiles(`../files/anexos/imagem/${obj.task.id}/`).then((resolve)=>{
                 images = JSON.parse(resolve)
             })
-          
+            let sub = 0
             for(let i=0; i<obj.perguntas.length; i++){
+
+
                 doc.setFont(undefined, 'bold')
                 doc.setFontSize(12)
-                doc.text((i+1).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
+                let title = `${(i+1-sub).toString().padStart(2,0)} - ${obj.perguntas[i].titulo}` 
+                if(Number(obj.perguntas[i].sub_item) && i>0){
+                    let n = 1
+                    while(Number(obj.perguntas[i-n].sub_item) && json[i-n].sub_item != undefined ){
+                        n++
+                    }
+                    title = `${(i-sub).toString().padStart(2,0)}.${n} - ${obj.perguntas[i].titulo}`
+                    sub++
+                }
+
+                if(images){
+                    if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
+                        newPage()
+                    }
+                }
+
+                doc.text(title,15,txt.y)
+//                doc.text((i+1).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
                 addLine(1,10,head)
                 doc.setFont(undefined, 'normal')
                 doc.setFontSize(10)
@@ -355,8 +380,8 @@
                     if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
                         const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg?`+ new Date().getTime()
                         const img = await makeImg(url)
-//                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
-                        plotImg(url,10,txt.y,doc.internal.pageSize.getWidth()-20)
+                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
+                        plotImg(url,txt.x,txt.y,Math.round(px2mm(img.width)))
                         addLine(Math.round(px2mm(img.height)),10,head)
                     }
                 }

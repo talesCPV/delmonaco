@@ -44,7 +44,7 @@
         "TASK-0" => 'CALL sp_view_task(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
         "TASK-1" => 'CALL sp_set_task(@access,@hash,x00,x01,"x02","x03");', // ID, ID_PROD, NOME, DESCRIÇÃO
         "TASK-2" => 'CALL sp_view_quest(@access,@hash,"x00","x01","x02");', // FIELD,SIGNAL, VALUE
-        "TASK-3" => 'CALL sp_set_quest(@access,@hash,x00,x01,"x02","x03",x04);', // ID, ID_TAREFA, TITULO, PERGUNTA, RELATORIO
+        "TASK-3" => 'CALL sp_set_quest(@access,@hash,x00,x01,"x02","x03",x04,x05);', // ID, ID_TAREFA, TITULO, PERGUNTA, RELATORIO,SUB_ITEM
         "TASK-4" => 'CALL sp_view_answer(@access,@hash,x00,x01);', // ID_PERGUNTA, ID_TASK_CLI
         "TASK-5" => 'CALL sp_set_answer(@access,@hash,x00,x01,"x02","x03");', // ID_PERGUNTA, ID_TASK_CLI, RESPOSTA,DATA_HORA
         "TASK-6" => 'CALL sp_set_like(@access,@hash,x00,"x01");', // ID_PERGUNTA,DATA_HORA

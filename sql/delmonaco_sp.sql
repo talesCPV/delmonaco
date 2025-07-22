@@ -1279,7 +1279,8 @@ DELIMITER $$
 		IN Iid_tarefa int(11),
         IN Ititulo varchar(150),
 		IN Ipergunta varchar(1500),
-		IN Irelat boolean
+		IN Irelat boolean,
+        IN Isub_item boolean
     )
 	BEGIN    
 		CALL sp_allow(Iallow,Ihash);
@@ -1290,10 +1291,10 @@ DELIMITER $$
                 DELETE FROM tb_like WHERE id_pergunta = Iid;
             ELSE
 				IF(Iid=0)THEN
-					INSERT INTO tb_perguntas (id_tarefa,titulo,pergunta,relatorio) 
-					VALUES (Iid_tarefa,Ititulo,Ipergunta, Irelat);
+					INSERT INTO tb_perguntas (id_tarefa,titulo,pergunta,relatorio,sub_item) 
+					VALUES (Iid_tarefa,Ititulo,Ipergunta, Irelat, Isub_item);
 				ELSE 
-					UPDATE tb_perguntas SET titulo=Ititulo, pergunta=Ipergunta, relatorio=Irelat WHERE id=Iid;
+					UPDATE tb_perguntas SET titulo=Ititulo, pergunta=Ipergunta, relatorio=Irelat, sub_item=Isub_item WHERE id=Iid;
                 END IF;
             END IF;
         END IF;
@@ -1465,8 +1466,8 @@ DELIMITER $$
         IN Iid_task_cli int(11),
 		IN Irevisao int,
 		IN Ihistorico varchar(50),
-        IN Ielab varchar(30),
-        IN Iaprov varchar(30),
+        IN Ielab varchar(50),
+        IN Iaprov varchar(50),
         IN Idata datetime
     )
 	BEGIN

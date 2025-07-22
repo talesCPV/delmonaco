@@ -207,7 +207,6 @@
                 obj.titulo = title 
                 obj.resposta = quest
                 obj.data_hora = ''
-
                 return makePost(obj)
             }
 
@@ -267,9 +266,19 @@
             const myPromisse = queryDB(params,'TASK-2');
             myPromisse.then((resolve)=>{
                 const json = JSON.parse(resolve)
+                let sub = 0
                 for(let i=0; i<json.length; i++){
+                   
                     const id = json[i].id
-                    const title = `${(i+1).toString().padStart(2,0)} - ${json[i].titulo}` 
+                    let title = `${(i+1-sub).toString().padStart(2,0)} - ${json[i].titulo}` 
+                    if(Number(json[i].sub_item) && i>0){
+                        let n = 1
+                        while(Number(json[i-n].sub_item) && json[i-n].sub_item != undefined ){
+                            n++
+                        }
+                        title = `${(i-sub).toString().padStart(2,0)}.${n} - ${json[i].titulo}`
+                        sub++
+                    }
                     const quest = json[i].pergunta
                     screen.appendChild(addQuest(id,title,quest))
                 }
