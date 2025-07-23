@@ -349,8 +349,6 @@
             })
             let sub = 0
             for(let i=0; i<obj.perguntas.length; i++){
-
-
                 doc.setFont(undefined, 'bold')
                 doc.setFontSize(12)
                 let title = `${(i+1-sub).toString().padStart(2,0)} - ${obj.perguntas[i].titulo}` 
@@ -363,27 +361,45 @@
                     sub++
                 }
 
-                if(images){
-                    if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
-                        newPage()
-                    }
+
+                function print_title(){
+                    doc.text(title,15,txt.y)
+                    addLine(1,10,head)
+
+                    doc.setFont(undefined, 'normal')
+                    doc.setFontSize(10)
+                    box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
+                    addLine(3,10,head)
                 }
 
-                doc.text(title,15,txt.y)
-//                doc.text((i+1).toString().padStart(2,0)+'   '+obj.perguntas[i].titulo,15,txt.y)
-                addLine(1,10,head)
-                doc.setFont(undefined, 'normal')
-                doc.setFontSize(10)
-                box(obj.perguntas[i].resposta,15,txt.y,doc.internal.pageSize.getWidth()-30,1)
-                addLine(3,10,head)
-                if(images){
-                    if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
-                        const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg?`+ new Date().getTime()
-                        const img = await makeImg(url)
-                        txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(px2mm(img.width)/2)
-                        plotImg(url,txt.x,txt.y,Math.round(px2mm(img.width)))
-                        addLine(Math.round(px2mm(img.height)),10,head)
+                if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
+
+                    txt.y>65 ?  newPage() : null
+                    print_title()
+
+                    const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg?`+ new Date().getTime()
+                    const img = await makeImg(url)
+                    
+                    const w = Math.round(px2mm(img.width))
+                    const ar = Math.round(px2mm(img.height))/w
+
+                    const page_w = Math.round(doc.internal.pageSize.getHeight()-txt.y-10)                 
+                    const page_h = Math.round(doc.internal.pageSize.getWidth()-20)
+
+                    let img_w = Number(page_w.toString())
+
+                    if(w*ar > page_h){
+                        img_w = Math.round(page_h/ar)
+                    }else if(w > page_w){
+                        img_w = page_w
                     }
+
+                    txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(img_w/2)
+                    plotImg(url,txt.x,txt.y,img_w)
+                    addLine(Math.round(img_w * ar),10,head)
+
+                }else{
+                    print_title()
                 }
             }
         }

@@ -48,12 +48,13 @@
             display: none;
         }
 
-        .resp-image{
+        .img-resp{
             width: 100%;
         }
 
         .edit-div{
             display : flex;
+            flex-direction: row;
             align-items: center;
         }
 
@@ -434,7 +435,10 @@
                     const div = post.querySelector('.post-text')
                     div.className = 'edit-div post-text'
 
-                    localStorage.setItem('temp',div.innerHTML)
+                    const txt = div.querySelector('.txt-resp')
+                    const img = div.querySelector('.img-resp')
+
+                    localStorage.setItem('temp',txt.innerHTML)
                     div.innerHTML = ''              
                     const ta = document.createElement('textarea')
                     ta.maxLength = 1024
@@ -451,7 +455,11 @@
                         post.obj.textarea = ta
                         const old_text = ta.value
                         pageFunc.setAnswer(post).then((resolve)=>{
-                            div.innerHTML = old_text
+                            div.innerHTML = ''
+                            div.classList.remove('edit-div')
+                            txt.innerHTML = old_text
+                            div.appendChild(txt)
+                            img != null ? div.appendChild(img) : null
                         })
                     })
                     
@@ -478,7 +486,7 @@
                         up.then((resp)=>{     
                             setLog(`Imagem Anexado  - ID da Pergunta: ${post.obj.id_pergunta}`)
                             var image = post.querySelector('.post-text').querySelector('img')                        
-                            image = image==null ? new_element('img','','resp-image') : image
+                            image = image==null ? new_element('img','','img-resp') : image
                             image.src = `../../files/anexos/imagem/${post.obj.id_task_cli}/${post.obj.id_pergunta}.jpg?`+ new Date().getTime()
                             post.querySelector('.post-text').appendChild(image)
 
@@ -511,15 +519,17 @@
         const post_titulo = new_element('div',obj.titulo, 'post-titulo')
         post.appendChild(post_titulo)
 
-        const post_text = new_element('div',obj.resposta, 'post-text')
+        const post_text = new_element('div','', 'post-text')
+        post_text.appendChild(new_element('p',obj.resposta,'txt-resp'))
         post.appendChild(post_text)
+
 
 if(!quest && !obj.indice){
     const back = backFunc({'filename':`../../files/anexos/imagem/${post.obj.id_task_cli}/${post.obj.id_pergunta}.jpg`},1)
     back.then((resp)=>{
         const hasImg = JSON.parse(resp)
         if(hasImg){
-            const image = new_element('img','','resp-image')
+            const image = new_element('img','','img-resp')
             image.src = `../../files/anexos/imagem/${post.obj.id_task_cli}/${post.obj.id_pergunta}.jpg?`+new Date().getTime()
             post_text.appendChild(image)
 
