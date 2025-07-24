@@ -361,6 +361,9 @@
                     sub++
                 }
 
+                if(images.includes(`${obj.perguntas[i].id_pergunta}.jpg`)){
+                    txt.y>65 ?  newPage() : null
+                }
 
                 function print_title(){
                     doc.text(title,15,txt.y)
@@ -379,19 +382,21 @@
 
                     const url = `../files/anexos/imagem/${obj.task.id}/${obj.perguntas[i].id_pergunta}.jpg?`+ new Date().getTime()
                     const img = await makeImg(url)
-                    
+
                     const w = Math.round(px2mm(img.width))
                     const ar = Math.round(px2mm(img.height))/w
 
-                    const page_w = Math.round(doc.internal.pageSize.getHeight()-txt.y-10)                 
+                    const page_w = Math.round(doc.internal.pageSize.getHeight()-txt.y-10)
                     const page_h = Math.round(doc.internal.pageSize.getWidth()-20)
 
                     let img_w = Number(page_w.toString())
 
-                    if(w*ar > page_h){
-                        img_w = Math.round(page_h/ar)
-                    }else if(w > page_w){
-                        img_w = page_w
+                    if(ar > 1){
+                        if(img_w *ar > page_h){
+                            img_w = Math.round(page_h/ar)
+                        }else if(w > page_w){
+                            img_w = page_w
+                        }
                     }
 
                     txt.x = Math.round(doc.internal.pageSize.getWidth()/2) - Math.round(img_w/2)
